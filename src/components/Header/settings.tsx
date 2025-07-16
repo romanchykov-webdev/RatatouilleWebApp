@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { Settings, User } from 'lucide-react';
-import ToggleTheme from '@/components/ui/toggle-theme';
+import ToggleTheme from '@/components/ToggleThem/toggle-theme';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 
 interface SettingsComponentProps {
 

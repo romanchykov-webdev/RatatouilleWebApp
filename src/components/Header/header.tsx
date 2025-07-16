@@ -2,20 +2,33 @@
 
 import React from 'react';
 import Logo from '@/components/Header/logo';
-
 import SettingsComponent from '@/components/Header/settings';
-
-export default function Header() {
-
-
-  return <div className="p-4 flex items-center justify-between">
+import SearchComponent from '@/components/Search/SearchComponent';
+import { IWidthScreen } from '@/types';
 
 
-    <Logo />
-
-    <SettingsComponent />
+export default function Header({ widthScreen }: IWidthScreen) {
 
 
-  </div>;
+  const isDesktop = widthScreen !== undefined ? widthScreen > 810 : false;
 
+
+  return (
+    <header
+      className={`flex flex-col gap-y-5`}
+    >
+      <div className="flex items-center justify-between ">
+        <Logo />
+
+        {isDesktop && <SearchComponent />}
+
+        <SettingsComponent />
+      </div>
+
+
+      {!isDesktop && <SearchComponent />}
+
+
+    </header>
+  );
 }

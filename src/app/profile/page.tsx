@@ -2,11 +2,11 @@
 
 import React from 'react';
 import Header from '@/components/Header/header';
+import WrapperApp from '@/components/Wrappers/wrapperApp';
 
 export default function Profile() {
-  return <div
-    className="flex flex-col border-2-white min-w-[1200px]  gap-12 font-[family-name:var(--font-geist-sans)] ">
+  return <WrapperApp>
     <Header />
     <div>profile page</div>
-  </div>;
+  </WrapperApp>;
 }

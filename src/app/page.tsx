@@ -1,17 +1,26 @@
+'use client';
 import Header from '@/components/Header/header';
+import useWindowWidth from '@/helpers/widthScreen';
+import WrapperApp from '@/components/Wrappers/wrapperApp';
+
 
 export default function Page() {
+
+  const widthScreen = useWindowWidth();
+  // console.log('widthScreen', widthScreen);
+
   return (
-    <div className="flex flex-col border-2-white min-w-[1200px]  gap-2 font-[family-name:var(--font-geist-sans)] ">
-      <header>
-       <Header/>
-      </header>
+
+    <WrapperApp>
+
+      <Header widthScreen={widthScreen ?? 0} />
       <main className="bg-red-500">
-       main
+        main
       </main>
       <footer className="bg-red-500">
-       footer
+        footer
       </footer>
-    </div>
+    </WrapperApp>
+
   );
 }
