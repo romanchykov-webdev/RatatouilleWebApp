@@ -7,8 +7,9 @@ import { Search } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { setQuery } from '@/store/searchSlice';
+import { clearQuery, setQuery } from '@/store/searchSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
+import { CircleX } from 'lucide-react';
 
 
 const SearchComponent: React.FC = () => {
@@ -42,16 +43,28 @@ const SearchComponent: React.FC = () => {
     }
   };
 
+  const handClearQuery = () => {
+    dispatch(clearQuery());
+  };
+
 
   return (
     <div className="items-center relative  flex ">
-      <Input
-        value={searchQuery}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setQuery(e.target.value))}
-        type="text"
-        style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
-        placeholder="Search recipe"
-      />
+      <div className="relative w-full">
+        <Input
+          value={searchQuery}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setQuery(e.target.value))}
+          type="text"
+          style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
+          placeholder="Search recipe"
+        />
+        <CircleX
+          onClick={handClearQuery}
+          className={`absolute right-0 w-[20px] h-[20px] text-red-400 transition-all duration-600
+          ${searchQuery.trim() !== '' ? 'top-0 opacity-100' : '-top-[20px] opacity-0'}`
+          }
+        />
+      </div>
       {
         !pathName.startsWith('/searchScreen') && (
           <Button style={{ marginLeft: 10 }} onClick={handleSearch}
