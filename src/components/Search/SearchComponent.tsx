@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuery } from '@/store/searchSlice';
+import { useDebounce } from '@/helpers/hooks/useDebounce';
 
 
 const SearchComponent: React.FC = () => {
@@ -20,11 +21,23 @@ const SearchComponent: React.FC = () => {
 
   const searchQuery = useSelector((state: RootState) => state.search.query);
 
-  // if (pathName !== '/' && pathName !== '/searchScreen') return null;
+  const debounceValue = useDebounce(searchQuery);
+
   if (pathName !== '/' && !pathName.startsWith('/searchScreen')) return null;
 
+  //  Отправка запроса на сервер
+  useEffect(() => {
+
+    if (debounceValue && pathName.startsWith('/searchScreen')) {
+      // getSearchQuery(debounceValue);
+      console.log(debounceValue);
+    }
+
+
+  }, [debounceValue, pathName, dispatch]);
+
   const handleSearch = () => {
-    if (searchQuery) {
+    if (searchQuery.trim()) {
       router.push('/searchScreen');
     }
   };
@@ -39,13 +52,18 @@ const SearchComponent: React.FC = () => {
         style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
         placeholder="Search recipe"
       />
-      <Button style={{ marginLeft: 10 }} onClick={handleSearch}
-              className="w-[40px] h-[40px]   cursor-pointer shadow-none ">
-        <Search
-          style={{ height: 30, width: 30 }}
-          className="text-neutral-400 dark:text-white hover:text-neutral-900 transition-text duration-600"
-        />
-      </Button>
+      {
+        !pathName.startsWith('/searchScreen') && (
+          <Button style={{ marginLeft: 10 }} onClick={handleSearch}
+                  className="w-[40px] h-[40px]   cursor-pointer shadow-none ">
+            <Search
+              style={{ height: 30, width: 30 }}
+              className="text-neutral-400 dark:text-white hover:text-neutral-900 transition-text duration-600"
+            />
+          </Button>
+        )
+      }
+
     </div>
   );
 };
