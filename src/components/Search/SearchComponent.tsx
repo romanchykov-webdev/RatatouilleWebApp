@@ -10,9 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setQuery } from '@/store/searchSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 
-
 const SearchComponent: React.FC = () => {
-
   const pathName = usePathname();
 
   const router = useRouter();
@@ -23,25 +21,21 @@ const SearchComponent: React.FC = () => {
 
   const debounceValue = useDebounce(searchQuery);
 
-  if (pathName !== '/' && !pathName.startsWith('/searchScreen')) return null;
-
   //  Отправка запроса на сервер
   useEffect(() => {
-
     if (debounceValue && pathName.startsWith('/searchScreen')) {
       // getSearchQuery(debounceValue);
       console.log(debounceValue);
     }
+  }, [dispatch, debounceValue, pathName]);
 
-
-  }, [debounceValue, pathName, dispatch]);
+  if (pathName !== '/' && !pathName.startsWith('/searchScreen')) return null;
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       router.push('/searchScreen');
     }
   };
-
 
   return (
     <div className="items-center relative  flex ">
@@ -52,18 +46,18 @@ const SearchComponent: React.FC = () => {
         style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
         placeholder="Search recipe"
       />
-      {
-        !pathName.startsWith('/searchScreen') && (
-          <Button style={{ marginLeft: 10 }} onClick={handleSearch}
-                  className="w-[40px] h-[40px]   cursor-pointer shadow-none ">
-            <Search
-              style={{ height: 30, width: 30 }}
-              className="text-neutral-400 dark:text-white hover:text-neutral-900 transition-text duration-600"
-            />
-          </Button>
-        )
-      }
-
+      {!pathName.startsWith('/searchScreen') && (
+        <Button
+          style={{ marginLeft: 10 }}
+          onClick={handleSearch}
+          className="w-[40px] h-[40px]   cursor-pointer shadow-none "
+        >
+          <Search
+            style={{ height: 30, width: 30 }}
+            className="text-neutral-400 dark:text-white hover:text-neutral-900 transition-text duration-600"
+          />
+        </Button>
+      )}
     </div>
   );
 };

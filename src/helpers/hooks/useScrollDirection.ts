@@ -1,14 +1,15 @@
+'use client';
 import { useEffect, useState } from 'react';
 
-export const useScrollDirection = (): 'up' | 'down' => {
-  const [scrollDir, setScrollDir] = useState<'up' | 'down'>('down');
+export const useScrollDirection = (): 'up' | 'down' | null => {
+  const [scrollDir, setScrollDir] = useState<'up' | 'down' | null>(null);
 
   useEffect(() => {
     let lastY = window.scrollY;
 
     const update = () => {
       const currentY = window.scrollY;
-      if (Math.abs(currentY - lastY) < 10) return; // Игнорируем мелкие движения
+      if (Math.abs(currentY - lastY) < 10) return;
       setScrollDir(currentY > lastY ? 'down' : 'up');
       lastY = currentY;
     };
