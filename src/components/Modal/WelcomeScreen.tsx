@@ -3,10 +3,9 @@
 import { JSX, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, useSpring, useCycle } from 'framer-motion';
-import { Loader2 } from 'lucide-react'; // Для индикатора загрузки
+import { Loader2 } from 'lucide-react';
 
 import logo from '../../../public/assets/images/logoSmall2.webp';
-// import { hp } from '@/helpers/widthHeightWindow';
 import { shadowText } from '@/helpers/ShadowTextStyle';
 
 export default function WelcomeScreen(): JSX.Element {
@@ -102,7 +101,7 @@ export default function WelcomeScreen(): JSX.Element {
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.3, type: 'spring' }}
-          style={{ fontSize: 70, ...shadowText() }}
+          style={{ fontSize: 70, ...shadowText({ theme: 'dark' }) }}
           className="font-bold text-white tracking-widest"
         >
           Food
@@ -111,7 +110,7 @@ export default function WelcomeScreen(): JSX.Element {
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 1.4, duration: 0.3, type: 'spring' }}
-          style={{ fontSize: 20, ...shadowText() }}
+          style={{ fontSize: 20, ...shadowText({ theme: 'dark' }) }}
           className="font-bold text-white tracking-widest mb-10"
         >
           Food is always right

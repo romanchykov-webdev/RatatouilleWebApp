@@ -3,21 +3,23 @@ interface ShadowTextStyle {
 }
 
 interface ShadowTextParams {
-  offsetX: string;
-  offsetY: string;
-  blurRadius: string;
-  color: string;
+  offsetX?: string;
+  offsetY?: string;
+  blurRadius?: string;
+  color?: string;
+  theme?: 'light' | 'dark';
 }
 
-export const shadowText = (
-  {
-    offsetX = '2px',
-    offsetY = '2px',
-    blurRadius = '4px',
-    color = 'rgba(0, 0, 0, 0.5)',
-  }: ShadowTextParams = {} as ShadowTextParams,
-): ShadowTextStyle => {
+export const shadowText = ({
+  offsetX = '2px',
+  offsetY = '2px',
+  blurRadius = '4px',
+  color,
+  theme = 'light',
+}: ShadowTextParams = {}): ShadowTextStyle => {
+  const resolvedColor =
+    color ?? (theme === 'dark' ? 'rgb(255,255,255, 0.3)' : 'rgba(0, 0, 0, 0.3)');
   return {
-    textShadow: `${offsetX} ${offsetY} ${blurRadius} ${color}`,
+    textShadow: `${offsetX} ${offsetY} ${blurRadius} ${resolvedColor}`,
   };
 };
