@@ -6,17 +6,9 @@ import SettingsComponent from '@/components/Header/settings';
 import SearchComponent from '@/components/Search/SearchComponent';
 import { IWidthScreen } from '@/types';
 
-
-export default function Header({ widthScreen }: IWidthScreen) {
-
-
-  const isDesktop = widthScreen !== undefined ? widthScreen > 810 : false;
-
-
+export default function Header({ isDesktop }: IWidthScreen) {
   return (
-    <header
-      className={`flex flex-col gap-y-5`}
-    >
+    <header className={`flex flex-col gap-y-5`} style={{ marginBottom: 50 }}>
       <div className="flex items-center justify-between ">
         <Logo />
 
@@ -25,10 +17,7 @@ export default function Header({ widthScreen }: IWidthScreen) {
         <SettingsComponent />
       </div>
 
-
       {!isDesktop && <SearchComponent />}
-
-
     </header>
   );
 }
