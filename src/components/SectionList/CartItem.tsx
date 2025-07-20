@@ -2,13 +2,12 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import Image from 'next/image';
-import img from '../../../public/foto.jpg';
 import { Youtube, MessageCircle, Star, Heart, HeartHandshake, Languages } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 
+// Интерфейс для одного элемента
 interface IItem {
   id: string;
   index: number;
@@ -19,20 +18,21 @@ interface IItem {
   subcategory: string;
   title: string;
   like: number;
+  comments: number;
   rating: number;
   isLiked: boolean;
   lang: string[];
   video: boolean;
 }
 
-// Интерфейс для пропсов компонента CartsList
-interface ICartsListProps {
-  categoryArr: IItem[];
+// Интерфейс для пропсов компонента CartItem
+interface ICartItemProps {
+  item: IItem;
 }
 
-const CartItem: React.FC<ICartsListProps> = ({ category }: ICartsListProps): React.ReactElement => {
+const CartItem: React.FC<ICartItemProps> = ({ item }): React.ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  console.log('category', category);
+  // console.log('item', item);
   return (
     <article>
       <Card
@@ -41,9 +41,9 @@ const CartItem: React.FC<ICartsListProps> = ({ category }: ICartsListProps): Rea
       >
         <CardContent className="relative w-full h-full  overflow-hidden rounded-lg">
           <Avatar className="w-full h-full rounded-none absolute top-0 left-0 right-0 bottom-0">
-            {isLoading && <Skeleton className="w-full h-full absolute bg-red-500" />}
+            {isLoading && <Skeleton className="w-full h-full absolute" />}
             <AvatarImage
-              src={category.image}
+              src={item.image}
               className={`w-full h-full  ${isLoading ? 'hidden' : 'block'}`}
               alt="Logo"
               onLoad={() => setTimeout(() => setIsLoading(false), 1000)}
@@ -59,8 +59,8 @@ const CartItem: React.FC<ICartsListProps> = ({ category }: ICartsListProps): Rea
             {/*header video author avatar name*/}
             <div className="flex items-start justify-between">
               <div>
-                {category.video && <Youtube className="text-red-500" />}
-                {category.lang.length > 1 && (
+                {item.video && <Youtube className="text-red-500" />}
+                {item.lang.length > 1 && (
                   <Languages className="text-white text-xs w-[20px] h-[20px]" />
                 )}
               </div>
@@ -68,15 +68,15 @@ const CartItem: React.FC<ICartsListProps> = ({ category }: ICartsListProps): Rea
                 <Avatar>
                   {isLoading && <Skeleton className="w-[50px] h-[50px] rounded-full" />}
                   <AvatarImage
-                    src="/assets/images/logo.png"
+                    src={item.authorAvatar}
                     className="w-[30px] h-[30px] rounded-full"
-                    alt="Logo"
+                    alt="Author avatar"
                     onLoad={() => setTimeout(() => setIsLoading(false), 1000)}
                     onError={() => setIsLoading(false)}
                   />
                 </Avatar>
                 <span className="text-xs text-white text-shadow-2xs text-shadow-gray-900 capitalize">
-                  name
+                  {}
                 </span>
               </div>
             </div>
@@ -84,29 +84,34 @@ const CartItem: React.FC<ICartsListProps> = ({ category }: ICartsListProps): Rea
             {/* footer title like commit rating isLiked */}
             <div className="flex flex-col">
               <div className="flex items-center justify-center pb-5">
-                <h6 className="text-white text-shadow-2xs text-shadow-gray-900">
-                  {category.title}
-                </h6>
+                <h6 className="text-white text-shadow-2xs text-shadow-gray-900">{item.title}</h6>
               </div>
               {/*icons block*/}
               <div className="flex items-center justify-around pb-2">
-                <div className="flex items-center justify-center relative">
-                  <MessageCircle className="text-white w-[30px] h-[30px]" />
-                  <span className="text-amber-300 text-xs absolute" style={{ fontSize: 8 }}>
-                    {formatNumberToK(4200)}
-                  </span>
-                </div>
+                {item.comments > 0 && (
+                  <div className="flex items-center justify-center relative">
+                    <MessageCircle className="text-white w-[30px] h-[30px]" />
+                    <span className="text-amber-300 text-xs absolute" style={{ fontSize: 8 }}>
+                      {formatNumberToK(item.comments)}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-center relative">
                   <Star className="text-amber-300 w-[30px] h-[30px]" />
                   <span className="text-white text-xs absolute" style={{ fontSize: 8 }}>
-                    4.3
+                    {item.rating.toFixed(1)}
                   </span>
                 </div>
                 <div className="flex items-center justify-center relative">
-                  <Heart className="text-white w-[30px] h-[30px]" />
-                  {/*<HeartHandshake className="text-red-500 w-[25px] h-[25px]" />*/}
+                  {item.isLiked ? (
+                    <HeartHandshake className="text-red-500 w-[25px] h-[25px]" />
+                  ) : (
+                    <Heart className="text-white w-[30px] h-[30px]" />
+                  )}
+
                   <span className="absolute text-amber-300 " style={{ fontSize: 8 }}>
-                    {formatNumberToK(5200)}
+                    {formatNumberToK(item.like)}
                   </span>
                 </div>
               </div>

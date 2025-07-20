@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX, useEffect } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import CartItem from '@/components/SectionList/CartItem';
 
 import {
@@ -24,6 +24,7 @@ interface IItem {
   subcategory: string;
   title: string;
   like: number;
+  comments: number;
   rating: number;
   isLiked: boolean;
   lang: string[];
@@ -36,9 +37,9 @@ interface ICartsListProps {
 }
 
 const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
-  const [api, setApi] = React.useState<CarouselApi | undefined>();
-  const [current, setCurrent] = React.useState<number>(0);
-  const [count, setCount] = React.useState<number>(0);
+  const [api, setApi] = useState<CarouselApi | undefined>();
+  const [current, setCurrent] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
 
   // console.log('CartsList categoryArr', categoryArr);
 
@@ -65,7 +66,7 @@ const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
   return (
     <section className="border-2 border-neutral-400 rounded-[16px] p-[10px]  flex gap-x-10 relative">
       <div className="absolute -top-5">
-        <p>{categoryArr[0].id}</p>
+        <p>{categoryArr[0]?.id || 'Not item'}</p>
       </div>
       <Carousel
         opts={{
@@ -75,13 +76,13 @@ const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
         setApi={setApi}
       >
         <CarouselContent>
-          {categoryArr.map((item, index) => (
+          {categoryArr.map(item => (
             <CarouselItem
-              key={index}
+              key={item.id}
               className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6 overflow-y-visible"
             >
               <div className="p-2">
-                <CartItem category={item} />
+                <CartItem item={item} />
               </div>
             </CarouselItem>
           ))}
