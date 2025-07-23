@@ -6,7 +6,7 @@ import { motion, useSpring, useCycle } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 import logo from '../../../public/assets/images/logoSmall2.webp';
-import { shadowText } from '@/helpers/ShadowTextStyle';
+import { shadowText } from '@/helpers/shadowTextStyle';
 
 export default function WelcomeScreen(): JSX.Element {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -56,7 +56,10 @@ export default function WelcomeScreen(): JSX.Element {
           className="bg-white/20 rounded-full absolute "
           style={{ padding: ring2Padding }}
         >
-          <motion.div className="  bg-white/20 rounded-full" style={{ padding: ring1Padding }}>
+          <motion.div
+            className="  bg-white/20 rounded-full"
+            style={{ padding: ring1Padding }}
+          >
             <Image
               src={logo}
               alt="Логотип"
@@ -82,7 +85,10 @@ export default function WelcomeScreen(): JSX.Element {
         className="bg-white/20 rounded-full absolute "
         style={{ padding: ring2Padding }}
       >
-        <motion.div className="  bg-white/20 rounded-full" style={{ padding: ring1Padding }}>
+        <motion.div
+          className="  bg-white/20 rounded-full"
+          style={{ padding: ring1Padding }}
+        >
           <Image
             src={logo}
             alt="Логотип"
