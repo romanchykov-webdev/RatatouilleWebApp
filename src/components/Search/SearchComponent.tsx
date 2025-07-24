@@ -7,7 +7,7 @@ import { Search } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { setQuery } from '@/store/searchSlice';
+import { setQuery } from '@/store/slices/searchSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 
 const SearchComponent: React.FC = () => {
@@ -41,7 +41,9 @@ const SearchComponent: React.FC = () => {
     <div className="items-center relative  flex ">
       <Input
         value={searchQuery}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setQuery(e.target.value))}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          dispatch(setQuery(e.target.value))
+        }
         type="text"
         style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
         placeholder="Search recipe"
