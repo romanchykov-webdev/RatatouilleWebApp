@@ -23,7 +23,7 @@ const HeaderPage: React.FC<HeaderPageProps> = ({ title, openModal, router }) => 
 
       <div
         style={shadowBox()}
-        onClick={() => openModal}
+        onClick={() => openModal()}
         title="LogOut"
         className="cursor-pointer w-[50px] h-[50px] flex items-center justify-center bg-neutral-200 rounded-full hover:bg-red-300 transition-all duration-600"
       >

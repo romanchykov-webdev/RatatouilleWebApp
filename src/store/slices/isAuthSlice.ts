@@ -1,29 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAuth } from '@/types';
+import { IAuth, INotAuthorized } from '@/types';
 
-const initialState: IAuth = {
+type AuthState = IAuth | INotAuthorized;
+
+// const initialState: IAuth = {
+//   isAuth: false,
+//   userId: '',
+//   userName: '',
+//   userAvatar: '',
+//   userEmail: '',
+//   lang: '',
+//   userTheme: '',
+//   subscribers: 0,
+// };
+const initialState: INotAuthorized = {
   isAuth: false,
-  userId: '',
-  userName: '',
-  userAvatar: '',
-  userEmail: '',
-  lang: '',
-  userTheme: '',
-  subscribers: 0,
 };
-
 const authSlice = createSlice({
-  name: 'isAuth',
+  name: 'auth',
   initialState,
   reducers: {
     login(state, action: PayloadAction<Omit<IAuth, 'isAuth'>>) {
       return {
         ...action.payload,
         isAuth: true,
-      };
+      } as IAuth;
     },
     logout() {
-      return initialState;
+      return initialState as INotAuthorized;
     },
   },
 });

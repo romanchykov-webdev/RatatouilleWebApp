@@ -2,7 +2,7 @@ import { AppDispatch } from '@/store';
 import { supabase } from '../../../api/supabase';
 import { login } from '@/store/slices/isAuthSlice';
 
-export const signInUser =
+export const logInUser =
   (email: string, password: string) => async (dispatch: AppDispatch) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -37,7 +37,4 @@ export const signInUser =
         subscribers: profileData.subscribers || 0,
       }),
     );
-
-    // console.log('📦 Supabase user:', JSON.stringify(user, null, 2));
-    // console.log('📦 Supabase profileError:', JSON.stringify(profileData, null, 2));
   };

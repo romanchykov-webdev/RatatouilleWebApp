@@ -1,17 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Settings, User } from 'lucide-react';
 import ToggleTheme from '@/components/ToggleThem/toggle-theme';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAppSelector } from '@/store/hooks';
+import { RootState } from '@/store';
 
-const AuthIcon = ({ isAuh }) => {
+interface AuthIconProps {
+  isAuth: boolean;
+}
+
+const AuthIcon: React.FC<AuthIconProps> = ({ isAuth }) => {
   const pathname = usePathname();
 
   if (pathname !== '/') return null;
 
-  return isAuh ? (
+  return isAuth ? (
     <Link href={'/profile'}>
       <User className="w-[30px] h-[30px] " />
     </Link>
@@ -22,16 +28,13 @@ const AuthIcon = ({ isAuh }) => {
   );
 };
 
-interface SettingsComponentProps {}
-
-const SettingsComponent: React.FC<SettingsComponentProps> = () => {
-  const [isAuh, setIsAuh] = useState(true);
-
+const SettingsComponent: React.FC = () => {
+  const isAuth = useAppSelector((state: RootState) => state.user.isAuth);
   return (
     <div className="flex items-center gap-x-12">
       <ToggleTheme />
 
-      <AuthIcon isAuh={isAuh} />
+      <AuthIcon isAuth={isAuth} />
     </div>
   );
 };

@@ -8,3 +8,7 @@ export interface IAuth {
   userTheme: string;
   subscribers: number;
 }
+
+export interface INotAuthorized {
+  isAuth: IAuth['isAuth'];
+}

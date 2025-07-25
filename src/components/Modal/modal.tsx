@@ -88,15 +88,15 @@ export const Modal: React.FC<ModalProps> = ({
             {/* Содержимое */}
             <div className="mb-6">{children}</div>
 
-            {/* Кнопки */}
-            <div className="flex justify-end gap-4">
-              {cancelText && (
-                <Button variant="outline" onClick={onCloseAction}>
-                  {cancelText}
-                </Button>
-              )}
-              {onConfirm && confirmText && <Button onClick={onConfirm}>{confirmText}</Button>}
-            </div>
+            {/*/!* Кнопки *!/*/}
+            {/*<div className="flex justify-end gap-4">*/}
+            {/*  {cancelText && (*/}
+            {/*    <Button variant="outline" onClick={onCloseAction}>*/}
+            {/*      {cancelText}*/}
+            {/*    </Button>*/}
+            {/*  )}*/}
+            {/*  {onConfirm && confirmText && <Button onClick={onConfirm}>{confirmText}</Button>}*/}
+            {/*</div>*/}
           </motion.div>
         </motion.div>
       )}

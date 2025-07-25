@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header/header';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 
@@ -9,8 +9,12 @@ import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import ButtonsWrapper from '@/components/ProfilePage/ButtonsWrapper';
 import HeaderPage from '@/components/ProfilePage/HeaderPage';
 import { useRouter } from 'next/navigation';
-import { signInUser } from '@/store/thunks/authThunks';
+import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/store/hooks';
+import { logout } from '@/store/slices/isAuthSlice';
+import { signOutThunk } from '@/store/thunks/signOutThunk';
+// import { signInUser } from '@/store/thunks/authThunks';
+// import { useAppDispatch } from '@/store/hooks';
 
 export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,15 +26,18 @@ export default function Profile() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const handleConfirm = () => {
-    console.log('Профиль обновлен');
+    // console.log('Профиль обновлен');
     closeModal();
   };
   const dispatch = useAppDispatch();
+  //
+  // useEffect(() => {
+  //   dispatch(signInUser('s22@g.com', '123456'));
+  // }, []);
 
-  useEffect(() => {
-    dispatch(signInUser('s22@g.com', '123456'));
-  }, []);
-
+  const handleSignOut = async () => {
+    await dispatch(signOutThunk());
+  };
   return (
     <WrapperApp>
       <Header />
@@ -62,6 +69,14 @@ export default function Profile() {
       >
         <div className="flex flex-col gap-y-4">
           <p>Вы действительно хотите выйти</p>
+
+          {/* Кнопки */}
+          <div className="flex justify-end gap-4">
+            <Button variant="outline" onClick={closeModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleSignOut}>Exit</Button>
+          </div>
         </div>
       </Modal>
     </WrapperApp>
