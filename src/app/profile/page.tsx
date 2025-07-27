@@ -10,34 +10,41 @@ import ButtonsWrapper from '@/components/ProfilePage/ButtonsWrapper';
 import HeaderPage from '@/components/ProfilePage/HeaderPage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useAppDispatch } from '@/store/hooks';
-import { logout } from '@/store/slices/isAuthSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { signOutThunk } from '@/store/thunks/signOutThunk';
-// import { signInUser } from '@/store/thunks/authThunks';
-// import { useAppDispatch } from '@/store/hooks';
+import { RootState } from '@/store';
+import { UserProfile } from '@/types';
 
 export default function Profile() {
-  const [isLoading, setIsLoading] = useState(true);
-
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state: RootState) => state.user as UserProfile);
+  console.log('user', user);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Функции для управления модальным окном
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-  const handleConfirm = () => {
-    // console.log('Профиль обновлен');
+  const openModal: () => void = () => setIsModalOpen(true);
+  const closeModal: () => void = () => setIsModalOpen(false);
+  const handleConfirm: () => void = () => {
     closeModal();
   };
-  const dispatch = useAppDispatch();
-  //
-  // useEffect(() => {
-  //   dispatch(signInUser('s22@g.com', '123456'));
-  // }, []);
 
-  const handleSignOut = async () => {
-    await dispatch(signOutThunk());
+  // Функции для Выхода
+  const handleSignOut: () => Promise<void> = async () => {
+    try {
+      await dispatch(signOutThunk()).unwrap();
+      // Перенаправление на главную страницу после успешного выхода
+      router.push('/');
+    } catch (error) {
+      console.error('Ошибка при выходе:', error);
+    } finally {
+      closeModal();
+    }
   };
+
   return (
     <WrapperApp>
       <Header />
@@ -46,8 +53,8 @@ export default function Profile() {
         <HeaderPage title={'Профиль'} openModal={openModal} router={router} />
         {/*avatar*/}
         <UserAvatarComponent
-          userName={'userName'}
-          userAvatar={'/assets/images/logo.png'}
+          userName={user.userName}
+          userAvatar={user.userAvatar}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
         />

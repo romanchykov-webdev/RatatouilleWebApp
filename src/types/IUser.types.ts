@@ -1,4 +1,4 @@
-export interface IAuth {
+export interface UserProfile {
   isAuth: boolean;
   userId: string;
   userName: string;
@@ -10,5 +10,13 @@ export interface IAuth {
 }
 
 export interface INotAuthorized {
-  isAuth: IAuth['isAuth'];
+  isAuth: UserProfile['isAuth'];
+}
+
+export interface IUserProfileUpdate {
+  userId: string;
+  userName: string;
+  userAvatar: string | null | undefined;
+  lang: string;
+  userTheme: string;
 }

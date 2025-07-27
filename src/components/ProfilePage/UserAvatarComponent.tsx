@@ -1,17 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { SquarePen } from 'lucide-react';
-import { shadowBox } from '@/helpers/shadowBoxStyle';
-import { shadowText } from '@/helpers/shadowTextStyle';
+import { SquarePen, Camera } from 'lucide-react';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useShadowBox } from '@/helpers/hooks/useShadowBox';
+import { useShadowText } from '@/helpers/hooks/useShadowText';
 
 interface UserAvatarComponentProps {
   userName: string;
   userAvatar: string;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  handleImageChange?: (event: ChangeEvent<HTMLInputElement>) => void; // Исправленный тип
 }
 
 const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
@@ -19,7 +23,13 @@ const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
   userAvatar,
   isLoading,
   setIsLoading,
+  handleImageChange,
 }) => {
+  const pathName = usePathname();
+
+  const { shadowBox } = useShadowBox();
+  const { shadowText } = useShadowText();
+
   return (
     <div className="flex flex-col gap-y-2 items-center ">
       <div className="relative">
@@ -40,12 +50,27 @@ const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
               "
           style={shadowBox()}
         >
-          <SquarePen className="w-[30px] h-[30px]" />
+          {pathName.startsWith('/profileEdit') ? (
+            <label htmlFor="avatar-upload" className="cursor-pointer">
+              <Camera className="w-[30px] h-[30px] dark:text-black" />
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </label>
+          ) : (
+            <Link href={'/profileEdit'}>
+              <SquarePen className="w-[30px] h-[30px]" />
+            </Link>
+          )}
         </div>
       </div>
       <h6
         style={shadowText()}
-        className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap"
+        className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap capitalize"
       >
         {userName}
       </h6>
