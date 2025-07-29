@@ -50,7 +50,7 @@ const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
               "
           style={shadowBox()}
         >
-          {pathName.startsWith('/profileEdit') ? (
+          {pathName.startsWith('/profile/edit') ? (
             <label htmlFor="avatar-upload" className="cursor-pointer">
               <Camera className="w-[30px] h-[30px] dark:text-black" />
               <input
@@ -62,8 +62,8 @@ const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
               />
             </label>
           ) : (
-            <Link href={'/profileEdit'}>
-              <SquarePen className="w-[30px] h-[30px]" />
+            <Link href={'/profile/edit'}>
+              <SquarePen className="w-[30px] h-[30px] text-black" />
             </Link>
           )}
         </div>

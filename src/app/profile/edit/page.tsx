@@ -7,7 +7,7 @@ import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
 import { IUserProfileUpdate, UserProfile } from '@/types';
-import avatarDefault from '../../../public/assets/images/avatarDefault.png';
+import avatarDefault from '../../../../public/assets/images/avatarDefault.png';
 import HeaderPage from '@/components/ProfilePage/HeaderPage';
 import { Accordion } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { Loader2 } from 'lucide-react';
 import ChangeUserLang from '@/components/ProfileEditScreen/ChangeUserLang';
 import ChangeUserTheme from '@/components/ProfileEditScreen/ChangeUserTheme';
 import { handleImageChange, handlerUpdateProfile } from '@/lib/utils/profileEditHandlers';
+import BreadcrumbsComponent from '@/components/Breadcrumbs/BreadcrumbsComponent';
 
 const ProfileEdit: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +52,7 @@ const ProfileEdit: React.FC = () => {
 
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} />
+        <BreadcrumbsComponent />
         <UserAvatarComponent
           userName={userDataUpdate?.userName}
           // userAvatar={
