@@ -6,14 +6,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { clearQuery } from '@/store/slices/searchSlice';
 import { useDispatch } from 'react-redux';
-import { shadowBox } from '@/helpers/shadowBoxStyle';
-import { shadowText } from '@/helpers/shadowTextStyle';
+import { useShadowBox } from '@/helpers/hooks/useShadowBox';
+import { useShadowText } from '@/helpers/hooks/useShadowText';
+// import { shadowBox } from '@/helpers/shadowBoxStyle';
+// import { shadowText } from '@/helpers/shadowTextStyle';
 
 export default function Logo() {
   const dispatch = useDispatch();
   const handler = () => {
     dispatch(clearQuery());
   };
+  const { shadowBox } = useShadowBox();
+  const { shadowText } = useShadowText();
 
   const [isLoading, setIsLoading] = useState(true);
   return (

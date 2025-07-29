@@ -21,8 +21,6 @@ export default function ToggleTheme(): JSX.Element | null {
     else setTheme('light');
   };
 
-  // const currentTheme = theme === "system" ? resolvedTheme : theme
-
   return (
     <button
       type="button"

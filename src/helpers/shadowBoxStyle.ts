@@ -20,7 +20,7 @@ export const shadowBox = ({
   theme = 'light',
 }: ShadowBoxParams = {}): ShadowBoxStyle => {
   const resolvedColor =
-    color ?? (theme === 'dark' ? 'rgb(255,255,255, 0.5)' : 'rgba(0, 0, 0, 0.5)');
+    color ?? (theme === 'dark' ? 'rgba(255,255,255, 0.5)' : 'rgba(0, 0, 0, 0.5)');
   return {
     boxShadow: `${offsetX} ${offsetY} ${blurRadius} ${spreadRadius} ${resolvedColor}`,
   };

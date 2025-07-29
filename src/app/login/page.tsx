@@ -21,10 +21,11 @@ import { logInUser } from '@/store/thunks/logInUserThunks';
 import { z } from 'zod';
 import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 const loginSchema = z.object({
-  email: z.string().email('Некорректный email'),
-  password: z.string().min(6, 'Пароль должен быть не короче 6 символов'),
+  email: z.string().email('Incorrect email'),
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -43,9 +44,9 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const handlerLogIn = async (e: React.FormEvent) => {
-    console.log('handlerLogIn');
+    // console.log('handlerLogIn');
     e.preventDefault();
-    setErrorText({ errorEmail: null, errorPassword: null });
+    // setErrorText({ errorEmail: null, errorPassword: null });
     setLoading(true);
 
     try {
@@ -65,27 +66,39 @@ export default function Login() {
             ? 'Неверный email или пароль'
             : errorMessage,
         });
+        // toast.error(
+        //   errorMessage.includes('Invalid login')
+        //     ? 'Неверный email или пароль'
+        //     : errorMessage,
+        // );
         setLoading(false);
         return;
       }
 
       // Успешный вход, перенаправление
-      router.push('/profile');
+      toast.success('Login successful');
+      router.push('/');
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errors = err.flatten().fieldErrors as {
           email?: string[];
           password?: string[];
         };
+        // if (errors.email) {
+        //   toast.error(errors.email[0]);
+        // } else if (errors.password) {
+        //   toast.error(errors.password[0]);
+        // }
         setErrorText({
           errorEmail: errors.email?.[0] || null,
           errorPassword: errors.password?.[0] || null,
         });
       } else {
-        setErrorText({
-          errorEmail: 'Произошла ошибка при входе',
-          errorPassword: 'Произошла ошибка при входе',
-        });
+        toast.error('There was an error logging in');
+        // setErrorText({
+        //   errorEmail: 'Произошла ошибка при входе',
+        //   errorPassword: 'Произошла ошибка при входе',
+        // });
       }
       setLoading(false);
     }
@@ -109,7 +122,11 @@ export default function Login() {
           </CardHeader>
           <CardContent>
             {/*form*/}
-            <form className="mb-5" id="signup-form" onSubmit={handlerLogIn}>
+            <form
+              className="mb-5"
+              id="signup-form"
+              // onSubmit={handlerLogIn}
+            >
               <div className="flex flex-col gap-6">
                 {/*email*/}
                 <div className="grid gap-2">
@@ -147,9 +164,9 @@ export default function Login() {
           </CardContent>
           <CardFooter className="flex-col gap-2">
             <Button
-              // onClick={handlerLogIn}
+              onClick={handlerLogIn}
               variant="outline"
-              // type="submit"
+              type="submit"
               disabled={loading}
               className={`w-full bg-black text-white dark:bg-white dark:text-black cursor-pointer transform-hover duration-500
              

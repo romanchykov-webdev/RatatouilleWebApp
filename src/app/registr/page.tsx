@@ -21,6 +21,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { signUpUser } from '@/store/thunks/signUpUserThunks';
+import toast from 'react-hot-toast';
 
 const signUpSchema = z
   .object({
@@ -98,7 +99,8 @@ const SingUp: React.FC = () => {
       }
 
       // Успешная регистрация, перенаправление
-      router.push('/profileEdit');
+      toast.success('Successful registration');
+      router.push('/profile');
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errors = err.flatten().fieldErrors as {

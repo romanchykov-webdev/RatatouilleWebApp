@@ -55,6 +55,7 @@ const ButtonsWrapper: React.FC<ButtonsWrapperProps> = ({ router }) => {
         pathScreen={'/myRecipes'}
         icon={FolderPlus}
         handlePath={handlePath}
+        color={`text-black`}
       />
 
       {/*add new recipe*/}
@@ -63,6 +64,7 @@ const ButtonsWrapper: React.FC<ButtonsWrapperProps> = ({ router }) => {
         pathScreen={'/createNewRecipe'}
         icon={SquarePen}
         handlePath={handlePath}
+        color={`text-black`}
       />
 
       {/*is favorite*/}

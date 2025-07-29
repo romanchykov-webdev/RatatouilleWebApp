@@ -9,8 +9,8 @@ import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
 import { UserProfile } from '@/types';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { shadowBox } from '@/helpers/shadowBoxStyle';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 interface AuthIconProps {
   isAuth: boolean;
@@ -21,6 +21,7 @@ const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
 
+  const { shadowBox } = useShadowBox();
   if (pathname !== '/') return null;
 
   return isAuth ? (
@@ -49,7 +50,7 @@ const SettingsComponent: React.FC = () => {
   );
   return (
     <div className="flex items-center gap-x-12">
-      <ToggleTheme />
+      {isAuth ? null : <ToggleTheme />}
 
       <AuthIcon isAuth={isAuth} userAvatar={userAvatar} />
     </div>

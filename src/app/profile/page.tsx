@@ -79,10 +79,12 @@ export default function Profile() {
 
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
-            <Button variant="outline" onClick={closeModal}>
+            <Button variant="outline" className="cursor-pointer" onClick={closeModal}>
               Cancel
             </Button>
-            <Button onClick={handleSignOut}>Exit</Button>
+            <Button onClick={handleSignOut} className="cursor-pointer">
+              Exit
+            </Button>
           </div>
         </div>
       </Modal>
