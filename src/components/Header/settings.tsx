@@ -1,35 +1,59 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Settings, User } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import ToggleTheme from '@/components/ToggleThem/toggle-theme';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAppSelector } from '@/store/hooks';
+import { RootState } from '@/store';
+import { UserProfile } from '@/types';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
-
-interface SettingsComponentProps {
-
+interface AuthIconProps {
+  isAuth: boolean;
+  userAvatar: string;
 }
 
-const SettingsComponent: React.FC<SettingsComponentProps> = () => {
-
+const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
 
-  const [isAuh, setIsAuh] = useState(true);
+  const { shadowBox } = useShadowBox();
+  if (pathname !== '/') return null;
 
-  const AuthIcon = () => {
-    if (pathname !== '/') return null;
+  return isAuth ? (
+    <Link href={'/profile'}>
+      {/*<User className="w-[30px] h-[30px] " />*/}
+      <Avatar className="w-[50px] h-[50px]" style={shadowBox()}>
+        {isLoading && <Skeleton className="w-[50px] h-[50px] rounded-full" />}
+        <AvatarImage
+          src={userAvatar}
+          alt="Avatar"
+          onLoad={() => setIsLoading(false)}
+          onError={() => setIsLoading(false)}
+        />
+      </Avatar>
+    </Link>
+  ) : (
+    <Link href={'/login'}>
+      <Settings className="w-[50px] h-[50px]" />
+    </Link>
+  );
+};
 
-    return isAuh
-      ? (<Link href={'/profile'}><User className="w-[30px] h-[30px]" /></Link>)
-      : (<Link href={'/login'}><Settings className="w-[50px] h-[50px]" /></Link>);
-  };
+const SettingsComponent: React.FC = () => {
+  const { isAuth, userAvatar } = useAppSelector(
+    (state: RootState) => state.user as UserProfile,
+  );
+  return (
+    <div className="flex items-center gap-x-12">
+      {isAuth ? null : <ToggleTheme />}
 
-  return <div className="flex items-center gap-x-12">
-
-    <ToggleTheme />
-
-    <AuthIcon />
-  </div>;
+      <AuthIcon isAuth={isAuth} userAvatar={userAvatar} />
+    </div>
+  );
 };
 export default SettingsComponent;

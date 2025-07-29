@@ -6,7 +6,9 @@ import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
 import { useIsHydrated } from '@/helpers/hooks/useIsHydrated';
 import { useEffect } from 'react';
 import WelcomeScreen from '@/components/Modal/WelcomeScreen';
-import { getAllRecipes } from '../../api/GET/getData';
+// import { getAllRecipes } from '../../api/GET/getData';
+import { useAppDispatch } from '@/store/hooks';
+import { logInUser } from '@/store/thunks/logInUserThunks';
 
 export default function Page() {
   const widthScreen = useWindowWidth();
@@ -17,27 +19,23 @@ export default function Page() {
 
   const hydrated = useIsHydrated();
 
-  useEffect(() => {
-    console.log('isDesktop:', isDesktop);
-  }, [isDesktop]);
-
-  const fetchRecipes = async () => {
-    try {
-      const result = await getAllRecipes();
-      if (!result.success) {
-        console.error('Ошибка при запросе к Supabase:', result.error);
-        return;
-      }
-      // console.log('Рецепты из Supabase:', result.data);
-    } catch (err) {
-      console.error('Неожиданная ошибка:', err);
-    }
-  };
-
+  // const fetchRecipes = async () => {
+  //   try {
+  //     const result = await getAllRecipes();
+  //     if (!result.success) {
+  //       console.error('Ошибка при запросе к Supabase:', result.error);
+  //       return;
+  //     }
+  //     // console.log('Рецепты из Supabase:', result.data);
+  //   } catch (err) {
+  //     console.error('Неожиданная ошибка:', err);
+  //   }
+  // };
   //
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
+  // //
+  // useEffect(() => {
+  //   fetchRecipes();
+  // }, []);
 
   useEffect(() => {
     const userLang = navigator.language || navigator.languages[0] || null;
