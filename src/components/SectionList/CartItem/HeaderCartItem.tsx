@@ -18,7 +18,7 @@ const HeaderCartItem: React.FC<IHeaderCartItemProps> = ({
   const { shadowBox } = useShadowBox();
 
   return (
-    <div className="flex items-start justify-between">
+    <div className="flex items-start justify-between  w-full">
       <div>
         {video && <Youtube className="text-red-500" />}
         {lang.length > 1 && (

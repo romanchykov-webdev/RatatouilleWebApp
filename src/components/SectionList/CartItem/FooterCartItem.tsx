@@ -25,7 +25,7 @@ const FooterCartItem: React.FC<IFooterCartItemProps> = ({
       </div>
 
       {/*icons block*/}
-      <div className="flex items-center justify-around pb-2">
+      <div className="flex items-center justify-between ">
         {comments > 0 && (
           <div className="flex items-center justify-center relative">
             <MessageCircle className="text-white w-[30px] h-[30px]" />

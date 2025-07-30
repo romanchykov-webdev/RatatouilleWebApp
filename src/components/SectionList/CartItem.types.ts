@@ -43,7 +43,7 @@ export interface IBGImageCartItemProps extends ICartItemBaseProps {
 }
 
 // Props для футера карточки
-export interface IFooterCartItemProps extends ICartItemBaseProps {
+export interface IFooterCartItemProps {
   title: IItem['title'];
   like: IItem['like'];
   comments: IItem['comments'];

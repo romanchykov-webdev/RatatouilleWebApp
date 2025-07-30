@@ -29,11 +29,11 @@ const CartItem: React.FC<ICartItemProps> = ({ item }): React.ReactElement => {
           <BGImage bdImg={item.image} isLoading={isLoading} setIsLoading={setIsLoading} />
           {/*content*/}
           <div
-            className="absolute inset-0 bg-gradient-to-t
-                        from-black/90 via-black/60 to-transparent p-1
-                        flex flex-col justify-between
+            className="absolute left-0 top-0 bottom-0 right-0 bg-gradient-to-t
+                        from-black/90 to-black/70
                       "
-          >
+          />
+          <div className="absolute flex flex-col h-full items-center justify-between  w-full left-0 p-2">
             {/*header video author avatar name*/}
             <HeaderCartItem
               video={item.video}

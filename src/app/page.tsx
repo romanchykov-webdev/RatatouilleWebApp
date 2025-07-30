@@ -6,6 +6,7 @@ import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
 import { useIsHydrated } from '@/helpers/hooks/useIsHydrated';
 import { useEffect } from 'react';
 import WelcomeScreen from '@/components/Modal/WelcomeScreen';
+import HomeBigCarouselComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselComponent';
 
 export default function Page() {
   const widthScreen = useWindowWidth();
@@ -28,6 +29,7 @@ export default function Page() {
     <WrapperApp>
       <Header isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
+        <HomeBigCarouselComponent />
         <SectionListWrapper />
       </main>
       <footer className="bg-red-500">footer</footer>
