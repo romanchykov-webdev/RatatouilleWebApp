@@ -1,15 +1,25 @@
 'use client';
 
 import React, { JSX, useState } from 'react';
-import { Category } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ICategory } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/Modal/modal';
+import { AppDispatch } from '@/store';
+import {
+  addCategory,
+  addSubCategory,
+  clearCategorySubCategory,
+} from '@/store/slices/createNewRecipeSlice';
 
 interface ISelectedCategoryProps {
-  data: Category[];
+  data: ICategory[];
+  dispatch: AppDispatch;
 }
 
-const SelectedCategory: React.FC<ISelectedCategoryProps> = ({ data }): JSX.Element => {
+const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
+  data,
+  dispatch,
+}): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState<string>('');
   const [subCategory, setSubCategory] = useState<string>('');
@@ -21,23 +31,53 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({ data }): JSX.Eleme
     setIsModalOpen(false);
     setCategoryName('');
     setSubCategory('');
+    dispatch(clearCategorySubCategory());
   };
 
-  const renderSubCategory = () => {
-    if (categoryName === '') return null;
-    const res = data.find(item => item.name === categoryName);
-    console.log('category', res?.subcategories);
-    return res?.subcategories.map(item => (
-      <Button key={item.name} onClick={() => setSubCategory(item.name)}>
-        {item.name}
+  const handlerAddCategory = (category: { name: string; point: string }) => {
+    setCategoryName(category.name);
+    dispatch(addCategory(category.point));
+  };
+  const renderCategory = (): JSX.Element[] => {
+    // const res = data.map(item => item.name);
+    // const shortCategories = data.map(({ name, point }) => ({ name, point }));
+    const res = data.map(({ name, point }) => ({ name, point }));
+    // console.log('res', res);
+    return res.map(category => (
+      <Button
+        className="cursor-pointer"
+        key={category.name}
+        onClick={() => handlerAddCategory(category)}
+      >
+        {category.name}
       </Button>
     ));
   };
 
-  console.log('renderSubCategory', renderSubCategory);
+  const handlerAddSubCategory = (subCategory: { name: string; point: string }) => {
+    setSubCategory(subCategory.name);
+    dispatch(addSubCategory(subCategory.point));
+  };
+  const renderSubCategory: () => JSX.Element[] | null = (): JSX.Element[] | null => {
+    if (categoryName === '') return null;
+    const res: ICategory | undefined = data.find(
+      (item: ICategory) => item.name === categoryName,
+    );
+    return (
+      res?.subcategories.map(item => (
+        <Button
+          key={item.name}
+          className="cursor-pointer"
+          onClick={() => handlerAddSubCategory(item)}
+        >
+          {item.name}
+        </Button>
+      )) || null
+    );
+  };
 
   return (
-    <>
+    <div className="mb-5">
       <Button
         onClick={() => setIsModalOpen(true)}
         variant="outline"
@@ -49,12 +89,12 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({ data }): JSX.Eleme
       {categoryName !== '' && subCategory !== '' && (
         <div>
           {categoryName && (
-            <span onClick={() => setCategoryName('')}>
+            <span>
               {categoryName}
               {' ->'}
             </span>
           )}{' '}
-          {subCategory && <span onClick={() => setSubCategory('')}>{subCategory}</span>}
+          {subCategory && <span>{subCategory}</span>}
         </div>
       )}
 
@@ -72,42 +112,52 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({ data }): JSX.Eleme
         <div className="flex flex-col gap-y-4">
           <div className="flex items-center gap-x-2">
             {categoryName && (
-              <span onClick={() => setCategoryName('')}>
+              <span
+                className="hover:text-red-500 cursor-pointer"
+                onClick={() => {
+                  setCategoryName('');
+                  setSubCategory('');
+                }}
+              >
                 {categoryName}
                 {' ->'}
               </span>
             )}{' '}
-            {subCategory && <span onClick={() => setSubCategory('')}>{subCategory}</span>}
+            {subCategory && (
+              <span
+              // className="hover:text-red-500 cursor-pointer"
+              // onClick={() => setSubCategory('')}
+              >
+                {subCategory}
+              </span>
+            )}
           </div>
 
           {/*render category*/}
-          {categoryName === '' &&
-            data.map((category: Category) => {
-              return (
-                <Button
-                  key={category.name}
-                  onClick={() => setCategoryName(category.name)}
-                >
-                  {category.name}
-                </Button>
-              );
-            })}
+          {categoryName === '' && renderCategory()}
 
           {/*render sub category*/}
           {renderSubCategory()}
 
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
-            <Button variant="outline" className="cursor-pointer" onClick={handleConfirm}>
-              Save
-            </Button>
+            {subCategory !== '' && (
+              <Button
+                variant="outline"
+                className="cursor-pointer"
+                onClick={handleConfirm}
+              >
+                Save
+              </Button>
+            )}
+
             <Button onClick={closeModal} className="cursor-pointer">
               Exit
             </Button>
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 export default SelectedCategory;

@@ -1,12 +1,12 @@
-export interface Subcategory {
+export interface ISubcategory {
   name: string;
   point: string;
   image: string;
 }
 
-export interface Category {
+export interface ICategory {
   name: string;
   point: string;
   image: string;
-  subcategories: Subcategory[];
+  subcategories: ISubcategory[];
 }
