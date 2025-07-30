@@ -8,7 +8,9 @@ import { IBGImageCartItemProps } from '@/components/SectionList/CartItem.types';
 const BGImage: React.FC<IBGImageCartItemProps> = ({ bdImg, isLoading, setIsLoading }) => {
   return (
     <Avatar className="w-full h-full rounded-none absolute top-0 left-0 right-0 bottom-0">
-      {isLoading && <Skeleton className="w-full h-full absolute" />}
+      {isLoading && (
+        <Skeleton className="w-full h-full top-0 left-0 right-0 bottom-0 absolute bg-neutral-500" />
+      )}
       <AvatarImage
         src={bdImg}
         className={`w-full h-full  ${isLoading ? 'hidden' : 'block'}`}

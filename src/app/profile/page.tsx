@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 
 import { Modal } from '@/components/Modal/modal';
@@ -47,7 +47,7 @@ export default function Profile() {
 
   return (
     <WrapperApp>
-      <Header />
+      <HeaderComponent />
       {/*top section*/}
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} openModal={openModal} router={router} />

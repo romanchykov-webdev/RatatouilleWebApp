@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ const SearchScreen: React.FC = () => {
 
   return (
     <WrapperApp>
-      <Header />
+      <HeaderComponent />
 
       <div>
         <h1>Результаты поиска</h1>

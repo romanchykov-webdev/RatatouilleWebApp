@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
@@ -48,7 +48,7 @@ const ProfileEdit: React.FC = () => {
 
   return (
     <WrapperApp>
-      <Header />
+      <HeaderComponent />
 
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} />

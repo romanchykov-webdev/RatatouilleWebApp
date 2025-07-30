@@ -1,5 +1,5 @@
 'use client';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import useWindowWidth from '@/helpers/widthScreen';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
@@ -27,7 +27,7 @@ export default function Page() {
   }
   return (
     <WrapperApp>
-      <Header isDesktop={isDesktop} />
+      <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
         <HomeBigCarouselComponent />
         <SectionListWrapper />
