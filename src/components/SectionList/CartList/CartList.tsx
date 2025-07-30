@@ -1,47 +1,23 @@
 'use client';
 
 import React, { JSX, useEffect, useState } from 'react';
-import CartItem from '@/components/SectionList/CartItem';
+import CartItem from '@/components/SectionList/CartItem/CartItem';
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { Progress } from '@/components/ui/progress';
+import ProgressBarPagination from '@/components/SectionList/CartList/ProgressBarPagination';
+import { ICartListProps } from '@/components/SectionList/CartItem.types';
 
-// Интерфейс для одного элемента (салат, блюдо и т.д.)
-interface IItem {
-  id: string;
-  index: number;
-  image: string;
-  author: string;
-  authorAvatar: string;
-  category: string;
-  subcategory: string;
-  title: string;
-  like: number;
-  comments: number;
-  rating: number;
-  isLiked: boolean;
-  lang: string[];
-  video: boolean;
-}
-
-// Интерфейс для пропсов компонента CartsList
-interface ICartsListProps {
-  categoryArr: IItem[];
-}
-
-const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
+const CartList: React.FC<ICartListProps> = ({ categoryArr }): JSX.Element => {
   const [api, setApi] = useState<CarouselApi | undefined>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
 
-  // console.log('CartsList categoryArr', categoryArr);
+  // console.log('CartList categoryArr', categoryArr);
 
   useEffect(() => {
     if (!api) {
@@ -62,7 +38,7 @@ const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
     };
   }, [api]);
 
-  const progress = count > 1 ? ((current - 1) / (count - 1)) * 100 : 0;
+  const progress: number = count > 1 ? ((current - 1) / (count - 1)) * 100 : 0;
   return (
     <section className="border-2 border-neutral-400 rounded-[16px] p-[10px]  flex gap-x-10 relative">
       <div className="absolute -top-5">
@@ -88,21 +64,10 @@ const CartsList: React.FC<ICartsListProps> = ({ categoryArr }): JSX.Element => {
           ))}
         </CarouselContent>
 
-        <div className="text-muted-foreground py-2 text-center text-sm">
-          <Progress value={progress} />
-          <div className="relative bg-black w-full top-[20px]">
-            <CarouselPrevious
-              style={{ backgroundColor: 'var(--button-slider)' }}
-              className="left-[calc(45%-50px)] w-[50px] h-[30px]  "
-            />
-            <CarouselNext
-              style={{ backgroundColor: 'var(--button-slider)' }}
-              className="right-[calc(45%-50px)] w-[50px] h-[30px]  "
-            />
-          </div>
-        </div>
+        {/*progress bar and pagination*/}
+        <ProgressBarPagination progress={progress} />
       </Carousel>
     </section>
   );
 };
-export default CartsList;
+export default CartList;
