@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import CartsList from '@/components/SectionList/CartsList';
+import CartList from '@/components/SectionList/CartList/CartList';
 import AnimatedWrapperUp from '@/components/Animated/AnimatedWrapperUp';
 
 import {
@@ -31,7 +31,7 @@ const SectionListWrapper: React.FC = () => {
     <>
       {allTopHome.map((item, i) => (
         <AnimatedWrapperUp key={i} delay={i * 0.05}>
-          <CartsList categoryArr={item} />
+          <CartList categoryArr={item} />
         </AnimatedWrapperUp>
       ))}
     </>
