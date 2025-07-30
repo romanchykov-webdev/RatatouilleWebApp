@@ -11,7 +11,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { JSX, useState } from 'react';
-import BGImage from '@/components/SectionList/CartItem/BGImage';
+
+import ItemCarousel from '@/components/Sliders/HomeBigCarousel/ItemCarousel';
 
 interface IWrapperCarouselItemsProps {
   index: number;
@@ -20,11 +21,14 @@ interface IWrapperCarouselItemsProps {
 export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
   index,
 }): JSX.Element => {
+  const imgMok =
+    'https://media.istockphoto.com/id/1829241109/it/foto/godersi-un-brunch-insieme.jpg?s=1024x1024&w=is&k=20&c=2B00_fh7byGrcg63_XXlpsoDTpfY9KGvEedV3AHlkLI=';
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   return (
     <CarouselItem key={index} className="h-[420px]">
       <div className="">
-        <Card className="h-[400px] py-0">
+        <Card className="h-[400px] py-0 border-none bg-transparent">
           <CardContent className="flex  items-center justify-center  h-full p-0">
             {/*bord*/}
             <div className=" grid grid-cols-5 gap-1 w-full h-full gap-x-2">
@@ -35,18 +39,19 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
               flex items-center justify-center relative overflow-hidden
               "
               >
-                {/*bg image*/}
-                <BGImage
-                  bdImg={
-                    'https://media.istockphoto.com/id/1829241109/it/foto/godersi-un-brunch-insieme.jpg?s=1024x1024&w=is&k=20&c=2B00_fh7byGrcg63_XXlpsoDTpfY9KGvEedV3AHlkLI='
-                  }
+                <ItemCarousel
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
-                />
-                <div
-                  className="absolute left-0 top-0 bottom-0 right-0 bg-gradient-to-t
-                        from-black/90 to-black/70
-                      "
+                  video={true}
+                  lang={['ru']}
+                  bgBigImage={imgMok}
+                  authorAvatar={imgMok}
+                  author={'sam Auth'}
+                  title={'title'}
+                  like={10}
+                  comments={10}
+                  rating={10}
+                  isLiked={true}
                 />
               </div>
 
@@ -55,18 +60,44 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
                 <div
                   className="text-4xl font-semibold border-2
                             border-neutral-300 rounded-[16px] col-span-2 h-full
-                            flex items-center justify-center
+                            flex items-center justify-center relative overflow-hidden
                             "
                 >
-                  {index + 2}
+                  <ItemCarousel
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    video={true}
+                    lang={['ru']}
+                    bgBigImage={imgMok}
+                    authorAvatar={imgMok}
+                    author={'sam Auth'}
+                    title={'title'}
+                    like={10}
+                    comments={10}
+                    rating={10}
+                    isLiked={true}
+                  />
                 </div>
                 <div
                   className="text-4xl font-semibold border-2
                               border-neutral-300 rounded-[16px] col-span-2 h-full
-                              flex items-center justify-center
+                              flex items-center justify-center relative overflow-hidden
                               "
                 >
-                  {index + 3}
+                  <ItemCarousel
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    video={true}
+                    lang={['ru']}
+                    bgBigImage={imgMok}
+                    authorAvatar={imgMok}
+                    author={'sam Auth'}
+                    title={'title'}
+                    like={10}
+                    comments={10}
+                    rating={10}
+                    isLiked={true}
+                  />
                 </div>
               </div>
             </div>

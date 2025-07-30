@@ -23,17 +23,17 @@ const SearchComponent: React.FC = () => {
 
   //  Отправка запроса на сервер
   useEffect(() => {
-    if (debounceValue && pathName.startsWith('/searchScreen')) {
+    if (debounceValue && pathName.startsWith('/search')) {
       // getSearchQuery(debounceValue);
       console.log(debounceValue);
     }
   }, [dispatch, debounceValue, pathName]);
 
-  if (pathName !== '/' && !pathName.startsWith('/searchScreen')) return null;
+  if (pathName !== '/' && !pathName.startsWith('/search')) return null;
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push('/searchScreen');
+      router.push('/search');
     }
   };
 
@@ -48,7 +48,7 @@ const SearchComponent: React.FC = () => {
         style={{ paddingLeft: 5, height: 40, fontSize: 24 }}
         placeholder="Search recipe"
       />
-      {!pathName.startsWith('/searchScreen') && (
+      {!pathName.startsWith('/search') && (
         <Button
           style={{ marginLeft: 10 }}
           onClick={handleSearch}
@@ -56,7 +56,7 @@ const SearchComponent: React.FC = () => {
         >
           <Search
             style={{ height: 30, width: 30 }}
-            className="text-neutral-400 dark:text-white hover:text-neutral-900 transition-text duration-600"
+            className="text-neutral-700 dark:text-black hover:text-neutral-900 transition-text duration-600"
           />
         </Button>
       )}

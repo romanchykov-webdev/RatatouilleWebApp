@@ -22,6 +22,9 @@ const BreadcrumbsComponent: React.FC = () => {
     if (pathname.includes('/profile/edit')) {
       crumbs.push({ label: 'Edit profile', href: '/profile/edit' });
     }
+    if (pathname.includes('/profile/create')) {
+      crumbs.push({ label: 'Create new recipe', href: '/profile/create' });
+    }
     return crumbs;
   };
 

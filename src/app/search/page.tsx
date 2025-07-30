@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 
 const SearchScreen: React.FC = () => {
-
   const query = useSelector((state: RootState) => state.search.query);
 
   const debounceValue = useDebounce(query);
@@ -19,7 +18,7 @@ const SearchScreen: React.FC = () => {
 
       <div>
         <h1>Результаты поиска</h1>
-        <p>Введённый запрос: {query || 'Запрос не указан'}</p>
+        <p>Введённый запрос: {debounceValue || 'Запрос не указан'}</p>
         {/* Логика для отображения результатов поиска на основе query */}
       </div>
     </WrapperApp>

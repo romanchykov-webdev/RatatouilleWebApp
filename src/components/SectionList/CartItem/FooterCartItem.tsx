@@ -16,10 +16,10 @@ const FooterCartItem: React.FC<IFooterCartItemProps> = ({
   const { shadowText } = useShadowText();
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full ">
       {/*title*/}
       <div className="flex items-center justify-center pb-5 overflow-hidden">
-        <h6 className="text-white " style={shadowText()}>
+        <h6 className="text-white capitalize" style={shadowText()}>
           {title}
         </h6>
       </div>
