@@ -7,7 +7,11 @@ import { useAppSelector } from '@/store/hooks';
 import toast from 'react-hot-toast';
 import { addHeaderImage, clearHeaderImage } from '@/store/slices/createNewRecipeSlice';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { compressImage, recipeCompressionOptions } from '@/lib/utils/imageCompression';
+import {
+  compressImage,
+  formatMB,
+  recipeCompressionOptions,
+} from '@/lib/utils/imageCompression';
 
 interface IAddHeaderImageProps {
   dispatch: AppDispatch;
@@ -44,9 +48,15 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
 
     try {
       // Сжатие изображения
-      const compressedFile = await compressImage(file, recipeCompressionOptions);
-
+      // const compressedFile = await compressImage(file, recipeCompressionOptions);
+      const { file: compressedFile, sizeMB } = await compressImage(
+        file,
+        recipeCompressionOptions,
+      );
+      // console.log('Размер сжатого файла (в байтах):', compressedFile.size);
+      // console.log('Размер в мегабайтах:', formatMB(sizeMB));
       // Проверка размера сжатого файла (например, максимум 2MB, как в recipeCompressionOptions)
+      toast.success(`Размер изображения: ${formatMB(sizeMB)}`);
       if (compressedFile.size > 2 * 1024 * 1024) {
         toast.error('Сжатый файл всё ещё слишком большой. Попробуйте другое изображение');
         return;

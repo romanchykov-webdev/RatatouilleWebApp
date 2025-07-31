@@ -13,7 +13,7 @@ const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
-  console.log('setSelectedFile', selectedFile);
+  // console.log('setSelectedFile', selectedFile);
   // const createRecipe:ICreateNewRecipe = useAppSelector(
   //   (state: RootState): ICreateNewRecipe => state.createNewRecipe,
   // );
