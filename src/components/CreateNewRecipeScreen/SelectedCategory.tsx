@@ -13,6 +13,7 @@ import {
 
 interface ISelectedCategoryProps {
   data: ICategory[];
+
   dispatch: AppDispatch;
 }
 

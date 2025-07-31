@@ -12,15 +12,20 @@ import {
   formatMB,
   recipeCompressionOptions,
 } from '@/lib/utils/imageCompression';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface IAddHeaderImageProps {
   dispatch: AppDispatch;
   setSelectedFile: (file: File | null) => void;
+  categoryStore: string;
+  subCategoryStore: string;
 }
 
 const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
   dispatch,
   setSelectedFile,
+  categoryStore,
+  subCategoryStore,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageHeader = useAppSelector(
@@ -48,14 +53,10 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
 
     try {
       // Сжатие изображения
-      // const compressedFile = await compressImage(file, recipeCompressionOptions);
       const { file: compressedFile, sizeMB } = await compressImage(
         file,
         recipeCompressionOptions,
       );
-      // console.log('Размер сжатого файла (в байтах):', compressedFile.size);
-      // console.log('Размер в мегабайтах:', formatMB(sizeMB));
-      // Проверка размера сжатого файла (например, максимум 2MB, как в recipeCompressionOptions)
       toast.success(`Размер изображения: ${formatMB(sizeMB)}`);
       if (compressedFile.size > 2 * 1024 * 1024) {
         toast.error('Сжатый файл всё ещё слишком большой. Попробуйте другое изображение');
@@ -91,27 +92,33 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
   };
 
   return (
-    <div
-      onClick={handlerAddImage}
-      className={`border-[1px] border-neutral-300 w-full h-[200px]
+    <section className="relative">
+      {(categoryStore === '' || subCategoryStore === '') && (
+        <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />
+      )}
+
+      <div
+        onClick={handlerAddImage}
+        className={`border-[1px] border-neutral-300 w-full h-[200px]
                   rounded-[10px] flex flex-col items-center justify-center bg-neutral-400
                   dark:text-black cursor-pointer gap-y-2 hover:gap-y-5 transition-all duration-600
-                  relative
+                  relative mb-5
                   ${imageHeader && previewUrl ? 'bg-cover bg-center bg-no-repeat' : ''}
                 `}
-      style={
-        imageHeader && previewUrl ? { backgroundImage: `url(${previewUrl})` } : undefined
-      }
-    >
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        className="hidden"
-      />
-      {imageHeader && previewUrl ? (
-        <>
+        style={
+          imageHeader && previewUrl
+            ? { backgroundImage: `url(${previewUrl})` }
+            : undefined
+        }
+      >
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+        />
+        {imageHeader && previewUrl ? (
           <button
             style={shadowBox()}
             onClick={e => {
@@ -122,14 +129,14 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
           >
             X
           </button>
-        </>
-      ) : (
-        <>
-          <ImagePlus className="mr-2 h-10 w-10" />
-          <span>Выбрать изображение</span>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <ImagePlus className="mr-2 h-10 w-10" />
+            <span>Выбрать изображение</span>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 export default AddHeaderImage;

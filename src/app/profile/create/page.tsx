@@ -7,12 +7,28 @@ import BreadcrumbsComponent from '@/components/Breadcrumbs/BreadcrumbsComponent'
 import { supabase } from '../../../../api/supabase';
 import SelectedCategory from '@/components/CreateNewRecipeScreen/SelectedCategory';
 import AddHeaderImage from '@/components/CreateNewRecipeScreen/AddHeaderImage';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import AddLanguages from '@/components/CreateNewRecipeScreen/AddLanguages';
+import { RootState } from '@/store';
+import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRecipe';
+import { useShadowBox } from '@/helpers/hooks/useShadowBox';
+import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
+  const createNewRecipe = useAppSelector((state: RootState) => state.createNewRecipe);
+  const {
+    category: categoryStore,
+    subCategory: subCategoryStore,
+    imageHeader: imageHeaderStore,
+    languages: languagesStore,
+    title: titleStore,
+  } = createNewRecipe;
+
+  const { shadowBox } = useShadowBox();
+
   // console.log('setSelectedFile', selectedFile);
   // const createRecipe:ICreateNewRecipe = useAppSelector(
   //   (state: RootState): ICreateNewRecipe => state.createNewRecipe,
@@ -37,12 +53,31 @@ const CreateNewRecipe: React.FC = () => {
       <HeaderComponent />
       <BreadcrumbsComponent />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-        <div className="w-full  h-[300px] bg-neutral-500  mb-5 gap-10">
+        {/*section 1*/}
+        <section
+          style={shadowBox()}
+          className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px]   gap-y-10"
+        >
           <SelectedCategory data={category} dispatch={dispatch} />
-          <AddHeaderImage dispatch={dispatch} setSelectedFile={setSelectedFile} />
-        </div>
-        <div className="w-full h-[300px] bg-neutral-500 mb-5"></div>
-        <div className="w-full h-[300px] bg-neutral-500 sm:col-span-2 lg:col-span-1"></div>
+          <AddHeaderImage
+            dispatch={dispatch}
+            setSelectedFile={setSelectedFile}
+            categoryStore={categoryStore}
+            subCategoryStore={subCategoryStore}
+          />
+          <AddLanguages dispatch={dispatch} imageHeaderStore={imageHeaderStore} />
+        </section>
+
+        {/*section 2*/}
+        <section className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col   gap-y-10">
+          <CreateTitleRecipe dispatch={dispatch} languagesStore={languagesStore} />
+          <AddArea
+            dispatch={dispatch}
+            titleStore={titleStore}
+            languagesStore={languagesStore}
+          />
+        </section>
+        <div className="w-full h-h-auto bg-neutral-500 sm:col-span-2 lg:col-span-1"></div>
       </div>
     </WrapperApp>
   );
