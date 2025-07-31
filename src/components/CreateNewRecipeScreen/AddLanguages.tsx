@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { AppDispatch } from '@/store';
 import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
@@ -13,10 +13,12 @@ import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScr
 interface IAddLanguagesProps {
   dispatch: AppDispatch;
   imageHeaderStore: string | File | null;
-  // setSelectedFile: (file: File | null) => void;
 }
 
-const AddLanguages: React.FC<IAddLanguagesProps> = ({ dispatch, imageHeaderStore }) => {
+const AddLanguages: React.FC<IAddLanguagesProps> = ({
+  dispatch,
+  imageHeaderStore,
+}: IAddLanguagesProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedLanguages, setSelectedLanguages] = useState<ILanguage[]>([]);
 

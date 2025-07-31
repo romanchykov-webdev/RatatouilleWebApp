@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
 import {
   ILanguage,
@@ -19,7 +19,7 @@ interface ICreateTitleRecipeProps {
 const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
   dispatch,
   languagesStore,
-}) => {
+}: ICreateTitleRecipeProps): JSX.Element => {
   // Состояние ввода для каждого языка
   const [titlesByLang, setTitlesByLang] = useState<Record<string, string>>({});
 

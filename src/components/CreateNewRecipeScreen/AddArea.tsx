@@ -49,9 +49,6 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
 
   return (
     <article className="flex flex-col gap-y-2  relative">
-      {/*{titleStore.length === 0 && (*/}
-      {/*  <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />*/}
-      {/*)}*/}
       <SkeletonCustom<ITitle> dependency={titleStore} />
       <h6 className="text-center">Add area</h6>
       {languagesStore?.map(lang => {

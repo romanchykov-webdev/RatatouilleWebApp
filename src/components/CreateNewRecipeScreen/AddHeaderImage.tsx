@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { JSX, RefObject, useRef, useState } from 'react';
 import { ImagePlus } from 'lucide-react';
 import { AppDispatch, RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
@@ -26,16 +26,16 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
   setSelectedFile,
   categoryStore,
   subCategoryStore,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageHeader = useAppSelector(
-    (state: RootState) => state.createNewRecipe.imageHeader,
+}: IAddHeaderImageProps): JSX.Element => {
+  const fileInputRef: RefObject<HTMLInputElement | null> = useRef<HTMLInputElement>(null);
+  const imageHeader: string | File | null = useAppSelector(
+    (state: RootState): string | File | null => state.createNewRecipe.imageHeader,
   );
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const { shadowBox } = useShadowBox();
 
-  const handlerAddImage = () => {
+  const handlerAddImage: () => void = (): void => {
     fileInputRef.current?.click();
   };
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

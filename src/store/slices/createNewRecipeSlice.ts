@@ -13,6 +13,7 @@ export interface ICreateNewRecipe {
   languages: ILanguage[];
   title: ITitle[];
   aria: IArea[];
+  tags: string[];
 }
 
 const initialState: ICreateNewRecipe = {
@@ -23,6 +24,7 @@ const initialState: ICreateNewRecipe = {
   languages: [],
   title: [],
   aria: [],
+  tags: [],
 };
 
 const createNewRecipeSlice = createSlice({
@@ -62,6 +64,9 @@ const createNewRecipeSlice = createSlice({
     addArea(state, action: PayloadAction<ITitle[]>) {
       state.aria = action.payload;
     },
+    addTags(state, action: PayloadAction<string[]>) {
+      state.tags = action.payload;
+    },
   },
 });
 
@@ -76,5 +81,6 @@ export const {
   removeAllLanguages,
   addTitle,
   addArea,
+  addTags,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;
