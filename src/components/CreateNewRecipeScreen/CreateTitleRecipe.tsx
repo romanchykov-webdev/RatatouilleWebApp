@@ -6,10 +6,10 @@ import {
   ILanguage,
   ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
-import { Input } from '@/components/ui/input';
 import { addTitle } from '@/store/slices/createNewRecipeSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import WrapperInputLS from '@/components/CreateNewRecipeScreen/WrapperInputLS';
 
 interface ICreateTitleRecipeProps {
   dispatch: AppDispatch;
@@ -50,22 +50,14 @@ const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
       {/*{languagesStore.length === 0 && (*/}
       {/*  <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />*/}
       {/*)}*/}
-      <SkeletonCustom<ILanguage> dependency={languagesStore} />
+      <SkeletonCustom dependency={languagesStore} />
       <h6 className="text-center">Add title</h6>
-      {languagesStore?.map(lang => {
-        return (
-          <div key={lang.name} className="flex gap-x-2 items-center">
-            <Input
-              type="text"
-              className="w-[90%]"
-              value={titlesByLang[lang.name] || ''}
-              onChange={e => handleChange(lang.name, e.target.value)}
-              placeholder={`Write the name of the recipe ${lang.value}`}
-            />
-            <div className="capitalize text-lg">{lang.name}</div>
-          </div>
-        );
-      })}
+
+      <WrapperInputLS
+        languagesStore={languagesStore}
+        inputValue={titlesByLang}
+        handleChangeInput={handleChange}
+      />
     </article>
   );
 };

@@ -11,11 +11,12 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import AddLanguages from '@/components/CreateNewRecipeScreen/AddLanguages';
 import { RootState } from '@/store';
 import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRecipe';
-import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 import AddTags from '@/components/CreateNewRecipeScreen/AddTags';
 import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
 import { usePathname } from 'next/navigation';
+import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
+import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState([]);
@@ -30,9 +31,9 @@ const CreateNewRecipe: React.FC = () => {
     title: titleStore,
     aria: ariaStore,
     tags: tagStore,
+    recipeMeta: recipeMetaStore,
   } = createNewRecipe;
 
-  const { shadowBox } = useShadowBox();
   const pathName = usePathname();
 
   // console.log('setSelectedFile', selectedFile);
@@ -60,10 +61,7 @@ const CreateNewRecipe: React.FC = () => {
       <BreadcrumbsComponent />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {/*section 1*/}
-        <section
-          style={shadowBox()}
-          className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px]   gap-y-10"
-        >
+        <SectionWrapper>
           <SelectedCategory data={category} dispatch={dispatch} />
           <AddHeaderImage
             dispatch={dispatch}
@@ -72,26 +70,41 @@ const CreateNewRecipe: React.FC = () => {
             subCategoryStore={subCategoryStore}
           />
           <AddLanguages dispatch={dispatch} imageHeaderStore={imageHeaderStore} />
-        </section>
+        </SectionWrapper>
 
         {/*section 2*/}
-        <section className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col   gap-y-10">
+        <SectionWrapper>
           <CreateTitleRecipe dispatch={dispatch} languagesStore={languagesStore} />
           <AddArea
             dispatch={dispatch}
             titleStore={titleStore}
             languagesStore={languagesStore}
           />
-        </section>
-        <section className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col   gap-y-10">
+        </SectionWrapper>
+
+        {/*section 3*/}
+        <SectionWrapper>
           <AddTags dispatch={dispatch} ariaStore={ariaStore} />
           <RecipeMetaComponents
             dispatch={dispatch}
             tagStore={tagStore}
             pathName={pathName}
           />
-        </section>
-        <div className="w-full h-h-auto bg-neutral-500 sm:col-span-2 lg:col-span-1"></div>
+        </SectionWrapper>
+
+        {/*section 4*/}
+        <SectionWrapper>
+          <IngredientsRecipe
+            dispatch={dispatch}
+            recipeMetaStore={recipeMetaStore}
+            languagesStore={languagesStore}
+          />
+        </SectionWrapper>
+
+        {/*section last*/}
+        <SectionWrapper styleWrapper="sm:col-span-2 lg:col-span-1">
+          last section
+        </SectionWrapper>
       </div>
     </WrapperApp>
   );

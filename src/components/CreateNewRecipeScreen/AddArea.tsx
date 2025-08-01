@@ -7,12 +7,11 @@ import { AppDispatch } from '@/store';
 import {
   IArea,
   ILanguage,
-  ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
-import { Input } from '@/components/ui/input';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import WrapperInputLS from '@/components/CreateNewRecipeScreen/WrapperInputLS';
 
 interface IAddAreaProps {
   dispatch: AppDispatch;
@@ -49,22 +48,14 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
 
   return (
     <article className="flex flex-col gap-y-2  relative">
-      <SkeletonCustom<ITitle> dependency={titleStore} />
+      <SkeletonCustom dependency={titleStore} />
       <h6 className="text-center">Add area</h6>
-      {languagesStore?.map(lang => {
-        return (
-          <div key={lang.name} className="flex gap-x-2 items-center">
-            <Input
-              type="text"
-              className="w-[90%]"
-              value={areaByLang[lang.name] || ''}
-              onChange={e => handleChange(lang.name, e.target.value)}
-              placeholder={`Write the name of the recipe ${lang.value}`}
-            />
-            <div className="capitalize text-lg">{lang.name}</div>
-          </div>
-        );
-      })}
+
+      <WrapperInputLS
+        languagesStore={languagesStore}
+        inputValue={areaByLang}
+        handleChangeInput={handleChange}
+      />
     </article>
   );
 };
