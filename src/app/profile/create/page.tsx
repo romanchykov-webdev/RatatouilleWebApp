@@ -14,6 +14,8 @@ import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRec
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 import AddTags from '@/components/CreateNewRecipeScreen/AddTags';
+import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
+import { usePathname } from 'next/navigation';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState([]);
@@ -27,9 +29,11 @@ const CreateNewRecipe: React.FC = () => {
     languages: languagesStore,
     title: titleStore,
     aria: ariaStore,
+    tags: tagStore,
   } = createNewRecipe;
 
   const { shadowBox } = useShadowBox();
+  const pathName = usePathname();
 
   // console.log('setSelectedFile', selectedFile);
   // const createRecipe:ICreateNewRecipe = useAppSelector(
@@ -81,6 +85,11 @@ const CreateNewRecipe: React.FC = () => {
         </section>
         <section className="w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col   gap-y-10">
           <AddTags dispatch={dispatch} ariaStore={ariaStore} />
+          <RecipeMetaComponents
+            dispatch={dispatch}
+            tagStore={tagStore}
+            pathName={pathName}
+          />
         </section>
         <div className="w-full h-h-auto bg-neutral-500 sm:col-span-2 lg:col-span-1"></div>
       </div>

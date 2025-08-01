@@ -4,6 +4,7 @@ import {
   ILanguage,
   ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IMetaData } from '@/components/RecipeMeta/recipeMeta.types';
 
 export interface ICreateNewRecipe {
   authorId: string;
@@ -14,6 +15,7 @@ export interface ICreateNewRecipe {
   title: ITitle[];
   aria: IArea[];
   tags: string[];
+  recipeMeta: IMetaData;
 }
 
 const initialState: ICreateNewRecipe = {
@@ -25,6 +27,7 @@ const initialState: ICreateNewRecipe = {
   title: [],
   aria: [],
   tags: [],
+  recipeMeta: { time: 0, serv: 0, cal: 0, level: 'easy' },
 };
 
 const createNewRecipeSlice = createSlice({
@@ -67,6 +70,9 @@ const createNewRecipeSlice = createSlice({
     addTags(state, action: PayloadAction<string[]>) {
       state.tags = action.payload;
     },
+    addRecipeMeta(state, action: PayloadAction<ICreateNewRecipe['recipeMeta']>) {
+      state.recipeMeta = action.payload;
+    },
   },
 });
 
@@ -82,5 +88,6 @@ export const {
   addTitle,
   addArea,
   addTags,
+  addRecipeMeta,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;
