@@ -20,6 +20,7 @@ import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState([]);
+  const [measurements, setMeasurements] = useState([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
   const createNewRecipe = useAppSelector((state: RootState) => state.createNewRecipe);
@@ -41,6 +42,14 @@ const CreateNewRecipe: React.FC = () => {
   //   (state: RootState): ICreateNewRecipe => state.createNewRecipe,
   // );
 
+  const getMeasurement = async () => {
+    const { data, error } = await supabase.from('measurement').select('lang');
+
+    if (error) console.log(error.message);
+    console.log('getMeasurement', JSON.stringify(data[0].lang, null, 2));
+    setMeasurements(data[0].lang);
+  };
+
   const getCategory = async () => {
     const { data, error } = await supabase
       .from('categories_masonry')
@@ -53,6 +62,7 @@ const CreateNewRecipe: React.FC = () => {
 
   useEffect(() => {
     getCategory();
+    getMeasurement();
   }, []);
 
   return (
@@ -98,6 +108,7 @@ const CreateNewRecipe: React.FC = () => {
             dispatch={dispatch}
             recipeMetaStore={recipeMetaStore}
             languagesStore={languagesStore}
+            measurements={measurements}
           />
         </SectionWrapper>
 

@@ -30,3 +30,9 @@ export interface IArea extends ITitle {
   lang: ITitle['lang'];
   value: ITitle['value'];
 }
+
+export interface IMeasurement {
+  [language: string]: {
+    [unitKey: string]: string;
+  };
+}

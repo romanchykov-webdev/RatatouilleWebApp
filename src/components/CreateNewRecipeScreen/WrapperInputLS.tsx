@@ -6,13 +6,13 @@ import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScr
 
 interface IWrapperInputLSProps {
   languagesStore: ILanguage[];
-  inputValue: Record<string, string>;
+  inputValue: Record<string, string> | undefined;
   handleChangeInput: (langName: string, value: string) => void;
 }
 
 const WrapperInputLS: React.FC<IWrapperInputLSProps> = ({
   languagesStore,
-  inputValue,
+  // inputValue,
   handleChangeInput,
 }: IWrapperInputLSProps): JSX.Element => {
   return (
@@ -23,7 +23,7 @@ const WrapperInputLS: React.FC<IWrapperInputLSProps> = ({
             <Input
               type="text"
               className="w-[90%]"
-              value={inputValue[lang.name] || ''}
+              // value={inputValue[lang.name] || ''}
               onChange={e => handleChangeInput(lang.name, e.target.value)}
               placeholder={`Write the name of the recipe ${lang.value}`}
             />

@@ -48,7 +48,7 @@ const AddTags: React.FC<IAddTagsProps> = ({
 
   return (
     <article className="relative overflow-hidden">
-      {ariaStore.length === 0 && <SkeletonCustom<IArea> dependency={ariaStore} />}
+      {ariaStore.length === 0 && <SkeletonCustom dependency={ariaStore} />}
       <h6 className="text-center">Add tags</h6>
       <div className="flex items-center justify-center gap-x-2 mb-5">
         <Input
