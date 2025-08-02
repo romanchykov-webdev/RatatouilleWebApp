@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IArea,
+  IIngredientTitle,
   ILanguage,
   ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
@@ -16,6 +17,7 @@ export interface ICreateNewRecipe {
   aria: IArea[];
   tags: string[];
   recipeMeta: IMetaData;
+  ingredients: IIngredientTitle[];
 }
 
 const initialState: ICreateNewRecipe = {
@@ -28,6 +30,7 @@ const initialState: ICreateNewRecipe = {
   aria: [],
   tags: [],
   recipeMeta: { time: 0, serv: 0, cal: 0, level: 'easy' },
+  ingredients: [],
 };
 
 const createNewRecipeSlice = createSlice({
@@ -64,7 +67,7 @@ const createNewRecipeSlice = createSlice({
     addTitle(state, action: PayloadAction<ITitle[]>) {
       state.title = action.payload;
     },
-    addArea(state, action: PayloadAction<ITitle[]>) {
+    addArea(state, action: PayloadAction<IArea[]>) {
       state.aria = action.payload;
     },
     addTags(state, action: PayloadAction<string[]>) {
@@ -72,6 +75,18 @@ const createNewRecipeSlice = createSlice({
     },
     addRecipeMeta(state, action: PayloadAction<ICreateNewRecipe['recipeMeta']>) {
       state.recipeMeta = action.payload;
+    },
+    // addIngredients(state, action: PayloadAction<IIngredientTitle[]>) {
+    //   state.ingredients = action.payload;
+    // },
+    addIngredients(state, action: PayloadAction<ICreateNewRecipe['ingredients']>) {
+      state.ingredients = action.payload;
+    },
+    removeIngredient(state, action: PayloadAction<number>) {
+      state.ingredients = state.ingredients.filter(
+        (_, index) => index !== action.payload,
+      );
+      // console.log('removeIngredient', state.ingredients);
     },
   },
 });
@@ -89,5 +104,7 @@ export const {
   addArea,
   addTags,
   addRecipeMeta,
+  addIngredients,
+  removeIngredient,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;

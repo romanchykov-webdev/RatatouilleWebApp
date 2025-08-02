@@ -102,7 +102,7 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
         className={`border-[1px] border-neutral-300 w-full h-[200px]
                   rounded-[10px] flex flex-col items-center justify-center bg-neutral-400
                   dark:text-black cursor-pointer gap-y-2 hover:gap-y-5 transition-all duration-600
-                  relative mb-5
+                  relative 
                   ${imageHeader && previewUrl ? 'bg-cover bg-center bg-no-repeat' : ''}
                 `}
         style={

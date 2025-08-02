@@ -13,14 +13,13 @@ import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { signOutThunk } from '@/store/thunks/signOutThunk';
 import { RootState } from '@/store';
-import { UserProfile } from '@/types';
+import { IUserProfile } from '@/types';
 
 export default function Profile() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state: RootState) => state.user as UserProfile);
-  console.log('user', user);
+  const user = useAppSelector((state: RootState) => state.user as IUserProfile);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);

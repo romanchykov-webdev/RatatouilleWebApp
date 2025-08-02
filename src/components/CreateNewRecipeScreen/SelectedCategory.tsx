@@ -45,11 +45,7 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
     const res = data.map(({ name, point }) => ({ name, point }));
     // console.log('res', res);
     return res.map(category => (
-      <Button
-        className="cursor-pointer"
-        key={category.name}
-        onClick={() => handlerAddCategory(category)}
-      >
+      <Button key={category.name} onClick={() => handlerAddCategory(category)}>
         {category.name}
       </Button>
     ));
@@ -66,11 +62,7 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
     );
     return (
       res?.subcategories.map(item => (
-        <Button
-          key={item.name}
-          className="cursor-pointer"
-          onClick={() => handlerAddSubCategory(item)}
-        >
+        <Button key={item.name} onClick={() => handlerAddSubCategory(item)}>
           {item.name}
         </Button>
       )) || null
@@ -82,7 +74,7 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
       <Button
         onClick={() => setIsModalOpen(true)}
         variant="outline"
-        className="w-full dark:text-black flex dark:bg-green-500 cursor-pointer dark:hover:bg-green-300 "
+        className="w-full dark:text-black flex dark:bg-green-500  dark:hover:bg-green-300 "
       >
         Add category
       </Button>
@@ -114,7 +106,7 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
           <div className="flex items-center gap-x-2">
             {categoryName && (
               <span
-                className="hover:text-red-500 cursor-pointer"
+                className="hover:text-red-500 "
                 onClick={() => {
                   setCategoryName('');
                   setSubCategory('');
@@ -124,14 +116,7 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
                 {' ->'}
               </span>
             )}{' '}
-            {subCategory && (
-              <span
-              // className="hover:text-red-500 cursor-pointer"
-              // onClick={() => setSubCategory('')}
-              >
-                {subCategory}
-              </span>
-            )}
+            {subCategory && <span>{subCategory}</span>}
           </div>
 
           {/*render category*/}
@@ -142,19 +127,15 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
 
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
-            {subCategory !== '' && (
-              <Button
-                variant="outline"
-                className="cursor-pointer"
-                onClick={handleConfirm}
-              >
-                Save
-              </Button>
-            )}
-
-            <Button onClick={closeModal} className="cursor-pointer">
-              Exit
+            <Button
+              disabled={subCategory === ''}
+              variant="outline"
+              onClick={handleConfirm}
+            >
+              Save
             </Button>
+
+            <Button onClick={closeModal}>Exit</Button>
           </div>
         </div>
       </Modal>

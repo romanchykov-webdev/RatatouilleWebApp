@@ -21,7 +21,7 @@ const RangLevel: React.FC<RangLevelProps> = ({
       {levelArray.map((item, index) => (
         <Button
           key={index}
-          className={`capitalize cursor-pointer hover:bg-yellow-500 transition-all duration-600 ${isActive === item && 'bg-yellow-500'} `}
+          className={`capitalize  hover:bg-yellow-500 transition-all duration-600 ${isActive === item && 'bg-yellow-500'} `}
           onClick={() => handlerIsActive(item as IMetaData['level'])}
         >
           {item}

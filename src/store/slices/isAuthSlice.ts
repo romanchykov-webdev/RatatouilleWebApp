@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserProfile, INotAuthorized, IUserProfileUpdate } from '@/types';
+import { IUserProfile, INotAuthorized, IUserProfileUpdate } from '@/types';
 import { updateUserProfileThunk } from '@/store/thunks/updateUserProfileThunk';
 
 // type AuthState = UserProfile | INotAuthorized;
@@ -12,11 +12,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<Omit<UserProfile, 'isAuth'>>) {
+    login(state, action: PayloadAction<Omit<IUserProfile, 'isAuth'>>) {
       return {
         ...action.payload,
         isAuth: true,
-      } as UserProfile;
+      } as IUserProfile;
     },
     logout() {
       return initialState as INotAuthorized;
@@ -33,14 +33,14 @@ const authSlice = createSlice({
           state,
           action: PayloadAction<IUserProfileUpdate | { success: boolean; error: string }>,
         ) => {
-          if ((state as UserProfile).isAuth && 'userId' in action.payload) {
+          if ((state as IUserProfile).isAuth && 'userId' in action.payload) {
             return {
-              ...(state as UserProfile),
+              ...(state as IUserProfile),
               userName: action.payload.userName,
               userAvatar: action.payload.userAvatar,
               lang: action.payload.lang,
               userTheme: action.payload.userTheme,
-            } as UserProfile;
+            } as IUserProfile;
           }
           return state;
         },

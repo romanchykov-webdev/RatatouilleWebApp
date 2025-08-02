@@ -12,7 +12,6 @@ import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
 import { Input } from '@/components/ui/input';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import WrapperInputLS from '@/components/CreateNewRecipeScreen/WrapperInputLS';
 
 interface IAddAreaProps {
   dispatch: AppDispatch;

@@ -3,25 +3,24 @@
 import React, { ChangeEvent, JSX, useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '@/store';
 import {
+  IIngredientTitle,
   ILanguage,
   IMeasurement,
-  ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/Modal/modal';
 import { useAppSelector } from '@/store/hooks';
-import { UserProfile } from '@/types';
-import RangeNumber from '@/components/RecipeMeta/SelectedMetaData/RangeNumber';
+import { IUserProfile } from '@/types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { logout } from '@/store/slices/isAuthSlice';
+import { addIngredients } from '@/store/slices/createNewRecipeSlice';
+import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import { IMetaData } from '@/components/RecipeMeta/recipeMeta.types';
 
 interface IIngredientsRecipeProps {
   dispatch: AppDispatch;
-  recipeMetaStore: { time: number; serv: number; cal: number; level: string };
+  recipeMetaStore: IMetaData;
   languagesStore: ILanguage[];
   measurements: IMeasurement;
 }
@@ -33,23 +32,39 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
   measurements,
 }: IIngredientsRecipeProps): JSX.Element => {
   const [inputValueModal, setInputValueModal] = useState(0);
-  const [selectedMeasure, setSelectedMeasure] = useState({
+  const [selectedMeasure, setSelectedMeasure] = useState<{
+    meas: string | null;
+    val: number;
+  }>({
     meas: null,
     val: 0,
   });
 
-  console.log('measurements', measurements);
-  const userLang: UserProfile['lang'] = useAppSelector(
-    (state: RootState) => (state.user as UserProfile).lang,
+  // Синхронизация selectedMeasure.val с inputValueModal
+  useEffect(() => {
+    if (selectedMeasure.meas !== null && inputValueModal !== selectedMeasure.val) {
+      setSelectedMeasure(prev => ({
+        ...prev,
+        val: inputValueModal,
+      }));
+    }
+  }, [inputValueModal, selectedMeasure.meas]);
+
+  const ingredientsStore = useAppSelector(
+    (state: RootState) => state.createNewRecipe.ingredients,
+  );
+
+  const userLang: IUserProfile['lang'] = useAppSelector(
+    (state: RootState) => (state.user as IUserProfile).lang,
   );
 
   const [ingredient, setIngredient] = useState<Record<string, string>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // console.log('ingredient ', JSON.stringify(ingredient, null, 2));
+  // console.log('languagesStore', JSON.stringify(languagesStore, null, 2));
 
   const isVisible =
     recipeMetaStore.time > 0 && recipeMetaStore.serv > 0 && recipeMetaStore.cal > 0;
-
-  // const debounceIngredients = useDebounce(ingredients);
 
   const handleChange = (langName: string, value: string) => {
     setIngredient(prev => ({ ...prev, [langName]: value }));
@@ -57,30 +72,43 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setInputValueModal(0);
+    setSelectedMeasure({ meas: null, val: 0 });
   };
   const handleConfirm = () => {
     setIsModalOpen(false);
   };
 
-  // Диспатчим в redux, когда все поля заполнены и debounce отработал
   const addIngredient = () => {
     const allFilled =
       languagesStore.length > 0 &&
-      languagesStore.every(lang => ingredient[lang.name]?.trim());
+      languagesStore.every(lang => ingredient[lang.name]?.trim()) &&
+      selectedMeasure.meas !== null &&
+      selectedMeasure.val > 0;
 
     if (allFilled) {
-      const titles: ITitle[] = languagesStore.map(lang => {
-        const langMeasurements = measurements[lang.name];
-
-        return {
-          lang: lang.name,
-          value: ingredient[lang.name],
-          mera: langMeasurements?.[selectedMeasure.meas] ?? '',
-          ves: selectedMeasure.val,
-        };
+      // Создаем объект переводов для value
+      const translations: Record<string, string> = {};
+      languagesStore.forEach(lang => {
+        translations[lang.name] = ingredient[lang.name];
       });
-      // dispatch(addTitle(titles));
-      console.log('IngredientRecipe', titles);
+
+      // Создаем новый ингредиент
+      const newIngredient: IIngredientTitle = {
+        lang: userLang,
+        value: translations,
+        mera: selectedMeasure.meas!,
+        ves: selectedMeasure.val,
+      };
+
+      const updatedIngredients = [...(ingredientsStore || []), newIngredient];
+
+      dispatch(addIngredients(updatedIngredients));
+
+      // Очищаем состояния
+      setIngredient({});
+      setSelectedMeasure({ meas: null, val: 0 });
+      setInputValueModal(0);
     }
   };
 
@@ -96,18 +124,26 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
     );
   };
 
-  const handlerAddMeasure = key => {
+  const handlerAddMeasure = (key: string) => {
     if (inputValueModal === 0) return;
     setSelectedMeasure({
       meas: key,
       val: inputValueModal,
     });
-    console.log('electedMeasure', selectedMeasure);
   };
+
+  // button Selected measurement !disabled
+  const isAllLanguagesFilled: boolean = languagesStore.every(
+    lang => ingredient.hasOwnProperty(lang.name) && ingredient[lang.name].trim() !== '',
+  );
+
+  // button save in modal !disabled
+  const buttonSaveIsActive: boolean =
+    selectedMeasure.meas !== '' && selectedMeasure.val > 0;
 
   return (
     <article className="relative ">
-      {/*<SkeletonCustom dependency={isVisible} />*/}
+      <SkeletonCustom dependency={isVisible} />
       <h6 className="text-center mb-2">Add ingredients</h6>
       <div className="flex flex-col gap-y-2 mb-5">
         {languagesStore?.map(lang => {
@@ -130,39 +166,27 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
         {selectedMeasure.meas !== null && selectedMeasure.val > 0 && (
           <div>
             <span>{selectedMeasure.val}:</span>
-            <span>{measurements[userLang][selectedMeasure.meas]}</span>
+            <span>{measurements[userLang]?.[selectedMeasure.meas]}</span>
           </div>
         )}
 
-        <div>
-          <Button onClick={addIngredient} className="cursor-pointer">
+        <div className="flex items-center justify-between">
+          <Button
+            disabled={!buttonSaveIsActive || !isAllLanguagesFilled}
+            onClick={addIngredient}
+            className="hover:bg-yellow-500"
+          >
             Add ing
           </Button>
-          <Button className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+          <Button
+            disabled={!isAllLanguagesFilled}
+            className="hover:bg-yellow-500"
+            onClick={() => setIsModalOpen(true)}
+          >
             Selected measurement
           </Button>
         </div>
       </div>
-
-      {/*<Tabs defaultValue={languagesStore[0].name} className="w-full bg-red-500">*/}
-      {/*  <TabsList>*/}
-      {/*    {languagesStore.map(lang => {*/}
-      {/*      return (*/}
-      {/*        <TabsTrigger key={lang.name} value={lang.name} className="cursor-pointer">*/}
-      {/*          {lang.value}*/}
-      {/*        </TabsTrigger>*/}
-      {/*      );*/}
-      {/*    })}*/}
-      {/*  </TabsList>*/}
-
-      {/*  {languagesStore.map(lang => {*/}
-      {/*    return (*/}
-      {/*      <TabsContent key={lang.name} value={lang.name}>*/}
-      {/*        {ingredient[lang.name]}*/}
-      {/*      </TabsContent>*/}
-      {/*    );*/}
-      {/*  })}*/}
-      {/*</Tabs>*/}
 
       {/* Модальное окно */}
       <Modal
@@ -201,7 +225,7 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
             {Object.entries(measurements[userLang] || {}).map(([key, value]) => (
               <Button
                 onClick={() => handlerAddMeasure(key)}
-                className={`cursor-pointer w-full hover:bg-yellow-500 ${selectedMeasure.meas === key && 'bg-yellow-500'} `}
+                className={` w-full hover:bg-yellow-500 ${selectedMeasure.meas === key && 'bg-yellow-500'} `}
                 key={key}
               >
                 {value}
@@ -211,14 +235,14 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
             <Button
-              // disabled={inputValueModal===0 ||}
+              disabled={!buttonSaveIsActive}
               variant="outline"
-              className="cursor-pointer"
+              className=""
               onClick={handleConfirm}
             >
               Save
             </Button>
-            <Button onClick={closeModal} className="cursor-pointer">
+            <Button onClick={closeModal} className="">
               Exit
             </Button>
           </div>

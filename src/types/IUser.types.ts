@@ -1,4 +1,4 @@
-export interface UserProfile {
+export interface IUserProfile {
   isAuth: boolean;
   userId: string;
   userName: string;
@@ -10,7 +10,7 @@ export interface UserProfile {
 }
 
 export interface INotAuthorized {
-  isAuth: UserProfile['isAuth'];
+  isAuth: IUserProfile['isAuth'];
 }
 
 export interface IUserProfileUpdate {

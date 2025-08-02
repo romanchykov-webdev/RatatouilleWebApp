@@ -52,7 +52,7 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
         <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />
       )}
       <Button
-        className="w-full bg-green-500 hover:bg-green-300 cursor-pointer
+        className="w-full bg-green-500 hover:bg-green-300
         flex items-center justify-center gap-x-5 text-black
                   "
         onClick={() => setIsModalOpen(true)}
@@ -106,19 +106,15 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
           </div>
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
-            {selectedLanguages.length > 0 && (
-              <Button
-                variant="outline"
-                className="cursor-pointer"
-                onClick={handleConfirm}
-              >
-                Save
-              </Button>
-            )}
-
-            <Button onClick={closeModal} className="cursor-pointer">
-              Clear
+            <Button
+              disabled={selectedLanguages.length === 0}
+              variant="outline"
+              onClick={handleConfirm}
+            >
+              Save
             </Button>
+
+            <Button onClick={closeModal}>Clear</Button>
           </div>
         </div>
       </Modal>

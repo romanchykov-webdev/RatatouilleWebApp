@@ -17,10 +17,17 @@ import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
 import { usePathname } from 'next/navigation';
 import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
 import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
+import IngredientsWrapper from '@/components/IngredientsWrapper/IngredientsWrapper';
+import {
+  ICategory,
+  IMeasurement,
+} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IUserProfile } from '@/types';
+import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 
 const CreateNewRecipe: React.FC = () => {
-  const [category, setCategory] = useState([]);
-  const [measurements, setMeasurements] = useState([]);
+  const [category, setCategory] = useState<ICategory[]>([]);
+  const [measurements, setMeasurements] = useState<IMeasurement>({});
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
   const createNewRecipe = useAppSelector((state: RootState) => state.createNewRecipe);
@@ -33,37 +40,54 @@ const CreateNewRecipe: React.FC = () => {
     aria: ariaStore,
     tags: tagStore,
     recipeMeta: recipeMetaStore,
+    ingredients: ingredientsStore,
   } = createNewRecipe;
 
   const pathName = usePathname();
 
   // console.log('setSelectedFile', selectedFile);
-  // const createRecipe:ICreateNewRecipe = useAppSelector(
-  //   (state: RootState): ICreateNewRecipe => state.createNewRecipe,
-  // );
+  const user: IUserProfile = useAppSelector(
+    (state: RootState) => state.user as IUserProfile,
+  );
+  const { lang: userLangStore } = user;
 
   const getMeasurement = async () => {
     const { data, error } = await supabase.from('measurement').select('lang');
-
-    if (error) console.log(error.message);
-    console.log('getMeasurement', JSON.stringify(data[0].lang, null, 2));
-    setMeasurements(data[0].lang);
+    if (error) {
+      console.error('Error fetching measurements:', error.message);
+      return;
+    }
+    if (data && data[0]?.lang) {
+      // console.log('data[0].lang', JSON.stringify(data[0].lang, null, 2));
+      setMeasurements(data[0].lang as IMeasurement);
+    } else {
+      console.warn('No measurement data found');
+      setMeasurements({});
+    }
   };
 
   const getCategory = async () => {
+    // const lang = userLangStore || 'en';
     const { data, error } = await supabase
       .from('categories_masonry')
       .select('*')
-      .eq('lang', 'ru');
-    if (error) console.log(error.message);
-    // console.log('data', JSON.stringify(data?.[0].title));
-    setCategory(data?.[0].title);
+      .eq('lang', `${userLangStore}`);
+    if (error) {
+      console.error('Error fetching categories:', error.message);
+      return;
+    }
+    if (data && data.length > 0 && data[0]?.title) {
+      setCategory(data[0].title as ICategory[]);
+    } else {
+      console.warn('No category data found for lang:');
+      setCategory([]);
+    }
   };
 
   useEffect(() => {
     getCategory();
     getMeasurement();
-  }, []);
+  }, [userLangStore]);
 
   return (
     <WrapperApp>
@@ -110,6 +134,15 @@ const CreateNewRecipe: React.FC = () => {
             languagesStore={languagesStore}
             measurements={measurements}
           />
+        </SectionWrapper>
+
+        {/*section 5*/}
+        <SectionWrapper>
+          {ingredientsStore.length > 0 ? (
+            <IngredientsWrapper measurements={measurements} dispatch={dispatch} />
+          ) : (
+            <SkeletonCustom dependency={ingredientsStore} />
+          )}
         </SectionWrapper>
 
         {/*section last*/}

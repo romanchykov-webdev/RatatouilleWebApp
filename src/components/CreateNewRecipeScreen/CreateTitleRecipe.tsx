@@ -9,7 +9,6 @@ import {
 import { addTitle } from '@/store/slices/createNewRecipeSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import WrapperInputLS from '@/components/CreateNewRecipeScreen/WrapperInputLS';
 import { Input } from '@/components/ui/input';
 
 interface ICreateTitleRecipeProps {
@@ -48,9 +47,6 @@ const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
   }, [debouncedTitles, dispatch, languagesStore]);
   return (
     <article className="flex flex-col gap-y-2  relative">
-      {/*{languagesStore.length === 0 && (*/}
-      {/*  <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />*/}
-      {/*)}*/}
       <SkeletonCustom dependency={languagesStore} />
       <h6 className="text-center">Add title</h6>
 
@@ -68,11 +64,6 @@ const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
           </div>
         );
       })}
-      {/*<WrapperInputLS*/}
-      {/*  languagesStore={languagesStore}*/}
-      {/*  inputValue={titlesByLang}*/}
-      {/*  handleChangeInput={handleChange}*/}
-      {/*/>*/}
     </article>
   );
 };

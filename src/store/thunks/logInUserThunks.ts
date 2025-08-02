@@ -2,7 +2,7 @@ import { supabase } from '../../../api/supabase';
 import { login } from '@/store/slices/isAuthSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PostgrestError } from '@supabase/supabase-js';
-import { UserProfile } from '@/types';
+import { IUserProfile } from '@/types';
 
 interface LoginPayload {
   email: string;
@@ -43,7 +43,7 @@ export const logInUser = createAsyncThunk<LoginResponse, LoginPayload>(
         .from('users')
         .select('*')
         .eq('id', user.id)
-        .single()) as { data: UserProfile | null; error: PostgrestError | null };
+        .single()) as { data: IUserProfile | null; error: PostgrestError | null };
 
       if (profileError || !profileData) {
         throw new Error(profileError?.message || 'Профиль пользователя не найден');

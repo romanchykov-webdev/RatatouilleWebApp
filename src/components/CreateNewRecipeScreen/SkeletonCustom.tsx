@@ -15,7 +15,9 @@ const SkeletonCustom = <T,>({ dependency }: ISkeletonProps<T>) => {
     (typeof dependency === 'number' && dependency === 0); // Число равно 0
 
   if (isEmpty) {
-    return <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />;
+    return (
+      <Skeleton className="absolute z-10 w-full h-full top-0 left-0 right-0 bottom-0 bg-neutral-400 opacity-90" />
+    );
   }
 
   return null;

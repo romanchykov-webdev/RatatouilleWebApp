@@ -6,7 +6,7 @@ import HeaderComponent from '@/components/Header/headerComponent';
 import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import { IUserProfileUpdate, UserProfile } from '@/types';
+import { IUserProfileUpdate, IUserProfile } from '@/types';
 import avatarDefault from '../../../../public/assets/images/avatarDefault.png';
 import HeaderPage from '@/components/ProfilePage/HeaderPage';
 import { Accordion } from '@/components/ui/accordion';
@@ -23,7 +23,7 @@ const ProfileEdit: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state: RootState) => state.user as UserProfile);
+  const user = useAppSelector((state: RootState) => state.user as IUserProfile);
   // console.log('user', user);
   const { userName, userAvatar, lang, userTheme, userId } = user;
 

@@ -4,18 +4,18 @@ import * as React from 'react';
 import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import { INotAuthorized, UserProfile } from '@/types';
+import { INotAuthorized, IUserProfile } from '@/types';
 
 export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  const authState: UserProfile | INotAuthorized = useAppSelector(
-    (state: RootState) => state.user as UserProfile | INotAuthorized,
+  const authState: IUserProfile | INotAuthorized = useAppSelector(
+    (state: RootState) => state.user as IUserProfile | INotAuthorized,
   );
   const { theme } = useTheme();
   const themeApp: string = authState.isAuth
-    ? (authState as UserProfile).userTheme
+    ? (authState as IUserProfile).userTheme
     : theme;
 
   return (

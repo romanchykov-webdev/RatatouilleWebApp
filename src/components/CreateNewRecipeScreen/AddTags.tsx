@@ -59,7 +59,7 @@ const AddTags: React.FC<IAddTagsProps> = ({
         <Button
           onClick={handlerAddTag}
           style={shadowBox()}
-          className="w-[40px] h-[40px] rounded-full  flex items-center justify-center cursor-pointer
+          className="w-[40px] h-[40px] rounded-full  flex items-center justify-center
           text-green-800
           hover:bg-neutral-300  hover:text-green-500 transition-all duration-600
           "
