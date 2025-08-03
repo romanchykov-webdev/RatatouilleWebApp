@@ -4,7 +4,7 @@ import React, { JSX, useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { AppDispatch, RootState } from '@/store';
 import { Button } from '@/components/ui/button';
-import { IUserProfile } from '@/types';
+// import { IUserProfile } from '@/types';
 import {
   IIngredientTitle,
   IMeasurement,
@@ -16,11 +16,13 @@ import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 interface IIngredientsWrapperProps {
   measurements: IMeasurement;
   dispatch?: AppDispatch;
+  userLangStore: string;
 }
 
 const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
   dispatch,
   measurements,
+  userLangStore,
 }: IIngredientsWrapperProps): JSX.Element => {
   //
 
@@ -37,9 +39,9 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
 
   const ingredientsStore = createNewRecipeStore?.ingredients;
 
-  const userStore = useAppSelector((state: RootState) => state?.user as IUserProfile);
-
-  const langUserStore = userStore?.lang;
+  // const userStore = useAppSelector((state: RootState) => state?.user as IUserProfile);
+  //
+  // const langUserStore = userStore?.lang;
 
   const [selectedLang, setSelectedLang] = useState('');
 
@@ -48,8 +50,8 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
   };
 
   useEffect(() => {
-    setSelectedLang(langUserStore);
-  }, [langUserStore]);
+    setSelectedLang(userLangStore);
+  }, [userLangStore]);
 
   const handlerRemoveIng = (idx: number) => {
     if (dispatch) {
@@ -58,7 +60,7 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
   };
 
   return (
-    <div className="fllex flex-col gap-y-2 items-center justify-between relative">
+    <article className="fllex flex-col gap-y-2 items-center justify-between relative">
       {ingredientsStore && <SkeletonCustom dependency={ingredientsStore} />}
       {/*buttons lang*/}
       {isCreateRecipe && (
@@ -116,7 +118,7 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
             })
           : null}
       </div>
-    </div>
+    </article>
   );
 };
 export default IngredientsWrapper;

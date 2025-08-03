@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IArea,
   IIngredientTitle,
+  IInstruction,
   ILanguage,
   ITitle,
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
@@ -18,6 +19,7 @@ export interface ICreateNewRecipe {
   tags: string[];
   recipeMeta: IMetaData;
   ingredients: IIngredientTitle[];
+  instruction: IInstruction[];
 }
 
 const initialState: ICreateNewRecipe = {
@@ -31,6 +33,7 @@ const initialState: ICreateNewRecipe = {
   tags: [],
   recipeMeta: { time: 0, serv: 0, cal: 0, level: 'easy' },
   ingredients: [],
+  instruction: [],
 };
 
 const createNewRecipeSlice = createSlice({
@@ -86,7 +89,14 @@ const createNewRecipeSlice = createSlice({
       state.ingredients = state.ingredients.filter(
         (_, index) => index !== action.payload,
       );
-      // console.log('removeIngredient', state.ingredients);
+    },
+    addInstruction(state, action: PayloadAction<IInstruction>) {
+      state.instruction.push(action.payload);
+    },
+    removeInstruction(state, action: PayloadAction<number>) {
+      state.instruction = state.instruction.filter(
+        (_, index) => index !== action.payload,
+      );
     },
   },
 });
@@ -106,5 +116,7 @@ export const {
   addRecipeMeta,
   addIngredients,
   removeIngredient,
+  addInstruction,
+  removeInstruction,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;

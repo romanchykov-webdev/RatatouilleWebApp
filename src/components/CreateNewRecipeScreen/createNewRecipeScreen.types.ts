@@ -45,3 +45,8 @@ export interface IIngredientTitle {
   mera: string; // мера веса/объема, локализованная
   ves: number; // числовое значение веса/объема
 }
+
+export interface IInstruction {
+  lang: Record<string, string>; // ключ — код языка, значение — текст инструкции
+  images: string[]; // массив URL-ов изображений
+}

@@ -24,6 +24,8 @@ import {
 } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
 import { IUserProfile } from '@/types';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import InstructionWrapper from '@/components/Instruction/InstructionWrapper';
+import Instruction from '@/components/Instruction/Instruction';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -41,6 +43,7 @@ const CreateNewRecipe: React.FC = () => {
     tags: tagStore,
     recipeMeta: recipeMetaStore,
     ingredients: ingredientsStore,
+    instruction: instructionStore,
   } = createNewRecipe;
 
   const pathName = usePathname();
@@ -139,10 +142,35 @@ const CreateNewRecipe: React.FC = () => {
         {/*section 5*/}
         <SectionWrapper>
           {ingredientsStore.length > 0 ? (
-            <IngredientsWrapper measurements={measurements} dispatch={dispatch} />
+            <IngredientsWrapper
+              measurements={measurements}
+              dispatch={dispatch}
+              userLangStore={userLangStore}
+            />
           ) : (
             <SkeletonCustom dependency={ingredientsStore} />
           )}
+        </SectionWrapper>
+
+        {/*section 6*/}
+        <SectionWrapper>
+          {/*{ingredientsStore.length > 0 ? (*/}
+          <InstructionWrapper
+            dispatch={dispatch}
+            languagesStore={languagesStore}
+            userLangStore={userLangStore}
+          />
+          {/*// ) : (*/}
+          {/*//   <SkeletonCustom dependency={ingredientsStore} />*/}
+          {/*// )}*/}
+        </SectionWrapper>
+
+        {/*section 7*/}
+        <SectionWrapper>
+          <Instruction
+            instructionStore={instructionStore}
+            userLangStore={userLangStore}
+          />
         </SectionWrapper>
 
         {/*section last*/}
