@@ -168,6 +168,7 @@ const CreateNewRecipe: React.FC = () => {
         {/*section 7*/}
         <SectionWrapper>
           <Instruction
+            dispatch={dispatch}
             instructionStore={instructionStore}
             userLangStore={userLangStore}
           />

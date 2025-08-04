@@ -5,27 +5,26 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { IInstruction } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import {
-  Carousel,
-  type CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel';
-import Image from 'next/image';
+
+import SliderHandmade from '@/components/Sliders/SliderHandmade/SliderHandmade';
+import { AppDispatch } from '@/store';
+import { removeInstruction } from '@/store/slices/createNewRecipeSlice';
 
 interface IInstructionProps {
   instructionStore: IInstruction[];
   userLangStore: string;
+  dispatch?: AppDispatch;
 }
 
 const Instruction: React.FC<IInstructionProps> = ({
   instructionStore,
   userLangStore,
+  dispatch,
 }: IInstructionProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
   // API карусели Embla
-  const [emblaApi, setEmblaApi] = useState<CarouselApi | undefined>();
+  // const [emblaApi, setEmblaApi] = useState<CarouselApi | undefined>();
   // const handleTextareaChange = (lang: string, value: string) => {
   //   setInstructions(prev => ({ ...prev, [lang]: value }));
   // };
@@ -43,6 +42,12 @@ const Instruction: React.FC<IInstructionProps> = ({
   );
   const handleSelectLang = (l: string) => {
     setLangInstruction(l);
+  };
+
+  const handlerRemoveInst = (index: number) => {
+    if (pathName === '/profile/create' && dispatch) {
+      dispatch(removeInstruction(index));
+    }
   };
 
   return (
@@ -64,6 +69,7 @@ const Instruction: React.FC<IInstructionProps> = ({
         </div>
       )}
 
+      {/*render inst*/}
       {instructionStore.length > 0 ? (
         <div>
           {instructionStore.map((instruction: IInstruction, index) => (
@@ -76,43 +82,28 @@ const Instruction: React.FC<IInstructionProps> = ({
                   {index + 1}) {instruction.lang[langInstruction] || 'No instruction'}
                 </p>
                 <span
+                  onClick={() => handlerRemoveInst(index)}
                   className="flex items-center justify-center h-[20px] w-[20px] text-black bg-red-500 rounded-full
                                   hover:bg-red-900 cursor-pointer transition-colors duration-500 ease-in-out
-                                  absolute -top-[5px] right-0
+                                  absolute top-[2px] right-[2px]
                                 "
                 >
                   X
                 </span>
               </div>
 
+              {/*block img slider*/}
               <div className="flex flex-col gap-y-2">
-                {instruction.images.length === 1 ? (
+                {instruction.images.length === 1 &&
                   instruction.images.map((img, i) => (
                     <div
                       key={i}
                       className="w-[full] h-[200px] bg-cover bg-center rounded-md border border-neutral-300"
                       style={{ backgroundImage: `url(${img})`, ...shadowBox() }}
                     />
-                  ))
-                ) : (
-                  <Carousel className="w-full h-[200px] " setApi={setEmblaApi}>
-                    <CarouselContent>
-                      {instruction.images.map((img, index) => (
-                        <CarouselItem key={index}>
-                          <div className="p-1 h-[200px] relative">
-                            <span>{index + 1}</span>
-                            <Image
-                              src={img}
-                              alt={`image-${index}`}
-                              fill
-                              className="object-cover h-[100%]"
-                              unoptimized
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                  </Carousel>
+                  ))}
+                {instruction.images.length >= 2 && (
+                  <SliderHandmade images={instruction.images} />
                 )}
               </div>
             </div>
