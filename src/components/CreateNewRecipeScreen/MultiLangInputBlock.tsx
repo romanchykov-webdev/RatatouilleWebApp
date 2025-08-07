@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import SkeletonCustom from './SkeletonCustom';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
-import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ILanguage } from '@/types/createNewRecipeScreen.types';
 
 interface MultiLangInputBlockProps {
   label: string;

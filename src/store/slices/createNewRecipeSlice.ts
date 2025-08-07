@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IArea,
-  IIngredientTitle,
+  IIngredient,
   IInstruction,
   ILanguage,
+  ISocialRenderProps,
   ITitle,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
-import { IMetaData } from '@/components/RecipeMeta/recipeMeta.types';
+} from '@/types/createNewRecipeScreen.types';
+import { IMetaData } from '@/types/recipeMeta.types';
 
 export interface ICreateNewRecipe {
   authorId: string;
@@ -18,8 +19,9 @@ export interface ICreateNewRecipe {
   aria: IArea[];
   tags: string[];
   recipeMeta: IMetaData;
-  ingredients: IIngredientTitle[];
+  ingredients: IIngredient[];
   instruction: IInstruction[];
+  socialLinks: ISocialRenderProps;
 }
 
 const initialState: ICreateNewRecipe = {
@@ -34,12 +36,23 @@ const initialState: ICreateNewRecipe = {
   recipeMeta: { time: 0, serv: 0, cal: 0, level: 'easy' },
   ingredients: [],
   instruction: [],
+  socialLinks: {
+    youtube: null,
+    blog: null,
+    instagram: null,
+    facebook: null,
+    tikTok: null,
+    coordinates: null,
+  },
 };
 
 const createNewRecipeSlice = createSlice({
   name: 'createNewRecipe',
   initialState,
   reducers: {
+    addOwnerId: (state, action: PayloadAction<string>) => {
+      state.authorId = action.payload;
+    },
     addCategory(state, action: PayloadAction<ICreateNewRecipe['category']>) {
       state.category = action.payload;
     },
@@ -98,10 +111,17 @@ const createNewRecipeSlice = createSlice({
         (_, index) => index !== action.payload,
       );
     },
+    addSocialLinks(state, action: PayloadAction<ISocialRenderProps>) {
+      state.socialLinks = action.payload;
+    },
+    removeSocialLink(state, action: PayloadAction<keyof typeof state.socialLinks>) {
+      state.socialLinks[action.payload] = null;
+    },
   },
 });
 
 export const {
+  addOwnerId,
   addCategory,
   addSubCategory,
   clearCategorySubCategory,
@@ -118,5 +138,7 @@ export const {
   removeIngredient,
   addInstruction,
   removeInstruction,
+  addSocialLinks,
+  removeSocialLink,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;

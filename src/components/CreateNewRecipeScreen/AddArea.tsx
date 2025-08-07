@@ -4,10 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import {
-  IArea,
-  ILanguage,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IArea, ILanguage } from '@/types/createNewRecipeScreen.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
 import { Input } from '@/components/ui/input';

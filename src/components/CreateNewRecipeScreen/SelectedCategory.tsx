@@ -1,7 +1,7 @@
 'use client';
 
 import React, { JSX, useState } from 'react';
-import { ICategory } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ICategory } from '@/types/createNewRecipeScreen.types';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/Modal/modal';
 import { AppDispatch } from '@/store';

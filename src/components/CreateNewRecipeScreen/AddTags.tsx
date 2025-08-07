@@ -2,7 +2,7 @@
 
 import React, { JSX, useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import { IArea } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IArea } from '@/types/createNewRecipeScreen.types';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';

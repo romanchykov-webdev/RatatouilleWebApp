@@ -4,7 +4,7 @@ import React, { ChangeEvent, JSX, RefObject, useEffect, useRef, useState } from 
 import { AppDispatch } from '@/store';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IIngredient, ILanguage } from '@/types/createNewRecipeScreen.types';
 import { ImagePlus } from 'lucide-react';
 import { useImageUpload } from '@/helpers/hooks/useImageUpload';
 import toast from 'react-hot-toast';
@@ -17,17 +17,20 @@ import {
   CarouselItem,
   type CarouselApi,
 } from '@/components/ui/carousel';
+import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 
 interface IInstructionWrapperProps {
   dispatch: AppDispatch;
   languagesStore: ILanguage[];
   userLangStore: string;
+  ingredientsStore: IIngredient[];
 }
 
 const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
   dispatch,
   languagesStore,
   userLangStore,
+  ingredientsStore,
 }: IInstructionWrapperProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
@@ -106,7 +109,8 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
   );
 
   return (
-    <article className="flex flex-col gap-y-2">
+    <article className="flex flex-col gap-y-2 relative">
+      {ingredientsStore && <SkeletonCustom dependency={ingredientsStore} />}
       <h6 className="text-center">Add instructions</h6>
 
       {/* Кнопки для переключения языков */}

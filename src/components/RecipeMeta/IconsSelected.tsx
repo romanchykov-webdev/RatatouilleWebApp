@@ -1,7 +1,7 @@
 'use client';
 
 import React, { JSX } from 'react';
-import { IconsSelectedProps } from '@/components/RecipeMeta/recipeMeta.types';
+import { IconsSelectedProps } from '@/types/recipeMeta.types';
 import { Clock, Flame, Users, Layers } from 'lucide-react';
 
 const IconsSelected: React.FC<IconsSelectedProps> = ({

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ChangeEvent, JSX } from 'react';
-import { IMetaData, IMetaDataTimeProps } from '@/components/RecipeMeta/recipeMeta.types';
+import { IMetaData, IMetaDataTimeProps } from '@/types/recipeMeta.types';
 import IconsSelected from '@/components/RecipeMeta/IconsSelected';
 import RangLevel from '@/components/RecipeMeta/SelectedMetaData/RangLevel';
 import RangeNumber from '@/components/RecipeMeta/SelectedMetaData/RangeNumber';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -20,11 +20,12 @@ interface ISliderHandmadeProps {
 const SliderHandmade: React.FC<ISliderHandmadeProps> = ({
   images,
 }: ISliderHandmadeProps): JSX.Element => {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
+  const [api, setApi] = useState<CarouselApi>();
 
-  React.useEffect(() => {
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
     if (!api) {
       return;
     }

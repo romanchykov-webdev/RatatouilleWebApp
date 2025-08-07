@@ -39,7 +39,7 @@ export interface IIngredientEntry {
   ves: number;
 }
 
-export interface IIngredientTitle {
+export interface IIngredient {
   lang: string;
   value: Record<string, string>; // название ингредиента
   mera: string; // мера веса/объема, локализованная
@@ -49,4 +49,15 @@ export interface IIngredientTitle {
 export interface IInstruction {
   lang: Record<string, string>; // ключ — код языка, значение — текст инструкции
   images: string[]; // массив URL-ов изображений
+}
+
+export interface ISocialRenderProps {
+  youtube: string | null;
+  blog: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  tikTok: string | null;
+  coordinates: string | null;
+
+  [key: string]: string | null;
 }

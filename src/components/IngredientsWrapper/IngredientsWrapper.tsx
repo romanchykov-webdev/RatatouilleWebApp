@@ -5,10 +5,7 @@ import { useAppSelector } from '@/store/hooks';
 import { AppDispatch, RootState } from '@/store';
 import { Button } from '@/components/ui/button';
 // import { IUserProfile } from '@/types';
-import {
-  IIngredientTitle,
-  IMeasurement,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IIngredient, IMeasurement } from '@/types/createNewRecipeScreen.types';
 import { removeIngredient } from '@/store/slices/createNewRecipeSlice';
 import { usePathname } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
@@ -84,7 +81,7 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
       {/*render ing*/}
       <div className="flex flex-col gap-y-3">
         {ingredientsStore?.length > 0
-          ? ingredientsStore.map((ingredient: IIngredientTitle, index: number) => {
+          ? ingredientsStore.map((ingredient: IIngredient, index: number) => {
               const name =
                 ingredient.value[selectedLang] || ingredient.value['en'] || 'Неизвестно';
               const measureKey = ingredient.mera.toLowerCase();

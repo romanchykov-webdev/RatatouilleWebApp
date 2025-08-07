@@ -18,14 +18,14 @@ import { usePathname } from 'next/navigation';
 import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
 import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
 import IngredientsWrapper from '@/components/IngredientsWrapper/IngredientsWrapper';
-import {
-  ICategory,
-  IMeasurement,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ICategory, IMeasurement } from '@/types/createNewRecipeScreen.types';
 import { IUserProfile } from '@/types';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import InstructionWrapper from '@/components/Instruction/InstructionWrapper';
 import Instruction from '@/components/Instruction/Instruction';
+import AddSocialWrapper from '@/components/CreateNewRecipeScreen/AddSocialWrapper';
+import RecipeComponent from '@/components/RecipeComponent/RecipeComponent';
+import { addOwnerId } from '@/store/slices/createNewRecipeSlice';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -44,6 +44,7 @@ const CreateNewRecipe: React.FC = () => {
     recipeMeta: recipeMetaStore,
     ingredients: ingredientsStore,
     instruction: instructionStore,
+    socialLinks: socialLinkStore,
   } = createNewRecipe;
 
   const pathName = usePathname();
@@ -52,7 +53,7 @@ const CreateNewRecipe: React.FC = () => {
   const user: IUserProfile = useAppSelector(
     (state: RootState) => state.user as IUserProfile,
   );
-  const { lang: userLangStore } = user;
+  const { lang: userLangStore, userId } = user;
 
   const getMeasurement = async () => {
     const { data, error } = await supabase.from('measurement').select('lang');
@@ -88,9 +89,12 @@ const CreateNewRecipe: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(addOwnerId(userId));
     getCategory();
     getMeasurement();
-  }, [userLangStore]);
+  }, [userLangStore, dispatch, userId]);
+  const imageHeaderToPass =
+    typeof createNewRecipe.imageHeader === 'string' ? createNewRecipe.imageHeader : '';
 
   return (
     <WrapperApp>
@@ -159,6 +163,7 @@ const CreateNewRecipe: React.FC = () => {
             dispatch={dispatch}
             languagesStore={languagesStore}
             userLangStore={userLangStore}
+            ingredientsStore={ingredientsStore}
           />
           {/*// ) : (*/}
           {/*//   <SkeletonCustom dependency={ingredientsStore} />*/}
@@ -174,9 +179,25 @@ const CreateNewRecipe: React.FC = () => {
           />
         </SectionWrapper>
 
+        {/*section 8*/}
+        <SectionWrapper>
+          <AddSocialWrapper
+            dispatch={dispatch}
+            instructionStore={instructionStore}
+            // userLangStore={userLangStore}
+            socialLinkStore={socialLinkStore}
+          />
+        </SectionWrapper>
+
         {/*section last*/}
         <SectionWrapper styleWrapper="sm:col-span-2 lg:col-span-1">
-          last section
+          <RecipeComponent
+            recipe={{
+              ...createNewRecipe,
+              authorId: userId,
+              imageHeader: imageHeaderToPass,
+            }}
+          />
         </SectionWrapper>
       </div>
     </WrapperApp>

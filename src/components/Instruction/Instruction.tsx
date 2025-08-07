@@ -3,12 +3,13 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { IInstruction } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { IInstruction } from '@/types/createNewRecipeScreen.types';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 import SliderHandmade from '@/components/Sliders/SliderHandmade/SliderHandmade';
 import { AppDispatch } from '@/store';
 import { removeInstruction } from '@/store/slices/createNewRecipeSlice';
+import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 
 interface IInstructionProps {
   instructionStore: IInstruction[];
@@ -52,6 +53,7 @@ const Instruction: React.FC<IInstructionProps> = ({
 
   return (
     <article className="flex flex-col gap-y-2">
+      {instructionStore && <SkeletonCustom dependency={instructionStore} />}
       <h6 className="text-center">Instruction Const</h6>
 
       {/*block button for create recipe*/}

@@ -2,7 +2,7 @@
 
 import React, { JSX } from 'react';
 import { Input } from '@/components/ui/input';
-import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ILanguage } from '@/types/createNewRecipeScreen.types';
 
 interface IWrapperInputLSProps {
   languagesStore: ILanguage[];

@@ -7,14 +7,14 @@ import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
 import RecipeMetaItem from '@/components/RecipeMeta/RecipeMetaItem';
 import SelectedMetaData from '@/components/RecipeMeta/SelectedMetaData/SelectedMetaData';
-import { IMetaData } from '@/components/RecipeMeta/recipeMeta.types';
+import { IMetaData } from '@/types/recipeMeta.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addRecipeMeta } from '@/store/slices/createNewRecipeSlice';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 interface IRecipeMetaProps {
-  dispatch: AppDispatch;
+  dispatch?: AppDispatch;
   tagStore: string[];
   pathName: string;
 }
@@ -55,7 +55,9 @@ const RecipeMetaComponents: React.FC<IRecipeMetaProps> = ({
     // console.log('handler type:', type);
   };
   useEffect(() => {
-    dispatch(addRecipeMeta(debounceMetaData));
+    if (dispatch) {
+      dispatch(addRecipeMeta(debounceMetaData));
+    }
   }, [dispatch, debounceMetaData]);
   return (
     <article

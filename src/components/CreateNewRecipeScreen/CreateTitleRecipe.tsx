@@ -2,10 +2,7 @@
 
 import React, { JSX, useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import {
-  ILanguage,
-  ITitle,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ILanguage, ITitle } from '@/types/createNewRecipeScreen.types';
 import { addTitle } from '@/store/slices/createNewRecipeSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';

@@ -1,6 +1,6 @@
 import React, { JSX } from 'react';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { IRecipeMetaItemProps } from '@/components/RecipeMeta/recipeMeta.types';
+import { IRecipeMetaItemProps } from '@/types/recipeMeta.types';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 
 const RecipeMetaItem: React.FC<IRecipeMetaItemProps> = ({

@@ -3,10 +3,10 @@
 import React, { ChangeEvent, JSX, useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '@/store';
 import {
-  IIngredientTitle,
+  IIngredient,
   ILanguage,
   IMeasurement,
-} from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+} from '@/types/createNewRecipeScreen.types';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import { IUserProfile } from '@/types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { addIngredients } from '@/store/slices/createNewRecipeSlice';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import { IMetaData } from '@/components/RecipeMeta/recipeMeta.types';
+import { IMetaData } from '@/types/recipeMeta.types';
 
 interface IIngredientsRecipeProps {
   dispatch: AppDispatch;
@@ -94,7 +94,7 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
       });
 
       // Создаем новый ингредиент
-      const newIngredient: IIngredientTitle = {
+      const newIngredient: IIngredient = {
         lang: userLang,
         value: translations,
         mera: selectedMeasure.meas!,

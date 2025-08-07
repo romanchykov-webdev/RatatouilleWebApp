@@ -8,7 +8,7 @@ import { Languages } from 'lucide-react';
 import { languagesObj } from '@/helpers/languagesObj';
 import { addLanguage, removeAllLanguages } from '@/store/slices/createNewRecipeSlice';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ILanguage } from '@/components/CreateNewRecipeScreen/createNewRecipeScreen.types';
+import { ILanguage } from '@/types/createNewRecipeScreen.types';
 
 interface IAddLanguagesProps {
   dispatch: AppDispatch;

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { JSX, useState } from 'react';
-import { IMetaData, RangLevelProps } from '@/components/RecipeMeta/recipeMeta.types';
+import { IMetaData, RangLevelProps } from '@/types/recipeMeta.types';
 import { Button } from '@/components/ui/button';
 
 const RangLevel: React.FC<RangLevelProps> = ({
