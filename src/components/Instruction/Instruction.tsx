@@ -15,12 +15,16 @@ interface IInstructionProps {
   instructionStore: IInstruction[];
   userLangStore: string;
   dispatch?: AppDispatch;
+  isVisibleButtonLang?: boolean;
+  isVisibleRemoveInstruction?: boolean;
 }
 
 const Instruction: React.FC<IInstructionProps> = ({
   instructionStore,
   userLangStore,
   dispatch,
+  isVisibleButtonLang = true,
+  isVisibleRemoveInstruction = true,
 }: IInstructionProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
@@ -53,11 +57,11 @@ const Instruction: React.FC<IInstructionProps> = ({
 
   return (
     <article className="flex flex-col gap-y-2">
-      {instructionStore && <SkeletonCustom dependency={instructionStore} />}
+      {/*{instructionStore && <SkeletonCustom dependency={instructionStore} />}*/}
       <h6 className="text-center">Instruction Const</h6>
 
       {/*block button for create recipe*/}
-      {pathName === '/profile/create' && (
+      {isVisibleButtonLang && (
         <div className="flex items-center justify-around">
           {keyButton.map(item => (
             <Button
@@ -83,15 +87,17 @@ const Instruction: React.FC<IInstructionProps> = ({
                 <p className="text-lg  ">
                   {index + 1}) {instruction.lang[langInstruction] || 'No instruction'}
                 </p>
-                <span
-                  onClick={() => handlerRemoveInst(index)}
-                  className="flex items-center justify-center h-[20px] w-[20px] text-black bg-red-500 rounded-full
+                {isVisibleRemoveInstruction && (
+                  <span
+                    onClick={() => handlerRemoveInst(index)}
+                    className="flex items-center justify-center h-[20px] w-[20px] text-black bg-red-500 rounded-full
                                   hover:bg-red-900 cursor-pointer transition-colors duration-500 ease-in-out
                                   absolute top-[2px] right-[2px]
                                 "
-                >
-                  X
-                </span>
+                  >
+                    X
+                  </span>
+                )}
               </div>
 
               {/*block img slider*/}

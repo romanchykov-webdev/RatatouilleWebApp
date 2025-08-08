@@ -18,7 +18,7 @@ const RecipeMetaItem: React.FC<IRecipeMetaItemProps> = ({
       style={shadowBox()}
       className={`bg-yellow-500 w-full  h-full rounded-full flex overflow-hidden
       flex-col items-center justify-around ${pathName === '/profile/create' && 'cursor-pointer'}`}
-      onClick={() => handler(type)}
+      onClick={() => handler && handler(type)}
     >
       <div
         style={{ padding: '20%' }}

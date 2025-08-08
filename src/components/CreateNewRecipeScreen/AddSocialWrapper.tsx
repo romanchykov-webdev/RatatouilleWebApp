@@ -4,7 +4,7 @@ import React, { JSX, useState } from 'react';
 import { IInstruction, ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
 import { AppDispatch } from '@/store';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import SocialRender from '@/components/SocialRender';
+import SocialRender from '@/components/SocialRender/SocialRender';
 import InputLogRes from '@/components/Inputs/InputLogRes';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
@@ -101,7 +101,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 
   return (
     <article className="w-full h-full  relative flex flex-col gap-y-2">
-      {instructionStore && <SkeletonCustom dependency={instructionStore} />}
+      {/*{instructionStore && <SkeletonCustom dependency={instructionStore} />}*/}
 
       <h6 className="text-center">AddSocialWrapper Const</h6>
 
@@ -156,7 +156,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
         </div>
       </div>
 
-      <SocialRender socialLinksProps={socialLinkStore} />
+      <SocialRender socialLinks={socialLinkStore} />
     </article>
   );
 };

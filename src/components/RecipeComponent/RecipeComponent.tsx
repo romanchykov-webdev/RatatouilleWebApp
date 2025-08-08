@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import {
   IArea,
   IIngredient,
@@ -10,106 +10,145 @@ import {
   ITitle,
 } from '@/types/createNewRecipeScreen.types';
 import { IMetaData } from '@/types/recipeMeta.types';
-import Image from 'next/image';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { usePathname } from 'next/navigation';
-import {
-  Heart,
-  HeartHandshake,
-  Star,
-  MessageCircle,
-  Users,
-  Clock,
-  Flame,
-  Layers,
-} from 'lucide-react';
-import { formatNumberToK } from '@/helpers/formatNumberToK';
-import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
+import { Users, Clock, Flame, Layers } from 'lucide-react';
 import RecipeMetaItem from '@/components/RecipeMeta/RecipeMetaItem';
+import IngredientItem from '@/components/IngredientsWrapper/IngredientItem';
+import ImageHeader from '@/components/RecipeComponent/ImageHeader';
+import RatingStar from '@/components/RecipeComponent/RatingStar';
+import Instruction from '@/components/Instruction/Instruction';
+import SocialRender from '@/components/SocialRender/SocialRender';
+import TitleArea from '@/components/RecipeComponent/TitleArea';
+import toast from 'react-hot-toast';
+import { Modal } from '@/components/Modal/modal';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import SubscribeComponent from '@/components/RecipeComponent/SubscribeComponent';
 
 interface IRecipeComponentProps {
   recipe: {
+    id?: string;
     authorId: string;
     category: string;
     subCategory: string;
     imageHeader: string;
     languages: ILanguage[];
     title: ITitle[];
-    aria: IArea[];
+    area: IArea[];
     tags: string[];
     recipeMeta: IMetaData;
     ingredients: IIngredient[];
     instruction: IInstruction[];
     socialLinks: ISocialRenderProps;
-    rating?: number;
-    comments?: number;
-    isLiked?: boolean;
+    rating: number;
+    comments: number;
+    isLiked: boolean;
+  };
+  userLang: string;
+  userId: string;
+  ownerRecipe: {
+    avatar: string;
+    name: string;
+    subscribers: number;
+    ownerId: string;
   };
 }
 
 const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   recipe,
+  userLang,
+  userId,
+  ownerRecipe,
 }: IRecipeComponentProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
+
+  useEffect(() => {
+    // setIsActiveLang(userLang);
+    console.log('isActiveLang', isActiveLang);
+  }, [isActiveLang]);
+
+  const handlerSelectedLang = (lang: string) => {
+    console.log('handlerSelectedLang', lang);
+    setIsActiveLang(lang);
+  };
+
   const pathName = usePathname();
+
+  // handler for make rating
+  const handlerSelectedRating = (
+    newRating: number,
+    idRecipe = recipe?.id,
+    idOwnerRecipe = recipe?.authorId,
+    idUserClick = userId,
+  ) => {
+    console.log('handlerSelectedRating idRecipe', idRecipe);
+    console.log('handlerSelectedRating idOwnerRecipe', idOwnerRecipe);
+    console.log('handlerSelectedRating idUserClick', idUserClick);
+    console.log('handlerSelectedRating', newRating);
+    if (idOwnerRecipe === idUserClick) {
+      toast.success('This recipe is published by you');
+    }
+    if (idUserClick === null) {
+      toast.success('Only registered users can mark a recipe');
+    }
+  };
+
+  // handler fol make like
+  const handlerIsLackedRecipe = (
+    idRecipe: string,
+    idOwnerRecipe: string,
+    idUserClick: string,
+  ) => {
+    // console.log('handlerIsLackedRecipe idRecipe', idRecipe);
+    // console.log('handlerIsLackedRecipe idOwnerRecipe', idOwnerRecipe);
+    // console.log('handlerIsLackedRecipe idUserClick', idUserClick);
+    if (idOwnerRecipe === idUserClick) {
+      toast.success('This recipe is published by you');
+    }
+    if (idUserClick === null) {
+      toast.success('Only registered users can mark a recipe');
+      setIsModalOpen(true);
+    }
+  };
+
+  // modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <article className="flex flex-col gap-y-3">
       {/*header image*/}
-      <div className="relative rounded-[25px] overflow-hidden" style={shadowBox()}>
-        <div className="absolute top-0 right-0  flex items-center justify-end w-full  p-5  ">
-          <div
-            className="flex items-center justify-center relative rounded-full     p-2"
-            style={{ backgroundColor: 'rgba(255,255,255,0.8)', ...shadowBox() }}
-          >
-            <Heart className=" text-yellow-500 w-[40px] h-[40px]" />
-            <span className="absolute z-10 text-yellow-500 ">{recipe?.rating}</span>
-          </div>
-        </div>
-        <Image
-          src={recipe?.imageHeader}
-          alt="Логотип"
-          width={200}
-          height={200}
-          style={{ objectFit: 'cover' }}
-          // className="rotate-[-90deg]"
-          priority
-          className="w-full "
-        />
+      <ImageHeader
+        isLiked={recipe?.isLiked}
+        imageHeader={recipe?.imageHeader}
+        rating={recipe?.rating}
+        comments={recipe?.comments}
+        isActiveLang={isActiveLang}
+        handlerSelectedLang={handlerSelectedLang}
+        languages={recipe.languages}
+        isLackedRecipe={handlerIsLackedRecipe}
+        idOwnerRecipe={recipe?.authorId}
+        idUserClick={userId}
+        idRecipe={recipe?.id ?? ''}
+      />
 
-        {/*block rating comments*/}
-        <div className="absolute bottom-0 right-0  flex items-center justify-between w-full  p-5  ">
-          {/*rating*/}
-          <div
-            className="flex items-center justify-center relative rounded-full     p-2"
-            style={{ backgroundColor: 'rgba(255,255,255,0.8)', ...shadowBox() }}
-          >
-            <Star className=" text-yellow-500 w-[40px] h-[40px]" />
-            <span className="absolute z-10 text-yellow-500 ">{recipe?.rating}</span>
-          </div>
-
-          {/*comments*/}
-          <div
-            className="flex items-center justify-center relative rounded-full     p-2"
-            style={{ backgroundColor: 'rgba(255,255,255,0.8)', ...shadowBox() }}
-          >
-            <MessageCircle className=" text-yellow-500 w-[40px] h-[40px]" />
-            <span className="absolute z-10 text-yellow-500 ">{recipe?.rating}</span>
-          </div>
-        </div>
-      </div>
+      {/*block rating*/}
+      <RatingStar rating={recipe?.rating} selectedRating={handlerSelectedRating} />
 
       {/*  block subscribe*/}
-      <div className="border-[1px] border-neutral-300 h-[50px] rounded-[10px] p-2">
-        subscribe
-      </div>
+      <SubscribeComponent ownerRecipe={ownerRecipe} userId={recipe?.authorId} />
 
       {/*  title area*/}
-      <div>
-        <h1>Title</h1>
-        <h4>area</h4>
-      </div>
+      <TitleArea title={recipe?.title} area={recipe?.area} isActiveLang={isActiveLang} />
 
       {/*  mataData*/}
       <div
@@ -176,6 +215,52 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
           />
         </div>
       </div>
+
+      {/*ingredients*/}
+      <div>
+        <h4>Ingredients</h4>
+        <IngredientItem
+          ingredientsStore={recipe?.ingredients}
+          isCreateRecipe={false}
+          isActiveLang={isActiveLang}
+        />
+      </div>
+
+      {/*instruction*/}
+      <Instruction
+        instructionStore={recipe?.instruction}
+        userLangStore={isActiveLang ?? ''}
+        isVisibleButtonLang={false}
+        isVisibleRemoveInstruction={false}
+      />
+
+      {/*social links*/}
+
+      <SocialRender socialLinks={recipe?.socialLinks} />
+
+      {/* Модальное окно */}
+      <Modal
+        isOpen={isModalOpen}
+        onCloseAction={closeModal}
+        title={'Login to your account or submit'}
+        confirmText="Выход"
+        cancelText="Отмена"
+        onConfirm={handleConfirm}
+        showCloseButton={true}
+        maxWidth="max-w-lg"
+      >
+        <div className="flex flex-col gap-y-4">
+          <Link href={'/login'}>Login</Link>
+          <Link href={'/registr'}>Sing Up</Link>
+
+          {/* Кнопки */}
+          <div className="flex justify-end gap-4">
+            <Button onClick={closeModal} className="cursor-pointer">
+              Exit
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </article>
   );
 };

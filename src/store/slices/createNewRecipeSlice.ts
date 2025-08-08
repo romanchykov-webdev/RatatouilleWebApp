@@ -16,7 +16,7 @@ export interface ICreateNewRecipe {
   imageHeader: File | string | null;
   languages: ILanguage[];
   title: ITitle[];
-  aria: IArea[];
+  area: IArea[];
   tags: string[];
   recipeMeta: IMetaData;
   ingredients: IIngredient[];
@@ -31,7 +31,7 @@ const initialState: ICreateNewRecipe = {
   imageHeader: null,
   languages: [],
   title: [],
-  aria: [],
+  area: [],
   tags: [],
   recipeMeta: { time: 0, serv: 0, cal: 0, level: 'easy' },
   ingredients: [],
@@ -84,7 +84,7 @@ const createNewRecipeSlice = createSlice({
       state.title = action.payload;
     },
     addArea(state, action: PayloadAction<IArea[]>) {
-      state.aria = action.payload;
+      state.area = action.payload;
     },
     addTags(state, action: PayloadAction<string[]>) {
       state.tags = action.payload;

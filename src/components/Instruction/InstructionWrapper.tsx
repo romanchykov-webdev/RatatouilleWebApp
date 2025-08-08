@@ -18,6 +18,7 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
 
 interface IInstructionWrapperProps {
   dispatch: AppDispatch;
@@ -114,22 +115,12 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
       <h6 className="text-center">Add instructions</h6>
 
       {/* Кнопки для переключения языков */}
-      <div className="flex flex-wrap items-center justify-around gap-2">
-        {languagesStore?.length > 0 &&
-          languagesStore.map((l, index) => {
-            return (
-              <Button
-                key={l.name}
-                onClick={() => handlerChangeLang(l.name, index)}
-                className={`capitalize ${
-                  l.name === selectedLang ? 'bg-yellow-500' : ''
-                } hover:bg-yellow-300`}
-              >
-                {l.name}
-              </Button>
-            );
-          })}
-      </div>
+
+      <ButtonsLangSelected
+        langRecipe={languagesStore}
+        selectedLang={selectedLang}
+        handlerChangeLang={handlerChangeLang}
+      />
 
       {/* Карусель с Textarea для каждого языка */}
       <div className="w-full max-w-md mx-auto">

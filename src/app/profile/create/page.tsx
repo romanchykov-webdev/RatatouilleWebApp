@@ -26,6 +26,7 @@ import Instruction from '@/components/Instruction/Instruction';
 import AddSocialWrapper from '@/components/CreateNewRecipeScreen/AddSocialWrapper';
 import RecipeComponent from '@/components/RecipeComponent/RecipeComponent';
 import { addOwnerId } from '@/store/slices/createNewRecipeSlice';
+import { Button } from '@/components/ui/button';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -39,7 +40,7 @@ const CreateNewRecipe: React.FC = () => {
     imageHeader: imageHeaderStore,
     languages: languagesStore,
     title: titleStore,
-    aria: ariaStore,
+    area: ariaStore,
     tags: tagStore,
     recipeMeta: recipeMetaStore,
     ingredients: ingredientsStore,
@@ -53,7 +54,7 @@ const CreateNewRecipe: React.FC = () => {
   const user: IUserProfile = useAppSelector(
     (state: RootState) => state.user as IUserProfile,
   );
-  const { lang: userLangStore, userId } = user;
+  const { lang: userLangStore, userId, userAvatar, userName, subscribers } = user;
 
   const getMeasurement = async () => {
     const { data, error } = await supabase.from('measurement').select('lang');
@@ -95,6 +96,11 @@ const CreateNewRecipe: React.FC = () => {
   }, [userLangStore, dispatch, userId]);
   const imageHeaderToPass =
     typeof createNewRecipe.imageHeader === 'string' ? createNewRecipe.imageHeader : '';
+
+  //  Publish recipe
+  const handlerPublish = async () => {
+    console.log('Publish recipe');
+  };
 
   return (
     <WrapperApp>
@@ -172,32 +178,63 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 7*/}
         <SectionWrapper>
-          <Instruction
-            dispatch={dispatch}
-            instructionStore={instructionStore}
-            userLangStore={userLangStore}
-          />
+          {instructionStore.length === 0 ? (
+            <SkeletonCustom dependency={instructionStore} />
+          ) : (
+            <Instruction
+              dispatch={dispatch}
+              instructionStore={instructionStore}
+              userLangStore={userLangStore}
+            />
+          )}
         </SectionWrapper>
 
         {/*section 8*/}
         <SectionWrapper>
-          <AddSocialWrapper
-            dispatch={dispatch}
-            instructionStore={instructionStore}
-            // userLangStore={userLangStore}
-            socialLinkStore={socialLinkStore}
-          />
+          {instructionStore.length === 0 ? (
+            <SkeletonCustom dependency={instructionStore} />
+          ) : (
+            <AddSocialWrapper
+              dispatch={dispatch}
+              instructionStore={instructionStore}
+              // userLangStore={userLangStore}
+              socialLinkStore={socialLinkStore}
+            />
+          )}
         </SectionWrapper>
 
         {/*section last*/}
         <SectionWrapper styleWrapper="sm:col-span-2 lg:col-span-1">
-          <RecipeComponent
-            recipe={{
-              ...createNewRecipe,
-              authorId: userId,
-              imageHeader: imageHeaderToPass,
-            }}
-          />
+          {instructionStore.length === 0 ? (
+            <SkeletonCustom dependency={instructionStore} />
+          ) : (
+            <RecipeComponent
+              recipe={{
+                ...createNewRecipe,
+                authorId: userId,
+                imageHeader: imageHeaderToPass,
+                rating: 0,
+                comments: 0,
+                isLiked: false,
+              }}
+              userLang={userLangStore}
+              userId={userId}
+              ownerRecipe={{
+                avatar: userAvatar,
+                name: userName,
+                subscribers: subscribers,
+                ownerId: userId,
+              }}
+            />
+          )}
+          <div>
+            <Button
+              onClick={handlerPublish}
+              className="bg-green-300 w-full hover:bg-yellow-500"
+            >
+              Publish
+            </Button>
+          </div>
         </SectionWrapper>
       </div>
     </WrapperApp>

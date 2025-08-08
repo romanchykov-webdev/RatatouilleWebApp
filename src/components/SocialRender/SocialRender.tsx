@@ -8,19 +8,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface ISocialLinksPropsProps {
-  socialLinksProps: ISocialRenderProps;
+  socialLinks: ISocialRenderProps;
 }
 
 const SocialRender: React.FC<ISocialLinksPropsProps> = ({
-  socialLinksProps,
+  socialLinks,
 }: ISocialLinksPropsProps): JSX.Element => {
   // const { youtube, blog, instagram, facebook, tikTok, pointCoordinates } =
   //   socialLinksProps;
   // console.log('socialLinks youtubeUrl', socialLinksProps.youtube);
 
   return (
-    <article className="flex flex-wrap gap-2">
-      {Object.entries(socialLinksProps).map(([key, value]) => {
+    <article className="flex flex-wrap gap-2 items-center justify-center">
+      {Object.entries(socialLinks).map(([key, value]) => {
         if (value === null) return '';
 
         const Icon = () => {

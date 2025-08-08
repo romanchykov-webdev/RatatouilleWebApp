@@ -5,10 +5,12 @@ import { useAppSelector } from '@/store/hooks';
 import { AppDispatch, RootState } from '@/store';
 import { Button } from '@/components/ui/button';
 // import { IUserProfile } from '@/types';
-import { IIngredient, IMeasurement } from '@/types/createNewRecipeScreen.types';
+import { IMeasurement } from '@/types/createNewRecipeScreen.types';
 import { removeIngredient } from '@/store/slices/createNewRecipeSlice';
 import { usePathname } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import IngredientItem from '@/components/IngredientsWrapper/IngredientItem';
+import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
 
 interface IIngredientsWrapperProps {
   measurements: IMeasurement;
@@ -61,60 +63,35 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
       {ingredientsStore && <SkeletonCustom dependency={ingredientsStore} />}
       {/*buttons lang*/}
       {isCreateRecipe && (
-        <div
-          className={`flex flex-wrap items-center justify-around  ${ingredientsStore && 'mb-5'}`}
-        >
-          {languagesStore?.length > 0
-            ? languagesStore?.map(l => (
-                <Button
-                  key={l.name}
-                  onClick={() => handlerChangeLang(l.name)}
-                  className={`capitalize ${l.name === selectedLang && 'bg-yellow-500'}  hover:bg-yellow-300`}
-                >
-                  {l.name}
-                </Button>
-              ))
-            : null}
-        </div>
+        // <div
+        //   className={`flex flex-wrap items-center justify-around  ${ingredientsStore && 'mb-5'}`}
+        // >
+        //   {languagesStore?.length > 0
+        //     ? languagesStore?.map(l => (
+        //         <Button
+        //           key={l.name}
+        //           onClick={() => handlerChangeLang(l.name)}
+        //           className={`capitalize ${l.name === selectedLang && 'bg-yellow-500'}  hover:bg-yellow-300`}
+        //         >
+        //           {l.name}
+        //         </Button>
+        //       ))
+        //     : null}
+        // </div>
+        <ButtonsLangSelected
+          langRecipe={languagesStore}
+          selectedLang={selectedLang}
+          handlerChangeLang={handlerChangeLang}
+        />
       )}
 
-      {/*render ing*/}
-      <div className="flex flex-col gap-y-3">
-        {ingredientsStore?.length > 0
-          ? ingredientsStore.map((ingredient: IIngredient, index: number) => {
-              const name =
-                ingredient.value[selectedLang] || ingredient.value['en'] || 'Неизвестно';
-              const measureKey = ingredient.mera.toLowerCase();
-              const measureStr = measurements[selectedLang]?.[measureKey] || measureKey;
-              return (
-                <div
-                  key={index}
-                  className={`flex items-center justify-between  transition duration-300  rounded-[10px] p-2
-                               ${isCreateRecipe && 'hover:bg-yellow-200 hover:text-black'}
-                            `}
-                >
-                  {/*blog rend ring*/}
-                  <div className="flex gap-x-3 items-center">
-                    <div className="w-[20px] h-[20px] bg-yellow-500 rounded-full" />
-                    <p>{name}</p>
-                    <p>{ingredient.ves}</p>
-                    <p>{measureStr}</p>
-                  </div>
-
-                  {/*button remove ing*/}
-                  {isCreateRecipe && (
-                    <Button
-                      onClick={() => handlerRemoveIng(index)}
-                      className="p-0 bg-red-500 hover:bg-red-700 transition-all duration-500 rounded-full w-[20px] h-[20px] text-black"
-                    >
-                      X
-                    </Button>
-                  )}
-                </div>
-              );
-            })
-          : null}
-      </div>
+      <IngredientItem
+        ingredientsStore={ingredientsStore}
+        selectedLang={selectedLang}
+        measurements={measurements}
+        isCreateRecipe={isCreateRecipe}
+        handlerRemoveIng={handlerRemoveIng}
+      />
     </article>
   );
 };
