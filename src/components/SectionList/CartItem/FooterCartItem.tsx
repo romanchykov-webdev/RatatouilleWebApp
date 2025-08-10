@@ -16,16 +16,16 @@ const FooterCartItem: React.FC<IFooterCartItemProps> = ({
   const { shadowText } = useShadowText();
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full ">
       {/*title*/}
       <div className="flex items-center justify-center pb-5 overflow-hidden">
-        <h6 className="text-white " style={shadowText()}>
+        <h6 className="text-white capitalize" style={shadowText()}>
           {title}
         </h6>
       </div>
 
       {/*icons block*/}
-      <div className="flex items-center justify-around pb-2">
+      <div className="flex items-center justify-between ">
         {comments > 0 && (
           <div className="flex items-center justify-center relative">
             <MessageCircle className="text-white w-[30px] h-[30px]" />

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../../api/supabase';
 import { AuthError } from '@supabase/auth-js';
-import { UserProfile } from '@/types';
+import { IUserProfile } from '@/types';
 import { PostgrestError } from '@supabase/supabase-js';
 import { login } from '@/store/slices/isAuthSlice';
 
@@ -40,7 +40,7 @@ export const signUpUser = createAsyncThunk<SignUpResponse, SignUpPayload>(
         .from('users')
         .select('*')
         .eq('id', user.id)
-        .single()) as { data: UserProfile | null; error: PostgrestError | null };
+        .single()) as { data: IUserProfile | null; error: PostgrestError | null };
 
       if (fetchProfileError || !profileData) {
         throw new Error(fetchProfileError?.message || 'Профиль пользователя не найден');

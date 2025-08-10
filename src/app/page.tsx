@@ -1,14 +1,15 @@
 'use client';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import useWindowWidth from '@/helpers/widthScreen';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
 import { useIsHydrated } from '@/helpers/hooks/useIsHydrated';
 import { useEffect } from 'react';
 import WelcomeScreen from '@/components/Modal/WelcomeScreen';
+import HomeBigCarouselComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselComponent';
 
 export default function Page() {
-  const widthScreen = useWindowWidth();
+  const widthScreen: number = useWindowWidth();
 
   // console.log('widthScreen', widthScreen);
 
@@ -17,7 +18,7 @@ export default function Page() {
   const hydrated = useIsHydrated();
 
   useEffect(() => {
-    const userLang = navigator.language || navigator.languages[0] || null;
+    const userLang: string | null = navigator.language || navigator.languages[0] || null;
     console.log('userLang', userLang);
   }, []);
 
@@ -26,8 +27,9 @@ export default function Page() {
   }
   return (
     <WrapperApp>
-      <Header isDesktop={isDesktop} />
+      <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
+        <HomeBigCarouselComponent />
         <SectionListWrapper />
       </main>
       <footer className="bg-red-500">footer</footer>

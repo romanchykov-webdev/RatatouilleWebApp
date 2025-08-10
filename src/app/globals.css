@@ -2,6 +2,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.hide-number-arrows {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
 
 @custom-variant dark (&:is(.dark *));
 

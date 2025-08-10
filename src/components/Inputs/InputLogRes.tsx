@@ -1,15 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeClosed } from 'lucide-react';
+import { Eye, EyeClosed, Key, Mail, Link } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+
+interface IconCustomProps {
+  type: string;
+}
+
+const IconCustom: React.FC<IconCustomProps> = ({
+  type,
+}: IconCustomProps): JSX.Element | null => {
+  switch (type) {
+    case 'email':
+      return <Mail className="w-[20px] h-[20px] text-black " />;
+    case 'password':
+      return <Key className="w-[20px] h-[20px] text-black " />;
+    case 'link':
+      return <Link className="w-[20px] h-[20px] text-black " />;
+    default:
+      return null;
+  }
+};
 
 interface IInputLogResProps {
   id: string;
   type: string;
-  inputValue: string;
+  inputValue: string | null;
   setValue: (value: string) => void;
+  isIconLeft?: boolean;
   isPas?: boolean;
   isError?: boolean;
   errorText?: string | null;
@@ -21,6 +41,7 @@ const InputLogRes: React.FC<IInputLogResProps> = ({
   type,
   inputValue,
   setValue,
+  isIconLeft = true,
   isPas = false,
   isError = false,
   errorText = null,
@@ -28,25 +49,31 @@ const InputLogRes: React.FC<IInputLogResProps> = ({
 }) => {
   const [isVisiblePass, setIsVisiblePass] = useState(false);
 
-  console.log('InputLogRes isError', isError);
-  console.log('InputLogRes errorText', errorText);
+  // console.log('InputLogRes isError', isError);
+  // console.log('InputLogRes errorText', errorText);
 
   return (
-    <div className="grid gap-2   ">
+    <div className="grid gap-2  w-full ">
       <div className="flex items-center">
         <Label htmlFor={id} className="capitalize">
           {id}
         </Label>
       </div>
       <div className="relative flex items-center ">
+        {isIconLeft && (
+          <div className="absolute left-[7px]">
+            <IconCustom type={type} />
+          </div>
+        )}
         <Input
           id={id}
           type={isPas && isVisiblePass ? 'text' : type}
-          value={inputValue}
+          value={inputValue ?? ''}
           onChange={e => setValue(e.target.value)}
           required
           placeholder={placeholder}
           aria-describedby={isError && errorText ? `${id}-error` : undefined}
+          className={`pl-[30px] `}
         />
         {isPas && (
           <div

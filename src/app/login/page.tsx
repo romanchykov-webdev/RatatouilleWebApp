@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import { shadowBox } from '@/helpers/shadowBoxStyle';
 import InputLogRes from '@/components/Inputs/InputLogRes';
 import { Loader2 } from 'lucide-react';
@@ -106,7 +106,7 @@ export default function Login() {
 
   return (
     <WrapperApp>
-      <Header />
+      <HeaderComponent />
       <div className="flex items-center justify-center ">
         <Card style={shadowBox()} className="w-full max-w-sm">
           <CardHeader>
@@ -182,7 +182,7 @@ export default function Login() {
               )}
             </Button>
             <Button variant="outline" className="w-full cursor-pointer">
-              <Link href="/404">Login with Google</Link>
+              <Link href="/">Login with Google</Link>
             </Button>
           </CardFooter>
         </Card>
