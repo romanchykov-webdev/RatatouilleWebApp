@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import { IArea, ILanguage } from '@/types/createNewRecipeScreen.types';
+import { IArea, ILanguage, ITitle } from '@/types/createNewRecipeScreen.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 interface IAddAreaProps {
   dispatch: AppDispatch;
   languagesStore: ILanguage[];
-  titleStore: IArea[];
+  titleStore: ITitle[];
 }
 
 const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore }) => {
@@ -61,11 +61,6 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
           </div>
         );
       })}
-      {/*<WrapperInputLS*/}
-      {/*  languagesStore={languagesStore}*/}
-      {/*  inputValue={areaByLang}*/}
-      {/*  handleChangeInput={handleChange}*/}
-      {/*/>*/}
     </article>
   );
 };

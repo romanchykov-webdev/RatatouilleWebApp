@@ -9,7 +9,7 @@ import WelcomeScreen from '@/components/Modal/WelcomeScreen';
 import HomeBigCarouselComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselComponent';
 
 export default function Page() {
-  const widthScreen = useWindowWidth();
+  const widthScreen: number = useWindowWidth();
 
   // console.log('widthScreen', widthScreen);
 
@@ -18,7 +18,7 @@ export default function Page() {
   const hydrated = useIsHydrated();
 
   useEffect(() => {
-    const userLang = navigator.language || navigator.languages[0] || null;
+    const userLang: string | null = navigator.language || navigator.languages[0] || null;
     console.log('userLang', userLang);
   }, []);
 

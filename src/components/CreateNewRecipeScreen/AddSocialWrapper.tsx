@@ -18,7 +18,6 @@ interface IAddSocialWrapperProps {
 
 const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
   dispatch,
-  instructionStore,
   socialLinkStore,
 }: IAddSocialWrapperProps): JSX.Element => {
   const [socialObj, setSocialObj] = useState<ISocialRenderProps>({
@@ -26,7 +25,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
     blog: null,
     instagram: null,
     facebook: null,
-    tikTok: null,
+    tiktok: null,
     coordinates: null,
   });
   const [isSocialLink, setIsSocialLink] = useState<string>('');
@@ -52,7 +51,8 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
         blog: /.*/, // любые ссылки допустимы
         instagram: /^(www\.)?instagram\.com$/,
         facebook: /^(www\.)?facebook\.com$/,
-        tikTok: /^(www\.)?tiktok\.com$/,
+        tikTok: /^((?:www|vt|m)\.)?tiktok\.com$/,
+        // tikTok: /^(www\.)?tiktok\.com$/,
         // coordinates: /^https?:\/\/(www\.)?google\.[a-z.]+\/maps/, // пример: Google Maps
         coordinates: /^(www\.)?(google\.[a-z.]+|maps\.app\.goo\.gl)$/,
       };

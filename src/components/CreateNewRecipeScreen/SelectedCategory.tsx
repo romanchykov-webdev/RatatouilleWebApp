@@ -15,58 +15,62 @@ interface ISelectedCategoryProps {
   data: ICategory[];
 
   dispatch: AppDispatch;
+  categoryStore: string;
+  subCategoryStore: string;
 }
 
 const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
   data,
   dispatch,
+  categoryStore,
+  subCategoryStore,
 }): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [categoryName, setCategoryName] = useState<string>('');
-  const [subCategory, setSubCategory] = useState<string>('');
 
   const handleConfirm = () => {
     setIsModalOpen(false);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
-    setCategoryName('');
-    setSubCategory('');
     dispatch(clearCategorySubCategory());
   };
 
-  const handlerAddCategory = (category: { name: string; point: string }) => {
-    setCategoryName(category.name);
+  const handlerAddCategory = (category: { point: string }) => {
     dispatch(addCategory(category.point));
   };
-  const renderCategory = (): JSX.Element[] => {
-    // const res = data.map(item => item.name);
-    // const shortCategories = data.map(({ name, point }) => ({ name, point }));
-    const res = data.map(({ name, point }) => ({ name, point }));
-    // console.log('res', res);
-    return res.map(category => (
-      <Button key={category.name} onClick={() => handlerAddCategory(category)}>
+
+  const handlerAddSubCategory = (subCategory: { point: string }) => {
+    dispatch(addSubCategory(subCategory.point));
+  };
+
+  const renderCategory = () =>
+    data.map(category => (
+      <Button key={category.point} onClick={() => handlerAddCategory(category)}>
         {category.name}
       </Button>
     ));
-  };
 
-  const handlerAddSubCategory = (subCategory: { name: string; point: string }) => {
-    setSubCategory(subCategory.name);
-    dispatch(addSubCategory(subCategory.point));
-  };
-  const renderSubCategory: () => JSX.Element[] | null = (): JSX.Element[] | null => {
-    if (categoryName === '') return null;
-    const res: ICategory | undefined = data.find(
-      (item: ICategory) => item.name === categoryName,
-    );
+  const renderSubCategory = () => {
+    if (!categoryStore) return null;
+    const category = data.find(item => item.point === categoryStore);
     return (
-      res?.subcategories.map(item => (
-        <Button key={item.name} onClick={() => handlerAddSubCategory(item)}>
-          {item.name}
+      category?.subcategories.map(sub => (
+        <Button key={sub.point} onClick={() => handlerAddSubCategory(sub)}>
+          {sub.name}
         </Button>
       )) || null
     );
+  };
+
+  // Для отображения имени в UI по point
+  const getNameByPoint = (point: string) => {
+    for (const cat of data) {
+      if (cat.point === point) return cat.name;
+      const sub = cat.subcategories.find(s => s.point === point);
+      if (sub) return sub.name;
+    }
+    return '';
   };
 
   return (
@@ -79,15 +83,9 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
         Add category
       </Button>
 
-      {categoryName !== '' && subCategory !== '' && (
+      {categoryStore && subCategoryStore && (
         <div>
-          {categoryName && (
-            <span>
-              {categoryName}
-              {' ->'}
-            </span>
-          )}{' '}
-          {subCategory && <span>{subCategory}</span>}
+          {getNameByPoint(categoryStore)} {' -> '} {getNameByPoint(subCategoryStore)}
         </div>
       )}
 
@@ -104,31 +102,24 @@ const SelectedCategory: React.FC<ISelectedCategoryProps> = ({
       >
         <div className="flex flex-col gap-y-4">
           <div className="flex items-center gap-x-2">
-            {categoryName && (
+            {categoryStore && (
               <span
-                className="hover:text-red-500 "
-                onClick={() => {
-                  setCategoryName('');
-                  setSubCategory('');
-                }}
+                className="hover:text-red-500"
+                onClick={() => dispatch(clearCategorySubCategory())}
               >
-                {categoryName}
-                {' ->'}
+                {getNameByPoint(categoryStore)} {' -> '}
               </span>
-            )}{' '}
-            {subCategory && <span>{subCategory}</span>}
+            )}
+            {subCategoryStore && <span>{getNameByPoint(subCategoryStore)}</span>}
           </div>
 
-          {/*render category*/}
-          {categoryName === '' && renderCategory()}
-
-          {/*render sub category*/}
+          {!categoryStore && renderCategory()}
           {renderSubCategory()}
 
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
             <Button
-              disabled={subCategory === ''}
+              disabled={!subCategoryStore}
               variant="outline"
               onClick={handleConfirm}
             >

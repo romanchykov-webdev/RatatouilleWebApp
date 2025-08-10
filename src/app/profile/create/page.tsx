@@ -14,7 +14,7 @@ import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRec
 import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 import AddTags from '@/components/CreateNewRecipeScreen/AddTags';
 import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
 import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
 import IngredientsWrapper from '@/components/IngredientsWrapper/IngredientsWrapper';
@@ -25,13 +25,21 @@ import InstructionWrapper from '@/components/Instruction/InstructionWrapper';
 import Instruction from '@/components/Instruction/Instruction';
 import AddSocialWrapper from '@/components/CreateNewRecipeScreen/AddSocialWrapper';
 import RecipeComponent from '@/components/RecipeComponent/RecipeComponent';
-import { addOwnerId } from '@/store/slices/createNewRecipeSlice';
+import { addOwnerId, clearNewRecipeState } from '@/store/slices/createNewRecipeSlice';
 import { Button } from '@/components/ui/button';
+import { addRecipeThunk } from '@/store/thunks/createNewRecipeThunk';
+import { uploadBase64ToCloudinary } from '@/helpers/uploadBase64ToCloudinary';
+import toast from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 const CreateNewRecipe: React.FC = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
   const [measurements, setMeasurements] = useState<IMeasurement>({});
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [uploadRecipe, setUploadRecipe] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const dispatch = useAppDispatch();
   const createNewRecipe = useAppSelector((state: RootState) => state.createNewRecipe);
   const {
@@ -49,6 +57,8 @@ const CreateNewRecipe: React.FC = () => {
   } = createNewRecipe;
 
   const pathName = usePathname();
+
+  const router = useRouter();
 
   // console.log('setSelectedFile', selectedFile);
   const user: IUserProfile = useAppSelector(
@@ -94,12 +104,91 @@ const CreateNewRecipe: React.FC = () => {
     getCategory();
     getMeasurement();
   }, [userLangStore, dispatch, userId]);
-  const imageHeaderToPass =
-    typeof createNewRecipe.imageHeader === 'string' ? createNewRecipe.imageHeader : '';
+
+  // const imageHeaderToPass =
+  //   typeof createNewRecipe.imageHeader === 'string' ? createNewRecipe.imageHeader : '';
 
   //  Publish recipe
   const handlerPublish = async () => {
-    console.log('Publish recipe');
+    try {
+      setUploadRecipe(true);
+      setUploadProgress(0);
+
+      const { instruction, imageHeader } = createNewRecipe;
+
+      // Считаем все изображения
+      const imagesToUpload = [];
+
+      if (imageHeader.startsWith('data:image')) {
+        imagesToUpload.push(imageHeader);
+      }
+
+      instruction.forEach(step => {
+        if (step.images && step.images.length > 0) {
+          step.images.forEach(img => {
+            if (img.startsWith('data:image')) {
+              imagesToUpload.push(img);
+            }
+          });
+        }
+      });
+
+      const totalImages = imagesToUpload.length;
+      let uploadedCount = 0;
+
+      // Функция для загрузки с обновлением прогресса
+      const uploadWithProgress = async (img: string) => {
+        const url = await uploadBase64ToCloudinary(img);
+        uploadedCount++;
+        setUploadProgress(Math.round((uploadedCount / totalImages) * 100));
+        return url;
+      };
+
+      // Загружаем imageHeader
+      let imageHeaderUrl = imageHeader;
+      if (imageHeader.startsWith('data:image')) {
+        imageHeaderUrl = await uploadWithProgress(imageHeader);
+      }
+
+      // Загружаем изображения в instruction
+      const updatedInstructions = await Promise.all(
+        instruction.map(async step => {
+          if (step.images && step.images.length > 0) {
+            const updatedImages = await Promise.all(
+              step.images.map(async img => {
+                if (img.startsWith('data:image')) {
+                  return await uploadWithProgress(img);
+                }
+                return img;
+              }),
+            );
+            return { ...step, images: updatedImages };
+          }
+          return step;
+        }),
+      );
+
+      // Формируем новый объект
+      const newRecipeData = {
+        ...createNewRecipe,
+        imageHeader: imageHeaderUrl,
+        instruction: updatedInstructions,
+        user_name: userName,
+        avatar: userAvatar,
+      };
+
+      dispatch(addRecipeThunk(newRecipeData));
+    } catch (error) {
+      console.error('Error while publishing recipe:', error);
+      toast.error('Ошибка при публикации рецепта');
+    } finally {
+      setTimeout(() => {
+        dispatch(clearNewRecipeState());
+        setUploadRecipe(false);
+        setUploadProgress(0);
+        router.replace('/profile/create');
+      }, 500);
+    }
   };
 
   return (
@@ -107,16 +196,41 @@ const CreateNewRecipe: React.FC = () => {
       <HeaderComponent />
       <BreadcrumbsComponent />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        {uploadRecipe && (
+          <div
+            className="fixed z-20 left-0 right-0 top-0 bottom-0 w-full h-full flex items-center justify-center flex-col gap-y-5"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+          >
+            <h2>Подождите, загружается рецепт на сервер</h2>
+
+            {/* Например, если используешь shadcn UI Progress */}
+            <Progress value={uploadProgress} max={100} className="w-64" />
+
+            <span>{uploadProgress}%</span>
+
+            <Loader2 className="ml-2 w-[50px] h-[50px] text-yellow-400 animate-spin" />
+          </div>
+        )}
         {/*section 1*/}
         <SectionWrapper>
-          <SelectedCategory data={category} dispatch={dispatch} />
-          <AddHeaderImage
+          <SelectedCategory
+            data={category}
             dispatch={dispatch}
-            setSelectedFile={setSelectedFile}
             categoryStore={categoryStore}
             subCategoryStore={subCategoryStore}
           />
-          <AddLanguages dispatch={dispatch} imageHeaderStore={imageHeaderStore} />
+          <AddHeaderImage
+            dispatch={dispatch}
+            // setSelectedFile={setSelectedFile}
+            categoryStore={categoryStore}
+            imageHeaderStore={imageHeaderStore}
+            subCategoryStore={subCategoryStore}
+          />
+          <AddLanguages
+            dispatch={dispatch}
+            imageHeaderStore={imageHeaderStore}
+            languagesStore={languagesStore}
+          />
         </SectionWrapper>
 
         {/*section 2*/}
@@ -131,7 +245,7 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 3*/}
         <SectionWrapper>
-          <AddTags dispatch={dispatch} ariaStore={ariaStore} />
+          <AddTags dispatch={dispatch} ariaStore={ariaStore} tagStore={tagStore} />
           <RecipeMetaComponents
             dispatch={dispatch}
             tagStore={tagStore}
@@ -164,16 +278,12 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 6*/}
         <SectionWrapper>
-          {/*{ingredientsStore.length > 0 ? (*/}
           <InstructionWrapper
             dispatch={dispatch}
             languagesStore={languagesStore}
             userLangStore={userLangStore}
             ingredientsStore={ingredientsStore}
           />
-          {/*// ) : (*/}
-          {/*//   <SkeletonCustom dependency={ingredientsStore} />*/}
-          {/*// )}*/}
         </SectionWrapper>
 
         {/*section 7*/}
@@ -197,7 +307,6 @@ const CreateNewRecipe: React.FC = () => {
             <AddSocialWrapper
               dispatch={dispatch}
               instructionStore={instructionStore}
-              // userLangStore={userLangStore}
               socialLinkStore={socialLinkStore}
             />
           )}
@@ -212,7 +321,6 @@ const CreateNewRecipe: React.FC = () => {
               recipe={{
                 ...createNewRecipe,
                 authorId: userId,
-                imageHeader: imageHeaderToPass,
                 rating: 0,
                 comments: 0,
                 isLiked: false,

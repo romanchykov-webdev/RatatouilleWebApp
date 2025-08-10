@@ -13,7 +13,7 @@ export interface ICreateNewRecipe {
   authorId: string;
   category: string;
   subCategory: string;
-  imageHeader: File | string | null;
+  imageHeader: string;
   languages: ILanguage[];
   title: ITitle[];
   area: IArea[];
@@ -28,7 +28,7 @@ const initialState: ICreateNewRecipe = {
   authorId: '',
   category: '',
   subCategory: '',
-  imageHeader: null,
+  imageHeader: '',
   languages: [],
   title: [],
   area: [],
@@ -41,7 +41,7 @@ const initialState: ICreateNewRecipe = {
     blog: null,
     instagram: null,
     facebook: null,
-    tikTok: null,
+    tiktok: null,
     coordinates: null,
   },
 };
@@ -67,11 +67,20 @@ const createNewRecipeSlice = createSlice({
       state.imageHeader = action.payload;
     },
     clearHeaderImage(state) {
-      state.imageHeader = null;
+      state.imageHeader = '';
     },
-    addLanguage(state, action: PayloadAction<ILanguage[]>) {
-      state.languages = action.payload;
+    addLanguage(state, action: PayloadAction<ILanguage>) {
+      const exists = state.languages.some(l => l.name === action.payload.name);
+      if (!exists) {
+        state.languages.push(action.payload);
+      }
     },
+    removeLanguage(state, action: PayloadAction<string>) {
+      state.languages = state.languages.filter(lang => lang.name !== action.payload);
+    },
+    // addLanguage(state, action: PayloadAction<ILanguage[]>) {
+    //   state.languages = action.payload;
+    // },
     // removeLanguage(state, action: PayloadAction<ILanguage>) {
     //   state.languages = state.languages.filter(
     //     (language: ILanguage) => language.name !== action.payload.name,
@@ -91,6 +100,9 @@ const createNewRecipeSlice = createSlice({
     },
     addRecipeMeta(state, action: PayloadAction<ICreateNewRecipe['recipeMeta']>) {
       state.recipeMeta = action.payload;
+    },
+    removeTag(state, action: PayloadAction<string>) {
+      state.tags = state.tags.filter(tag => tag !== action.payload);
     },
     // addIngredients(state, action: PayloadAction<IIngredientTitle[]>) {
     //   state.ingredients = action.payload;
@@ -117,6 +129,10 @@ const createNewRecipeSlice = createSlice({
     removeSocialLink(state, action: PayloadAction<keyof typeof state.socialLinks>) {
       state.socialLinks[action.payload] = null;
     },
+    clearNewRecipeState(state) {
+      state.languages = [];
+      Object.assign(state, initialState);
+    },
   },
 });
 
@@ -128,11 +144,12 @@ export const {
   addHeaderImage,
   clearHeaderImage,
   addLanguage,
-  // removeLanguage,
+  removeLanguage,
   removeAllLanguages,
   addTitle,
   addArea,
   addTags,
+  removeTag,
   addRecipeMeta,
   addIngredients,
   removeIngredient,
@@ -140,5 +157,6 @@ export const {
   removeInstruction,
   addSocialLinks,
   removeSocialLink,
+  clearNewRecipeState,
 } = createNewRecipeSlice.actions;
 export default createNewRecipeSlice.reducer;

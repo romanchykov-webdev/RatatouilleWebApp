@@ -6,40 +6,42 @@ import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
 import { Languages } from 'lucide-react';
 import { languagesObj } from '@/helpers/languagesObj';
-import { addLanguage, removeAllLanguages } from '@/store/slices/createNewRecipeSlice';
+import {
+  addLanguage,
+  removeAllLanguages,
+  removeLanguage,
+} from '@/store/slices/createNewRecipeSlice';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ILanguage } from '@/types/createNewRecipeScreen.types';
 
 interface IAddLanguagesProps {
   dispatch: AppDispatch;
-  imageHeaderStore: string | File | null;
+  imageHeaderStore: string;
+  languagesStore: ILanguage[];
 }
 
 const AddLanguages: React.FC<IAddLanguagesProps> = ({
   dispatch,
   imageHeaderStore,
+  languagesStore,
 }: IAddLanguagesProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedLanguages, setSelectedLanguages] = useState<ILanguage[]>([]);
 
   const toggleLanguage = (lang: ILanguage) => {
-    const exists = selectedLanguages.find(l => l.name === lang.name);
+    const exists = languagesStore.find(l => l.name === lang.name);
     if (exists) {
-      // Удалить, если уже есть
-      setSelectedLanguages(prev => prev.filter(l => l.name !== lang.name));
+      dispatch(removeLanguage(lang.name)); // новый экшен для удаления одного языка
     } else {
-      // Добавить
-      setSelectedLanguages(prev => [...prev, lang]);
+      dispatch(addLanguage(lang)); // твой slice должен уметь добавлять массив языков
     }
   };
+
   const handleConfirm = () => {
-    console.log('Выбранные языки:', selectedLanguages);
-    dispatch(addLanguage(selectedLanguages));
+    console.log('Выбранные языки:', languagesStore);
     setIsModalOpen(false);
   };
 
   const closeModal = () => {
-    setSelectedLanguages([]);
     dispatch(removeAllLanguages());
     setIsModalOpen(false);
   };
@@ -48,7 +50,7 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
     <section
       className={`relative mb-5 flex flex-col ${imageHeaderStore !== null && 'gap-y-5'} `}
     >
-      {imageHeaderStore === null && (
+      {imageHeaderStore === '' && (
         <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />
       )}
       <Button
@@ -59,9 +61,9 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
       >
         Add Languages <Languages className="w-[20px] h-[20px] " />
       </Button>
-      {selectedLanguages && (
+      {languagesStore.length > 0 && (
         <div className="flex flex-wrap gap-2 items-center justify-center">
-          {selectedLanguages.map(l => (
+          {languagesStore.map(l => (
             <div
               key={l.name}
               className="capitalize border-[1px] border-neutral-300 rounded-full p-2"
@@ -87,7 +89,7 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
           {/*<div className="flex items-center gap-x-2">content</div>*/}
           <div className="flex flex-wrap gap-3">
             {languagesObj.map(lang => {
-              const isSelected = selectedLanguages.some(l => l.name === lang.name);
+              const isSelected = languagesStore.some(l => l.name === lang.name);
               return (
                 <Button
                   key={lang.name}
@@ -107,7 +109,7 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
             <Button
-              disabled={selectedLanguages.length === 0}
+              disabled={languagesStore.length === 0}
               variant="outline"
               onClick={handleConfirm}
             >

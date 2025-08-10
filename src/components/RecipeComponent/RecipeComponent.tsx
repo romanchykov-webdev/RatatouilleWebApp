@@ -68,7 +68,6 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
 
   useEffect(() => {
-    // setIsActiveLang(userLang);
     console.log('isActiveLang', isActiveLang);
   }, [isActiveLang]);
 
@@ -104,9 +103,9 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     idOwnerRecipe: string,
     idUserClick: string,
   ) => {
-    // console.log('handlerIsLackedRecipe idRecipe', idRecipe);
-    // console.log('handlerIsLackedRecipe idOwnerRecipe', idOwnerRecipe);
-    // console.log('handlerIsLackedRecipe idUserClick', idUserClick);
+    console.log('handlerIsLackedRecipe idRecipe', idRecipe);
+    console.log('handlerIsLackedRecipe idOwnerRecipe', idOwnerRecipe);
+    console.log('handlerIsLackedRecipe idUserClick', idUserClick);
     if (idOwnerRecipe === idUserClick) {
       toast.success('This recipe is published by you');
     }

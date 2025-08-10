@@ -43,7 +43,6 @@ const ProfileEdit: React.FC = () => {
       lang: lang,
       userTheme: userTheme,
     });
-    console.log('render');
   }, [userName, userAvatar, lang, userTheme, userId]);
 
   return (

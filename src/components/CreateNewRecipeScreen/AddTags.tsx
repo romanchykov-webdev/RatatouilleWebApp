@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX, useEffect, useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { AppDispatch } from '@/store';
 import { IArea } from '@/types/createNewRecipeScreen.types';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
@@ -8,43 +8,57 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CirclePlus } from 'lucide-react';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { useDebounce } from '@/helpers/hooks/useDebounce';
-import { addTags } from '@/store/slices/createNewRecipeSlice';
+import { addTags, removeTag } from '@/store/slices/createNewRecipeSlice';
 
 interface IAddTagsProps {
   dispatch: AppDispatch;
   ariaStore: IArea[];
+  tagStore: string[];
 }
 
 const AddTags: React.FC<IAddTagsProps> = ({
   dispatch,
   ariaStore,
+  tagStore,
 }: IAddTagsProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
   const [inputValue, setInputValue] = useState<string>('');
 
-  const [tagsArr, setTagsArr] = useState<string[]>([]);
-
-  const debounceTags = useDebounce(tagsArr);
+  // const [tagsArr, setTagsArr] = useState<string[]>([]);
+  //
+  // const debounceTags = useDebounce(tagsArr);
+  //
+  // const handlerAddTag = () => {
+  //   const trimmed = inputValue.trim();
+  //
+  //   if (trimmed && !tagsArr.includes(trimmed)) {
+  //     setTagsArr(prev => [...prev, trimmed]);
+  //     setInputValue('');
+  //   }
+  // };
+  //
+  // const handlerRemoveTag = (tag: string) => {
+  //   setTagsArr(tagsArr.filter(i => i !== tag));
+  //   // dispatch(addTags(debounceTags));
+  // };
+  //
+  // useEffect(() => {
+  //   dispatch(addTags(debounceTags));
+  // }, [debounceTags, dispatch]);
 
   const handlerAddTag = () => {
     const trimmed = inputValue.trim();
 
-    if (trimmed && !tagsArr.includes(trimmed)) {
-      setTagsArr(prev => [...prev, trimmed]);
+    if (trimmed && !tagStore.includes(trimmed)) {
+      dispatch(addTags([...tagStore, trimmed]));
       setInputValue('');
     }
   };
 
   const handlerRemoveTag = (tag: string) => {
-    setTagsArr(tagsArr.filter(i => i !== tag));
-    // dispatch(addTags(debounceTags));
+    dispatch(removeTag(tag));
   };
-
-  useEffect(() => {
-    dispatch(addTags(debounceTags));
-  }, [debounceTags, dispatch]);
 
   return (
     <article className="relative overflow-hidden">
@@ -67,9 +81,9 @@ const AddTags: React.FC<IAddTagsProps> = ({
           <CirclePlus className="w-full h-full  " />
         </Button>
       </div>
-      {tagsArr?.length > 0 && (
+      {tagStore?.length > 0 && (
         <div className="flex items-center justify-center gap-2 flex-wrap ">
-          {tagsArr.map(tag => (
+          {tagStore.map(tag => (
             <span
               onClick={() => handlerRemoveTag(tag)}
               className="border-[1px] border-neutral-300  px-2 rounded-[10px] relative cursor-pointer"

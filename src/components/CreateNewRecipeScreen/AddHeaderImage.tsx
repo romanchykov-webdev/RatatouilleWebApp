@@ -2,8 +2,7 @@
 
 import React, { JSX, RefObject, useEffect, useRef } from 'react';
 import { ImagePlus } from 'lucide-react';
-import { AppDispatch, RootState } from '@/store';
-import { useAppSelector } from '@/store/hooks';
+import { AppDispatch } from '@/store';
 import { addHeaderImage, clearHeaderImage } from '@/store/slices/createNewRecipeSlice';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
@@ -12,21 +11,20 @@ import { useImageUpload } from '@/helpers/hooks/useImageUpload';
 
 interface IAddHeaderImageProps {
   dispatch: AppDispatch;
-  setSelectedFile: (file: File | null) => void;
+  // setSelectedFile: (file: File | null) => void;
   categoryStore: string;
   subCategoryStore: string;
+  imageHeaderStore: string;
 }
 
 const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
   dispatch,
-  setSelectedFile,
+  // setSelectedFile,
   categoryStore,
   subCategoryStore,
+  imageHeaderStore,
 }: IAddHeaderImageProps): JSX.Element => {
   const fileInputRef: RefObject<HTMLInputElement | null> = useRef<HTMLInputElement>(null);
-  const imageHeader: string | File | null = useAppSelector(
-    (state: RootState): string | File | null => state.createNewRecipe.imageHeader,
-  );
 
   const { shadowBox } = useShadowBox();
 
@@ -34,26 +32,13 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
     multiple: false,
   });
 
-  // Синхронизация с Redux
-  // useEffect(() => {
-  //   if (images.length > 0) {
-  //     dispatch(addHeaderImage(images[0].previewUrl));
-  //     setSelectedFile(images[0].file);
-  //   } else if (imageHeader) {
-  //     dispatch(clearHeaderImage());
-  //     setSelectedFile(null);
-  //   }
-  // }, [images, imageHeader, dispatch, setSelectedFile]);
-
   useEffect(() => {
     if (images.length > 0) {
       dispatch(addHeaderImage(images[0].base64)); // сохраняем base64 в store
-      setSelectedFile(images[0].file);
-    } else if (imageHeader) {
+    } else {
       dispatch(clearHeaderImage());
-      setSelectedFile(null);
     }
-  }, [images, imageHeader, dispatch, setSelectedFile]);
+  }, [images, dispatch]);
 
   // Очистка previewUrl при размонтировании
   useEffect(() => {
@@ -78,10 +63,13 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
                   rounded-[10px] flex flex-col items-center justify-center bg-neutral-400
                   dark:text-black cursor-pointer gap-y-2 hover:gap-y-5 transition-all duration-600
                   relative 
-                  ${images.length > 0 ? 'bg-cover bg-center bg-no-repeat' : ''}
+                  ${imageHeaderStore !== '' ? 'bg-cover bg-center bg-no-repeat' : ''}
+                  
                 `}
         style={
-          images.length > 0 ? { backgroundImage: `url(${images[0].base64})` } : undefined
+          imageHeaderStore !== ''
+            ? { backgroundImage: `url(${images[0].base64})` }
+            : undefined
         }
       >
         <input
@@ -92,7 +80,7 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
           className="hidden"
         />
 
-        {images.length > 0 ? (
+        {imageHeaderStore !== '' ? (
           <button
             style={shadowBox()}
             onClick={e => {

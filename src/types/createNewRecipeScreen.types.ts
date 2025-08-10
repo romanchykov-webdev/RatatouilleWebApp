@@ -56,7 +56,7 @@ export interface ISocialRenderProps {
   blog: string | null;
   instagram: string | null;
   facebook: string | null;
-  tikTok: string | null;
+  tiktok: string | null;
   coordinates: string | null;
 
   [key: string]: string | null;

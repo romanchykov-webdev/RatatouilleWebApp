@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { usePathname } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import { Skeleton } from '@/components/ui/skeleton';
 import toast from 'react-hot-toast';
 
 interface ISubscribeComponentProps {
