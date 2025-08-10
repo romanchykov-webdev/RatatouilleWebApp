@@ -3,14 +3,14 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import { INotAuthorized, UserProfile } from '@/types';
+import { INotAuthorized, IUserProfile } from '@/types';
 
 export const useShadowBox = (params: Omit<ShadowBoxParams, 'theme'> = {}) => {
   const { theme } = useTheme();
   const [clientTheme, setClientTheme] = useState<'light' | 'dark'>('light');
 
   const authState = useAppSelector(
-    (state: RootState) => state.user as UserProfile | INotAuthorized,
+    (state: RootState) => state.user as IUserProfile | INotAuthorized,
   );
   const [mounted, setMounted] = useState(false);
   // const [clientTheme, setClientTheme] = useState<'light' | 'dark'>('light');
@@ -24,7 +24,7 @@ export const useShadowBox = (params: Omit<ShadowBoxParams, 'theme'> = {}) => {
 
     // Для авторизованных пользователей используем userTheme, для неавторизованных — theme из useTheme
     const newTheme = authState.isAuth
-      ? (authState as UserProfile).userTheme === 'dark'
+      ? (authState as IUserProfile).userTheme === 'dark'
         ? 'dark'
         : 'light'
       : theme === 'dark'

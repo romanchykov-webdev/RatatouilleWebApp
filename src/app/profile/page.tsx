@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Header from '@/components/Header/header';
+import HeaderComponent from '@/components/Header/headerComponent';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 
 import { Modal } from '@/components/Modal/modal';
@@ -13,14 +13,13 @@ import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { signOutThunk } from '@/store/thunks/signOutThunk';
 import { RootState } from '@/store';
-import { UserProfile } from '@/types';
+import { IUserProfile } from '@/types';
 
 export default function Profile() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state: RootState) => state.user as UserProfile);
-  console.log('user', user);
+  const user = useAppSelector((state: RootState) => state.user as IUserProfile);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +46,7 @@ export default function Profile() {
 
   return (
     <WrapperApp>
-      <Header />
+      <HeaderComponent />
       {/*top section*/}
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} openModal={openModal} router={router} />

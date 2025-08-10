@@ -32,18 +32,28 @@ export const handleImageChange = async ({
   }
 
   // Компрессия изображения
-  const compressedFile = await compressImage(file, avatarCompressionOptions);
+  // const compressedFile = await compressImage(file, avatarCompressionOptions);
 
+  const { file: compressedFile } = await compressImage(file, avatarCompressionOptions);
   try {
+    // Локальный предпросмотр
+    // const previewUrl = URL.createObjectURL(compressedFile);
     // Локальный предпросмотр
     const previewUrl = URL.createObjectURL(compressedFile);
 
-    setUserDataUpdate(
-      (prev: IUserProfileUpdate): IUserProfileUpdate => ({
-        ...prev,
-        userAvatar: previewUrl,
-      }),
-    );
+    setUserDataUpdate(prev => ({
+      ...prev,
+      userAvatar: previewUrl,
+    }));
+
+    // // Удаление старого аватара
+    // if (
+    //   userDataUpdate.userAvatar &&
+    //   userDataUpdate.userAvatar.includes('uploads_image/profiles')
+    // ) {
+    //   const oldFileName = userDataUpdate.userAvatar.split('/').pop();
+    //   await supabase.storage.from('uploads_image').remove([`profiles/${oldFileName}`]);
+    // }
 
     // Удаление старого аватара
     if (

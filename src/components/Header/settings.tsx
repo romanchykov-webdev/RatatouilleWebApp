@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import { UserProfile } from '@/types';
+import { IUserProfile } from '@/types';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
@@ -46,7 +46,7 @@ const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
 
 const SettingsComponent: React.FC = () => {
   const { isAuth, userAvatar } = useAppSelector(
-    (state: RootState) => state.user as UserProfile,
+    (state: RootState) => state.user as IUserProfile,
   );
   return (
     <div className="flex items-center gap-x-12">
