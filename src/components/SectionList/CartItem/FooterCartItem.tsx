@@ -8,7 +8,7 @@ import { IFooterCartItemProps } from '@/components/SectionList/CartItem.types';
 
 const FooterCartItem: React.FC<IFooterCartItemProps> = ({
   title,
-  like,
+  likes,
   comments,
   rating,
   isLiked,
@@ -49,7 +49,7 @@ const FooterCartItem: React.FC<IFooterCartItemProps> = ({
           )}
 
           <span className="absolute text-amber-300 " style={{ fontSize: 8 }}>
-            {formatNumberToK(like)}
+            {formatNumberToK(likes ?? 0)}
           </span>
         </div>
       </div>

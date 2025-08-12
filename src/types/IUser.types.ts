@@ -4,20 +4,21 @@ export interface IUserProfile {
   userName: string;
   userAvatar: string;
   userEmail: string;
-  lang: string;
+  appLang: string;
   userTheme: string;
   subscribers: number;
 }
 
 export interface INotAuthorized {
   isAuth: IUserProfile['isAuth'];
+  appLang: string;
 }
 
 export interface IUserProfileUpdate {
   userId: string;
   userName: string;
   userAvatar: string;
-  lang: string;
+  appLang: string;
   userTheme: string;
 }
 

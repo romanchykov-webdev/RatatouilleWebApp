@@ -4,23 +4,22 @@ import useWindowWidth from '@/helpers/widthScreen';
 import WrapperApp from '@/components/Wrappers/wrapperApp';
 import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
 import { useIsHydrated } from '@/helpers/hooks/useIsHydrated';
-import { useEffect } from 'react';
 import WelcomeScreen from '@/components/Modal/WelcomeScreen';
 import HomeBigCarouselComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselComponent';
+import { useAppSelector } from '@/store/hooks';
+import { RootState } from '@/store';
 
 export default function Page() {
   const widthScreen: number = useWindowWidth();
 
-  // console.log('widthScreen', widthScreen);
+  const categoriesData = useAppSelector(
+    (state: RootState) => state.allCategories.categories,
+  );
+  const userData = useAppSelector((state: RootState) => state.user);
 
   const isDesktop: boolean = widthScreen !== undefined ? widthScreen > 810 : false;
 
   const hydrated = useIsHydrated();
-
-  useEffect(() => {
-    const userLang: string | null = navigator.language || navigator.languages[0] || null;
-    console.log('userLang', userLang);
-  }, []);
 
   if (!hydrated) {
     return <WelcomeScreen />;
@@ -30,7 +29,7 @@ export default function Page() {
       <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
         <HomeBigCarouselComponent />
-        <SectionListWrapper />
+        <SectionListWrapper categories={categoriesData} appLang={userData?.appLang} />
       </main>
       <footer className="bg-red-500">footer</footer>
     </WrapperApp>

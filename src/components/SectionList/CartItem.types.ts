@@ -3,19 +3,24 @@ import React from 'react';
 // Базовый интерфейс для блюда или элемента
 export interface IItem {
   id: string;
-  index: number;
+  index?: number;
   image: string;
   author: string;
   authorAvatar: string;
   category: string;
   subcategory: string;
-  title: string;
-  like: number;
+  title: { lang: string; value: string }[]; // <-- исправлено
+  likes: number;
   comments: number;
   rating: number;
   isLiked: boolean;
   lang: string[];
   video: boolean;
+  image_header?: string;
+  published_user?: {
+    avatar: string;
+    user_name: string;
+  };
 }
 
 // Интерфейс для списка карточек
@@ -33,7 +38,7 @@ interface ICartItemBaseProps {
 export interface IHeaderCartItemProps extends ICartItemBaseProps {
   author: IItem['author'];
   authorAvatar: IItem['authorAvatar'];
-  lang: IItem['lang'];
+  lang: IItem['title']; // ✅ теперь массив объектов
   video: IItem['video'];
 }
 
@@ -44,8 +49,8 @@ export interface IBGImageCartItemProps extends ICartItemBaseProps {
 
 // Props для футера карточки
 export interface IFooterCartItemProps {
-  title: IItem['title'];
-  like: IItem['like'];
+  title: string;
+  likes: IItem['likes'];
   comments: IItem['comments'];
   rating: IItem['rating'];
   isLiked: IItem['isLiked'];

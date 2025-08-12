@@ -43,7 +43,7 @@ export default function Profile() {
       closeModal();
     }
   };
-
+  // console.log('user.userAvatar', user.userAvatar);
   return (
     <WrapperApp>
       <HeaderComponent />

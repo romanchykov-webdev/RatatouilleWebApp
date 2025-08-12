@@ -9,7 +9,7 @@ import { IUserProfileUpdate } from '@/types';
 export const updateUserProfileThunk = createAsyncThunk(
   'user/updateUserProfileThunk',
   async (userData: IUserProfileUpdate, { rejectWithValue }) => {
-    console.log('updateUserProfileThunk userData', userData);
+    // console.log('updateUserProfileThunk userData', userData);
     try {
       const { userId, userName, userAvatar, lang, userTheme } = userData;
       const { error } = await supabase

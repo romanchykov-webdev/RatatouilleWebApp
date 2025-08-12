@@ -16,7 +16,7 @@ const HeaderCartItem: React.FC<IHeaderCartItemProps> = ({
   setIsLoading,
 }) => {
   const { shadowBox } = useShadowBox();
-
+  // console.log('authorAvatar', authorAvatar);
   return (
     <div className="flex items-start justify-between  w-full">
       <div>

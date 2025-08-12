@@ -67,6 +67,8 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 
   const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
 
+  console.log('RecipeComponent', recipe);
+
   useEffect(() => {
     console.log('isActiveLang', isActiveLang);
   }, [isActiveLang]);
@@ -163,7 +165,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe.recipeMeta.time}
+            num={recipe?.recipeMeta?.time}
             text={'time'}
             icon={Clock}
           />
@@ -178,7 +180,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe.recipeMeta.serv}
+            num={recipe?.recipeMeta?.serv}
             text={'serv'}
             icon={Users}
           />
@@ -193,7 +195,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe.recipeMeta.cal}
+            num={recipe?.recipeMeta?.cal}
             text={'cal'}
             icon={Flame}
           />
@@ -209,7 +211,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             // handler={()=>void }
             type={'level'}
             // num={recipe.recipeMeta.level}
-            text={recipe.recipeMeta.level}
+            text={recipe?.recipeMeta?.level}
             icon={Layers}
           />
         </div>

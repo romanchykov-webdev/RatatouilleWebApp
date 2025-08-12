@@ -78,14 +78,7 @@ const createNewRecipeSlice = createSlice({
     removeLanguage(state, action: PayloadAction<string>) {
       state.languages = state.languages.filter(lang => lang.name !== action.payload);
     },
-    // addLanguage(state, action: PayloadAction<ILanguage[]>) {
-    //   state.languages = action.payload;
-    // },
-    // removeLanguage(state, action: PayloadAction<ILanguage>) {
-    //   state.languages = state.languages.filter(
-    //     (language: ILanguage) => language.name !== action.payload.name,
-    //   );
-    // },
+
     removeAllLanguages(state) {
       state.languages = [];
     },
@@ -104,9 +97,7 @@ const createNewRecipeSlice = createSlice({
     removeTag(state, action: PayloadAction<string>) {
       state.tags = state.tags.filter(tag => tag !== action.payload);
     },
-    // addIngredients(state, action: PayloadAction<IIngredientTitle[]>) {
-    //   state.ingredients = action.payload;
-    // },
+
     addIngredients(state, action: PayloadAction<ICreateNewRecipe['ingredients']>) {
       state.ingredients = action.payload;
     },

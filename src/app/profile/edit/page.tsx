@@ -25,13 +25,13 @@ const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.user as IUserProfile);
   // console.log('user', user);
-  const { userName, userAvatar, lang, userTheme, userId } = user;
+  const { userName, userAvatar, appLang, userTheme, userId } = user;
 
   const [userDataUpdate, setUserDataUpdate] = useState<IUserProfileUpdate>({
     userId: userId,
     userName: userName,
     userAvatar: userAvatar ?? avatarDefault.src,
-    lang: lang,
+    appLang: appLang,
     userTheme: userTheme,
   });
 
@@ -40,10 +40,10 @@ const ProfileEdit: React.FC = () => {
       userId: userId,
       userName: userName,
       userAvatar: userAvatar ?? avatarDefault.src,
-      lang: lang,
+      appLang: appLang,
       userTheme: userTheme,
     });
-  }, [userName, userAvatar, lang, userTheme, userId]);
+  }, [userName, userAvatar, appLang, userTheme, userId]);
 
   return (
     <WrapperApp>

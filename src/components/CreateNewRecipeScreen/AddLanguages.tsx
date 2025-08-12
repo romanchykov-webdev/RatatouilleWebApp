@@ -120,7 +120,6 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
           </div>
         </div>
       </Modal>
-      {/*</div>*/}
     </section>
   );
 };
