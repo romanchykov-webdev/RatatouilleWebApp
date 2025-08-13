@@ -3,6 +3,7 @@ import { login } from '@/store/slices/isAuthSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PostgrestError } from '@supabase/supabase-js';
 import { IUserProfile } from '@/types';
+import { getIsLikedRecipeByUser } from '@/store/api/getIsLikedRecipeByUser';
 
 interface LoginPayload {
   email: string;
@@ -49,15 +50,22 @@ export const logInUser = createAsyncThunk<LoginResponse, LoginPayload>(
         throw new Error(profileError?.message || 'Профиль пользователя не найден');
       }
 
+      // console.log('logInUser', profileData);
+
+      // const isLikedRecipe: string[] = await getIsLikedRecipeByUser(profileData.userId);
+      //
+      // console.log('isLikedRecipe', isLikedRecipe);
+
       dispatch(
         login({
           userId: profileData.userId, // Изменено с id на userId
           userName: profileData.userName || '', // Изменено с user_name на userName
           userAvatar: profileData.userAvatar || '', // Изменено с avatar на userAvatar
           userEmail: user.email || '',
-          lang: profileData.lang || 'en',
+          appLang: profileData.appLang || 'en',
           userTheme: profileData.userTheme || 'light', // Изменено с theme на userTheme
           subscribers: profileData.subscribers || 0,
+          // isLikedRecipe: isLikedRecipe,
         }),
       );
 

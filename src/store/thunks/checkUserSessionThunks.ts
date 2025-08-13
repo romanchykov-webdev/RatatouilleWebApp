@@ -33,7 +33,7 @@ export const checkUserSessionThunks = () => async (dispatch: AppDispatch) => {
       userName: profileData.user_name || '',
       userAvatar: profileData.avatar || '',
       userEmail: user.email || '',
-      lang: profileData.lang || 'en',
+      appLang: profileData.appLang || 'en',
       userTheme: profileData.theme || 'light',
       subscribers: profileData.subscribers || 0,
     }),

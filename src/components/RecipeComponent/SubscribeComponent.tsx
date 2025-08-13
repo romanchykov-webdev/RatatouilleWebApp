@@ -24,6 +24,9 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
   ownerRecipe,
   userId,
 }: ISubscribeComponentProps): JSX.Element => {
+  // console.log('SubscribeComponent ownerRecipe', ownerRecipe);
+  // console.log('SubscribeComponent userId', userId);
+
   const { shadowBox } = useShadowBox();
 
   const pathName = usePathname();
@@ -34,7 +37,8 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
   // console.log('isDisable', +isDisable);
 
   const handlerSubscribe = async () => {
-    if (ownerRecipe.ownerId === userId) {
+    console.log('SubscribeComponent handler subscribe');
+    if (ownerRecipe.id === userId) {
       toast.success('This recipe was published by you');
     }
     //   запрос на подписку
@@ -54,19 +58,20 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
           className="w-[50px] h-[50px] cursor-pointer"
           style={shadowBox()}
         >
+          {/*{ownerRecipe.avatar && <SkeletonCustom dependency={ownerRecipe.avatar} />}*/}
           <AvatarImage src={ownerRecipe.avatar} />
         </Avatar>
 
-        {/*  description*/}
+        {/*  /!*  description*!/*/}
         <div>
-          <h6 className="capitalize">{ownerRecipe.name}</h6>
+          <h6 className="capitalize">{ownerRecipe.user_name}</h6>
           <div className="flex items-center gap-2">
             <Users /> {formatNumberToK(ownerRecipe.subscribers)}
           </div>
         </div>
       </div>
 
-      {/*Button subscribe*/}
+      {/*/!*Button subscribe*!/*/}
       <Button onClick={handlerSubscribe} className="bg-green-300 hover:bg-yellow-500">
         Subscribe
       </Button>

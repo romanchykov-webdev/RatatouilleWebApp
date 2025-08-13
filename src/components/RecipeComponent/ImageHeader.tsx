@@ -45,6 +45,8 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
   const handleConfirm = () => {
     setIsModalOpen(false);
   };
+
+  // console.log('languages', languages);
   return (
     <div className="relative rounded-[25px] overflow-hidden" style={shadowBox()}>
       <div className="absolute top-0 right-0  flex items-center justify-end w-full  p-5  ">
@@ -77,6 +79,7 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
       {imageHeader && (
         <Image
           src={imageHeader}
+          // src={'https://res.cloudinary.com/dq0ymjvhx/image/upload/v1754757979/ratatouille_images/byvlnfyruho5rwxvibzs.jpg'}
           alt="Логотип"
           width={200}
           height={200}

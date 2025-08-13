@@ -3,8 +3,14 @@
 import React, { JSX, useEffect } from 'react';
 import { ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
 
-import { Youtube, Instagram, Facebook, MapPin, BookOpenText } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import {
+  Youtube,
+  Instagram,
+  Facebook,
+  MapPin,
+  BookOpenText,
+  Copyright,
+} from 'lucide-react';
 import Link from 'next/link';
 
 interface ISocialLinksPropsProps {
@@ -35,6 +41,8 @@ const SocialRender: React.FC<ISocialLinksPropsProps> = ({
               return <MapPin className="w-[30px] h-[30px] text-blue-300" />;
             case 'blog':
               return <BookOpenText className="w-[30px] h-[30px] text-blue-300" />;
+            case 'link_copyright':
+              return <Copyright className="w-[30px] h-[30px] text-blue-300" />;
             default:
               return null;
           }

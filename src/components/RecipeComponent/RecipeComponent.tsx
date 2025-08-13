@@ -67,11 +67,15 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 
   const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
 
-  console.log('RecipeComponent', recipe);
+  // console.log('RecipeComponent recipe', JSON.stringify(recipe, null, 2));
+  // console.log('RecipeComponent userLang', userLang);
+  // console.log('RecipeComponent userId', userId);
+  // console.log('RecipeComponent ownerRecipe', ownerRecipe);
 
   useEffect(() => {
-    console.log('isActiveLang', isActiveLang);
-  }, [isActiveLang]);
+    // console.log('isActiveLang', isActiveLang);
+    setIsActiveLang(userLang);
+  }, [userLang]);
 
   const handlerSelectedLang = (lang: string) => {
     console.log('handlerSelectedLang', lang);
@@ -125,19 +129,34 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     setIsModalOpen(false);
   };
 
+  if (!recipe || !ownerRecipe?.[0]) {
+    return <div>Loading...</div>;
+  }
+
+  const socialLinks = {
+    tiktok: recipe?.social_links?.tiktok || null,
+    facebook: recipe?.social_links?.facebook || null,
+    instagram: recipe?.social_links?.instagram || null,
+    link_copyright: recipe?.link_copyright || null,
+    map_coordinates: recipe?.map_coordinates || null,
+  };
+
+  console.log('RecipeComponent isActiveLang', isActiveLang);
+
   return (
-    <article className="flex flex-col gap-y-3">
+    <article className="flex flex-col gap-y-[35px]">
       {/*header image*/}
+
       <ImageHeader
         isLiked={recipe?.isLiked}
-        imageHeader={recipe?.imageHeader}
+        imageHeader={recipe?.image_header}
         rating={recipe?.rating}
         comments={recipe?.comments}
         isActiveLang={isActiveLang}
         handlerSelectedLang={handlerSelectedLang}
-        languages={recipe.languages}
+        languages={recipe?.title}
         isLackedRecipe={handlerIsLackedRecipe}
-        idOwnerRecipe={recipe?.authorId}
+        idOwnerRecipe={recipe?.published_id}
         idUserClick={userId}
         idRecipe={recipe?.id ?? ''}
       />
@@ -146,7 +165,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       <RatingStar rating={recipe?.rating} selectedRating={handlerSelectedRating} />
 
       {/*  block subscribe*/}
-      <SubscribeComponent ownerRecipe={ownerRecipe} userId={recipe?.authorId} />
+      <SubscribeComponent ownerRecipe={ownerRecipe[0]} userId={recipe?.published_id} />
 
       {/*  title area*/}
       <TitleArea title={recipe?.title} area={recipe?.area} isActiveLang={isActiveLang} />
@@ -165,7 +184,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe?.recipeMeta?.time}
+            num={recipe?.recipe_metrics?.time}
             text={'time'}
             icon={Clock}
           />
@@ -180,7 +199,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe?.recipeMeta?.serv}
+            num={recipe?.recipe_metrics?.serv}
             text={'serv'}
             icon={Users}
           />
@@ -195,7 +214,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             pathName={pathName}
             // handler={()=>void }
             type={'serv'}
-            num={recipe?.recipeMeta?.cal}
+            num={recipe?.recipe_metrics?.cal}
             text={'cal'}
             icon={Flame}
           />
@@ -211,7 +230,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             // handler={()=>void }
             type={'level'}
             // num={recipe.recipeMeta.level}
-            text={recipe?.recipeMeta?.level}
+            text={recipe?.recipe_metrics?.level}
             icon={Layers}
           />
         </div>
@@ -229,39 +248,39 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 
       {/*instruction*/}
       <Instruction
-        instructionStore={recipe?.instruction}
-        userLangStore={isActiveLang ?? ''}
+        userLangStore={isActiveLang}
+        instructionStore={recipe?.instructions}
         isVisibleButtonLang={false}
         isVisibleRemoveInstruction={false}
       />
 
       {/*social links*/}
 
-      <SocialRender socialLinks={recipe?.socialLinks} />
+      <SocialRender socialLinks={socialLinks} />
 
       {/* Модальное окно */}
-      <Modal
-        isOpen={isModalOpen}
-        onCloseAction={closeModal}
-        title={'Login to your account or submit'}
-        confirmText="Выход"
-        cancelText="Отмена"
-        onConfirm={handleConfirm}
-        showCloseButton={true}
-        maxWidth="max-w-lg"
-      >
-        <div className="flex flex-col gap-y-4">
-          <Link href={'/login'}>Login</Link>
-          <Link href={'/registr'}>Sing Up</Link>
+      {/*<Modal*/}
+      {/*  isOpen={isModalOpen}*/}
+      {/*  onCloseAction={closeModal}*/}
+      {/*  title={'Login to your account or submit'}*/}
+      {/*  confirmText="Выход"*/}
+      {/*  cancelText="Отмена"*/}
+      {/*  onConfirm={handleConfirm}*/}
+      {/*  showCloseButton={true}*/}
+      {/*  maxWidth="max-w-lg"*/}
+      {/*>*/}
+      {/*  <div className="flex flex-col gap-y-4">*/}
+      {/*    <Link href={'/login'}>Login</Link>*/}
+      {/*    <Link href={'/registr'}>Sing Up</Link>*/}
 
-          {/* Кнопки */}
-          <div className="flex justify-end gap-4">
-            <Button onClick={closeModal} className="cursor-pointer">
-              Exit
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      {/*    /!* Кнопки *!/*/}
+      {/*    <div className="flex justify-end gap-4">*/}
+      {/*      <Button onClick={closeModal} className="cursor-pointer">*/}
+      {/*        Exit*/}
+      {/*      </Button>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</Modal>*/}
     </article>
   );
 };

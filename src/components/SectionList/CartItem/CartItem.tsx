@@ -8,34 +8,12 @@ import BGImage from '@/components/SectionList/CartItem/BGImage';
 import FooterCartItem from '@/components/SectionList/CartItem/FooterCartItem';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import { IItem } from '@/components/SectionList/CartItem.types';
 import { useRouter } from 'next/navigation';
-
-// export interface IItem {
-//   id: string;
-//   index?: number;
-//   image: string;
-//   author: string;
-//   authorAvatar: string;
-//   category: string;
-//   subcategory: string;
-//   title: { lang: string; value: string }[]; // <-- исправлено
-//   likes: number;
-//   comments: number;
-//   rating: number;
-//   isLiked: boolean;
-//   lang: string[];
-//   video: boolean;
-//   image_header?: string;
-//   published_user?: {
-//     avatar: string;
-//     user_name: string;
-//   };
-// }
+import { IRecipe } from '@/store/api/getAllCategory';
 
 // Интерфейс для пропсов компонента CartItem
 interface ICartItemProps {
-  item: IItem;
+  item: IRecipe;
   appLang: string;
   loading: boolean;
 }
@@ -50,16 +28,12 @@ const CartItem: React.FC<ICartItemProps> = ({
   const { shadowBox } = useShadowBox();
 
   const router = useRouter();
-  // console.log('CartItem item', item);
 
-  // useEffect(() => {
-  //   dispatch(getRecipeHomeThunk(categoryArr.point));
-  // }, []);
   // Ищем заголовок на нужном языке appLang
   const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];
   const titleText = titleObj?.value ?? 'No title';
   const handleOpenRecipe = () => {
-    console.log('handleOpenRecipe item id', item.full_recipe_id);
+    // console.log('handleOpenRecipe item id', item.full_recipe_id);
     // router.push('/recipe');
     router.push(`/recipe?${encodeURIComponent(`${item.full_recipe_id}`)}`);
   };
@@ -103,7 +77,8 @@ const CartItem: React.FC<ICartItemProps> = ({
                 likes={item.likes}
                 comments={item.comments}
                 rating={item.rating}
-                isLiked={item.isLiked}
+                // isLiked={item.isLiked}
+                isLiked={true} //temp
               />
             </div>
           </CardContent>

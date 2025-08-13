@@ -53,7 +53,7 @@ export interface IFooterCartItemProps {
   likes: IItem['likes'];
   comments: IItem['comments'];
   rating: IItem['rating'];
-  isLiked: IItem['isLiked'];
+  isLiked?: IItem['isLiked'];
 }
 
 // export interface IFooterCartItemProps

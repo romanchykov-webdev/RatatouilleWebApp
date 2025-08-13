@@ -7,6 +7,7 @@ export interface IUserProfile {
   appLang: string;
   userTheme: string;
   subscribers: number;
+  isLikedRecipe?: string[];
 }
 
 export interface INotAuthorized {

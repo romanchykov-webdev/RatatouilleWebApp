@@ -2,14 +2,24 @@
 
 import React, { JSX, useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
-import { ITitle } from '@/store/thunks/categoriesThunk';
 import { ISubCategory } from '@/components/SectionList/CartList.types';
-import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
 
+// тип, совпадающий с данными из стора
+export type ICategoryFromStore = {
+  name: string;
+  point: string;
+  image: string;
+  subcategories: {
+    name: string;
+    point: string;
+    image: string;
+  }[];
+};
+
 interface IBreadcrumbsCategorySubCategoryProps {
-  categoryArr: ITitle;
+  categoryArr: ICategoryFromStore;
   handlerCategory: (item: string) => void;
   handlerSubCategoryGo: (item: string) => void;
   handlerFilter?: (subCats: ISubCategory[]) => void;
@@ -60,8 +70,8 @@ const BreadcrumbsCategorySubCategory: React.FC<IBreadcrumbsCategorySubCategoryPr
   const handleSelect = (point: string) => {
     setIsModalOpen(false);
     handlerSubCategoryGo(point);
-    console.log('handleSelect raw', raw.replace(/^sub_/, ''));
-    console.log('handleSelect point', point);
+    // console.log('handleSelect raw', raw.replace(/^sub_/, ''));
+    // console.log('handleSelect point', point);
   };
   return (
     <article className={`absolute -top-7 flex gap-x-3 ${styleWrapper}`}>

@@ -14,6 +14,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<Omit<IUserProfile, 'isAuth'>>) {
+      // localStorage.setItem('isAuth', JSON.stringify(action.payload));
+      // console.log('LOGIN', action.payload);
       return {
         ...action.payload,
         isAuth: true,
