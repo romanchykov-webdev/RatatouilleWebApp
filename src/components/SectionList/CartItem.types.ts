@@ -15,7 +15,7 @@ export interface IItem {
   rating: number;
   isLiked: boolean;
   lang: string[];
-  video: boolean;
+  video: string | null;
   image_header?: string;
   published_user?: {
     avatar: string;

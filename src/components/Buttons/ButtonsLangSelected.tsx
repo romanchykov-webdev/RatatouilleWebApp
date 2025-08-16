@@ -21,13 +21,13 @@ const ButtonsLangSelected: React.FC<IButtonsLangSelectedProps> = ({
         langRecipe.map((l, index) => {
           return (
             <Button
-              key={l.lang}
-              onClick={() => handlerChangeLang(l.lang, index)}
+              key={l.name}
+              onClick={() => handlerChangeLang(l.name, index)}
               className={`capitalize ${
-                l.lang === selectedLang ? 'bg-yellow-500' : ''
+                l.name === selectedLang ? 'bg-yellow-500' : ''
               } hover:bg-yellow-300`}
             >
-              {l.lang}
+              {l.name}
             </Button>
           );
         })}

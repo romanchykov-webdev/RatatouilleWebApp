@@ -35,7 +35,7 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
     const finalLang = supported.includes(lang) ? lang : 'en';
     setAppLang(finalLang);
 
-    if (userData.isAuth) {
+    if (!userData.isAuth) {
       dispatch(lanAppForNoAuthorization(finalLang));
     }
   }, [userData, dispatch]);
@@ -55,7 +55,7 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
   if (!isReady) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        {/*<Loader2 className="w-[50px] h-[50px] text-yellow-400 animate-spin" />*/}
+        {/*<Loader2Custom className="w-[50px] h-[50px] text-yellow-400 animate-spin" />*/}
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900" />
       </div>
     );

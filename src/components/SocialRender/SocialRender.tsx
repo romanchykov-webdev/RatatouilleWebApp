@@ -22,7 +22,7 @@ const SocialRender: React.FC<ISocialLinksPropsProps> = ({
 }: ISocialLinksPropsProps): JSX.Element => {
   // const { youtube, blog, instagram, facebook, tikTok, pointCoordinates } =
   //   socialLinksProps;
-  // console.log('socialLinks youtubeUrl', socialLinksProps.youtube);
+  console.log('socialLinks youtubeUrl', socialLinks);
 
   return (
     <article className="flex flex-wrap gap-2 items-center justify-center">
@@ -39,8 +39,8 @@ const SocialRender: React.FC<ISocialLinksPropsProps> = ({
               return <Instagram className="w-[30px] h-[30px] text-red-300" />;
             case 'coordinates':
               return <MapPin className="w-[30px] h-[30px] text-blue-300" />;
-            case 'blog':
-              return <BookOpenText className="w-[30px] h-[30px] text-blue-300" />;
+            // case 'blog':
+            //   return <BookOpenText className="w-[30px] h-[30px] text-blue-300" />;
             case 'link_copyright':
               return <Copyright className="w-[30px] h-[30px] text-blue-300" />;
             default:

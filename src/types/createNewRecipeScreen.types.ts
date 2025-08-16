@@ -53,11 +53,11 @@ export interface IInstruction {
 
 export interface ISocialRenderProps {
   youtube: string | null;
-  blog: string | null;
   instagram: string | null;
   facebook: string | null;
   tiktok: string | null;
-  coordinates: string | null;
+  map_coordinates: string | null;
+  link_copyright: string | null;
 
   [key: string]: string | null;
 }

@@ -3,7 +3,7 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { IInstruction } from '@/types/createNewRecipeScreen.types';
+import { IInstruction, ILanguage } from '@/types/createNewRecipeScreen.types';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 import SliderHandmade from '@/components/Sliders/SliderHandmade/SliderHandmade';
@@ -12,6 +12,7 @@ import { removeInstruction } from '@/store/slices/createNewRecipeSlice';
 
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
+import LoaderCustom from '@/components/Loaders/LoaderCustom';
 
 interface IInstructionProps {
   instructionStore: IInstruction[];
@@ -19,29 +20,25 @@ interface IInstructionProps {
   dispatch?: AppDispatch;
   isVisibleButtonLang?: boolean;
   isVisibleRemoveInstruction?: boolean;
+  languagesStore?: ILanguage[];
 }
 
 const Instruction: React.FC<IInstructionProps> = ({
   instructionStore,
   userLangStore,
   dispatch,
+  languagesStore,
   isVisibleButtonLang = true,
   isVisibleRemoveInstruction = true,
 }: IInstructionProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
-  // console.log('userLangStore', userLangStore);
-  // API карусели Embla
-  // const [emblaApi, setEmblaApi] = useState<CarouselApi | undefined>();
-  // const handleTextareaChange = (lang: string, value: string) => {
-  //   setInstructions(prev => ({ ...prev, [lang]: value }));
-  // };
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState<string[]>([]);
 
   const pathName = usePathname();
-  // console.log('userLangStore-----------------', userLangStore);
+  console.log('Instruction-----------------', userLangStore);
 
   const [langInstruction, setLangInstruction] = useState<string>(userLangStore);
 
@@ -72,11 +69,17 @@ const Instruction: React.FC<IInstructionProps> = ({
     setIsOpen(true);
   };
 
+  // if (!instructionStore || instructionStore.length === 0) {
+  //   return <LoaderCustom />;
+  // }
+  // console.log("instruction:", instruction);
+  // console.log("langInstruction:", langInstruction);
+  // console.log("instruction.lang[langInstruction]:", instruction.lang[langInstruction]);
+
   return (
     <article className="flex flex-col gap-y-2">
       {/*{instructionStore && <SkeletonCustom dependency={instructionStore} />}*/}
-      <h6 className="text-center">Instruction Const</h6>
-
+      <h6 className="text-center">Instruction</h6>
       {/*block button for create recipe*/}
       {isVisibleButtonLang && (
         <div className="flex items-center justify-around">
@@ -91,13 +94,13 @@ const Instruction: React.FC<IInstructionProps> = ({
           ))}
         </div>
       )}
-
       {/*render inst*/}
-      {instructionStore.length > 0 ? (
+
+      {instructionStore?.length > 0 ? (
         <div>
           {instructionStore.map((instruction: IInstruction, index) => {
             // console.log('instruction', instruction);
-            // console.log('instruction langInstruction', langInstruction);
+            console.log('instruction langInstruction', langInstruction);
             return (
               <div
                 key={index}
@@ -150,12 +153,18 @@ const Instruction: React.FC<IInstructionProps> = ({
           close={() => setIsOpen(false)}
           slides={currentImages.map(src => ({ src }))}
           index={currentIndex}
-          carousel={{ finite: true, swipe: false }}
-          animation={{ swipe: false }}
+          carousel={{ finite: true }} // убрали swipe
+          animation={{}} // если нужно, можно указать duration: 300
           render={{
-            slide: ({ slide }) => <img src={slide.src} alt="" />, // кастомный рендер слайдов
-            buttonPrev: () => null, // убираем prev
-            buttonNext: () => null, // убираем next
+            slide: ({ slide }) => (
+              <img
+                src={slide.src}
+                alt=""
+                style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
+              />
+            ),
+            buttonPrev: () => null,
+            buttonNext: () => null,
           }}
         />
       )}

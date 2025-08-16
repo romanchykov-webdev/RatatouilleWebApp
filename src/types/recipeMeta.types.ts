@@ -16,7 +16,7 @@ export interface IRecipeMetaItemProps {
   icon: LucideIcon;
   handler?: (type: keyof IMetaData) => void;
   num?: number;
-  text: string;
+  text: string | number;
   type: keyof IMetaData;
   pathName: string;
 }

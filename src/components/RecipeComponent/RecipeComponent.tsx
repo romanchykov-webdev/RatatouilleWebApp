@@ -1,15 +1,15 @@
 'use client';
 
-import React, { JSX, useEffect, useState } from 'react';
-import {
-  IArea,
-  IIngredient,
-  IInstruction,
-  ILanguage,
-  ISocialRenderProps,
-  ITitle,
-} from '@/types/createNewRecipeScreen.types';
-import { IMetaData } from '@/types/recipeMeta.types';
+import React, { JSX, useState } from 'react';
+// import {
+//   IArea,
+//   IIngredient,
+//   IInstruction,
+//   ILanguage,
+//   ISocialRenderProps,
+//   ITitle,
+// } from '@/types/createNewRecipeScreen.types';
+// import { IMetaData } from '@/types/recipeMeta.types';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { usePathname } from 'next/navigation';
 import { Users, Clock, Flame, Layers } from 'lucide-react';
@@ -21,38 +21,41 @@ import Instruction from '@/components/Instruction/Instruction';
 import SocialRender from '@/components/SocialRender/SocialRender';
 import TitleArea from '@/components/RecipeComponent/TitleArea';
 import toast from 'react-hot-toast';
-import { Modal } from '@/components/Modal/modal';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import SubscribeComponent from '@/components/RecipeComponent/SubscribeComponent';
+import { IOwner, IRecipe } from '@/types';
+import { languagesObj } from '@/helpers/languagesObj';
+import { IIngredient, IInstruction } from '@/types/createNewRecipeScreen.types';
+import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
+import ButtonBack from '@/components/Buttons/ButtonBack';
 
+// interface IRecipeComponentProps {
+//   recipe: {
+//     id?: string;
+//     authorId: string;
+//     category: string;
+//     subCategory: string;
+//     image_header: string;
+//     languages: ILanguage[];
+//     title: ITitle[];
+//     area: IArea[];
+//     tags: string[];
+//     recipe_metrics: IMetaData;
+//     ingredients: IIngredient[];
+//     instructions: IInstruction[];
+//     social_links: ISocialRenderProps;
+//     rating: number;
+//     comments: number;
+//     isLiked: boolean;
+//   };
+//   userLang: string;
+//   userId: string | null;
+//   ownerRecipe: IOwner;
+// }
 interface IRecipeComponentProps {
-  recipe: {
-    id?: string;
-    authorId: string;
-    category: string;
-    subCategory: string;
-    imageHeader: string;
-    languages: ILanguage[];
-    title: ITitle[];
-    area: IArea[];
-    tags: string[];
-    recipeMeta: IMetaData;
-    ingredients: IIngredient[];
-    instruction: IInstruction[];
-    socialLinks: ISocialRenderProps;
-    rating: number;
-    comments: number;
-    isLiked: boolean;
-  };
+  recipe: IRecipe;
   userLang: string;
-  userId: string;
-  ownerRecipe: {
-    avatar: string;
-    name: string;
-    subscribers: number;
-    ownerId: string;
-  };
+  userId: string | null;
+  ownerRecipe: IOwner;
 }
 
 const RecipeComponent: React.FC<IRecipeComponentProps> = ({
@@ -63,20 +66,12 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 }: IRecipeComponentProps): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
+  console.log('recipecomponent', recipe);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
 
-  // console.log('RecipeComponent recipe', JSON.stringify(recipe, null, 2));
-  // console.log('RecipeComponent userLang', userLang);
-  // console.log('RecipeComponent userId', userId);
-  // console.log('RecipeComponent ownerRecipe', ownerRecipe);
-
-  useEffect(() => {
-    // console.log('isActiveLang', isActiveLang);
-    setIsActiveLang(userLang);
-  }, [userLang]);
-
+  // console.log('recicpeComponent', ownerRecipe);
   const handlerSelectedLang = (lang: string) => {
     console.log('handlerSelectedLang', lang);
     setIsActiveLang(lang);
@@ -88,7 +83,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   const handlerSelectedRating = (
     newRating: number,
     idRecipe = recipe?.id,
-    idOwnerRecipe = recipe?.authorId,
+    idOwnerRecipe = recipe?.published_user.user_id,
     idUserClick = userId,
   ) => {
     console.log('handlerSelectedRating idRecipe', idRecipe);
@@ -99,7 +94,8 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       toast.success('This recipe is published by you');
     }
     if (idUserClick === null) {
-      toast.success('Only registered users can mark a recipe');
+      toast.error('Only registered users can mark a recipe');
+      setIsModalOpen(true);
     }
   };
 
@@ -107,7 +103,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   const handlerIsLackedRecipe = (
     idRecipe: string,
     idOwnerRecipe: string,
-    idUserClick: string,
+    idUserClick: string | null,
   ) => {
     console.log('handlerIsLackedRecipe idRecipe', idRecipe);
     console.log('handlerIsLackedRecipe idOwnerRecipe', idOwnerRecipe);
@@ -116,20 +112,18 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       toast.success('This recipe is published by you');
     }
     if (idUserClick === null) {
-      toast.success('Only registered users can mark a recipe');
+      toast.error('Only registered users can mark a recipe');
       setIsModalOpen(true);
     }
   };
 
-  // modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-  const handleConfirm = () => {
-    setIsModalOpen(false);
-  };
+  const languagesRecipe = languagesObj.filter(lang =>
+    recipe.title.some(t => t.lang === lang.name),
+  );
 
-  if (!recipe || !ownerRecipe?.[0]) {
+  // console.log('languagesRecipe', languagesRecipe);
+
+  if (!recipe || !ownerRecipe) {
     return <div>Loading...</div>;
   }
 
@@ -138,23 +132,35 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     facebook: recipe?.social_links?.facebook || null,
     instagram: recipe?.social_links?.instagram || null,
     link_copyright: recipe?.link_copyright || null,
-    map_coordinates: recipe?.map_coordinates || null,
+    coordinates: recipe?.map_coordinates || null,
+    youtube: recipe?.video || null,
+    // blog: recipe?.blog || null,
   };
 
-  console.log('RecipeComponent isActiveLang', isActiveLang);
+  console.log('RecipeComponent socialLinks', JSON.stringify(recipe?.social_links, null));
 
   return (
     <article className="flex flex-col gap-y-[35px]">
-      {/*header image*/}
+      {/*name recipe and back*/}
+      <div className="flex items-center p-2 mb-5">
+        {/*button back*/}
+        <ButtonBack />
+        {/*  name recipe*/}
+        <h1 className="flex-1 text-center font-bold text-xl">
+          {recipe.title.find(item => item.lang === isActiveLang)?.value ||
+            recipe.title[0].value}
+        </h1>
+      </div>
 
+      {/*header image*/}
       <ImageHeader
-        isLiked={recipe?.isLiked}
-        imageHeader={recipe?.image_header}
+        isLiked={false}
+        image_header={recipe?.image_header}
         rating={recipe?.rating}
         comments={recipe?.comments}
         isActiveLang={isActiveLang}
         handlerSelectedLang={handlerSelectedLang}
-        languages={recipe?.title}
+        languages={languagesRecipe}
         isLackedRecipe={handlerIsLackedRecipe}
         idOwnerRecipe={recipe?.published_id}
         idUserClick={userId}
@@ -165,7 +171,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       <RatingStar rating={recipe?.rating} selectedRating={handlerSelectedRating} />
 
       {/*  block subscribe*/}
-      <SubscribeComponent ownerRecipe={ownerRecipe[0]} userId={recipe?.published_id} />
+      <SubscribeComponent ownerRecipe={ownerRecipe} userId={userId} />
 
       {/*  title area*/}
       <TitleArea title={recipe?.title} area={recipe?.area} isActiveLang={isActiveLang} />
@@ -230,7 +236,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
             // handler={()=>void }
             type={'level'}
             // num={recipe.recipeMeta.level}
-            text={recipe?.recipe_metrics?.level}
+            text={recipe?.recipe_metrics?.level ?? ''}
             icon={Layers}
           />
         </div>
@@ -240,7 +246,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       <div>
         <h4>Ingredients</h4>
         <IngredientItem
-          ingredientsStore={recipe?.ingredients}
+          ingredientsStore={recipe?.ingredients as unknown as IIngredient[]}
           isCreateRecipe={false}
           isActiveLang={isActiveLang}
         />
@@ -248,8 +254,8 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 
       {/*instruction*/}
       <Instruction
-        userLangStore={isActiveLang}
-        instructionStore={recipe?.instructions}
+        userLangStore={isActiveLang ?? ''}
+        instructionStore={recipe?.instructions as unknown as IInstruction[]}
         isVisibleButtonLang={false}
         isVisibleRemoveInstruction={false}
       />
@@ -259,28 +265,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
       <SocialRender socialLinks={socialLinks} />
 
       {/* Модальное окно */}
-      {/*<Modal*/}
-      {/*  isOpen={isModalOpen}*/}
-      {/*  onCloseAction={closeModal}*/}
-      {/*  title={'Login to your account or submit'}*/}
-      {/*  confirmText="Выход"*/}
-      {/*  cancelText="Отмена"*/}
-      {/*  onConfirm={handleConfirm}*/}
-      {/*  showCloseButton={true}*/}
-      {/*  maxWidth="max-w-lg"*/}
-      {/*>*/}
-      {/*  <div className="flex flex-col gap-y-4">*/}
-      {/*    <Link href={'/login'}>Login</Link>*/}
-      {/*    <Link href={'/registr'}>Sing Up</Link>*/}
-
-      {/*    /!* Кнопки *!/*/}
-      {/*    <div className="flex justify-end gap-4">*/}
-      {/*      <Button onClick={closeModal} className="cursor-pointer">*/}
-      {/*        Exit*/}
-      {/*      </Button>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</Modal>*/}
+      <ModalLoginRes isOpen={isModalOpen} onCloseAction={() => setIsModalOpen(false)} />
     </article>
   );
 };

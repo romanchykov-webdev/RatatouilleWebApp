@@ -45,26 +45,26 @@ const CreateNewRecipe: React.FC = () => {
   const {
     category: categoryStore,
     subCategory: subCategoryStore,
-    imageHeader: imageHeaderStore,
+    image_header: imageHeaderStore,
     languages: languagesStore,
     title: titleStore,
     area: ariaStore,
     tags: tagStore,
-    recipeMeta: recipeMetaStore,
+    recipe_metrics: recipeMetaStore,
     ingredients: ingredientsStore,
-    instruction: instructionStore,
-    socialLinks: socialLinkStore,
+    instructions: instructionStore,
+    social_links: socialLinkStore,
   } = createNewRecipe;
 
   const pathName = usePathname();
 
   const router = useRouter();
 
-  // console.log('setSelectedFile', selectedFile);
+  // console.log('CreateNewRecipe instructionStore', instructionStore);
   const user: IUserProfile = useAppSelector(
     (state: RootState) => state.user as IUserProfile,
   );
-  const { lang: userLangStore, userId, userAvatar, userName, subscribers } = user;
+  const { appLang: userLangStore, userId, userAvatar, userName, subscribers } = user;
 
   const getMeasurement = async () => {
     const { data, error } = await supabase.from('measurement').select('lang');
@@ -114,16 +114,16 @@ const CreateNewRecipe: React.FC = () => {
       setUploadRecipe(true);
       setUploadProgress(0);
 
-      const { instruction, imageHeader } = createNewRecipe;
+      const { instructions, image_header } = createNewRecipe;
 
       // Считаем все изображения
       const imagesToUpload = [];
 
-      if (imageHeader.startsWith('data:image')) {
-        imagesToUpload.push(imageHeader);
+      if (image_header.startsWith('data:image')) {
+        imagesToUpload.push(image_header);
       }
 
-      instruction.forEach(step => {
+      instructions.forEach(step => {
         if (step.images && step.images.length > 0) {
           step.images.forEach(img => {
             if (img.startsWith('data:image')) {
@@ -145,14 +145,14 @@ const CreateNewRecipe: React.FC = () => {
       };
 
       // Загружаем imageHeader
-      let imageHeaderUrl = imageHeader;
-      if (imageHeader.startsWith('data:image')) {
-        imageHeaderUrl = await uploadWithProgress(imageHeader);
+      let imageHeaderUrl = image_header;
+      if (image_header.startsWith('data:image')) {
+        imageHeaderUrl = await uploadWithProgress(image_header);
       }
 
       // Загружаем изображения в instruction
       const updatedInstructions = await Promise.all(
-        instruction.map(async step => {
+        instructions.map(async step => {
           if (step.images && step.images.length > 0) {
             const updatedImages = await Promise.all(
               step.images.map(async img => {
@@ -171,11 +171,13 @@ const CreateNewRecipe: React.FC = () => {
       // Формируем новый объект
       const newRecipeData = {
         ...createNewRecipe,
-        imageHeader: imageHeaderUrl,
-        instruction: updatedInstructions,
+        image_header: imageHeaderUrl,
+        instructions: updatedInstructions,
         user_name: userName,
         avatar: userAvatar,
       };
+
+      console.log('pered otpravcoi newRecipeData', newRecipeData);
 
       dispatch(addRecipeThunk(newRecipeData));
     } catch (error) {
@@ -295,6 +297,7 @@ const CreateNewRecipe: React.FC = () => {
               dispatch={dispatch}
               instructionStore={instructionStore}
               userLangStore={userLangStore}
+              languagesStore={languagesStore}
             />
           )}
         </SectionWrapper>
@@ -317,22 +320,33 @@ const CreateNewRecipe: React.FC = () => {
           {instructionStore.length === 0 ? (
             <SkeletonCustom dependency={instructionStore} />
           ) : (
+            // <RecipeComponent
+            //   recipe={{
+            //     ...createNewRecipe,
+            //     // userId: userId,
+            //     rating: 0,
+            //     comments: 0,
+            //     // isLiked: false,
+            //   }}
+            //   userLang={userLangStore}
+            //   userId={userId}
+            //   ownerRecipe={{
+            //     avatar: userAvatar,
+            //     user_name: userName,
+            //     subscribers: subscribers,
+            //     user_id: userId,
+            //   }}
+            // />
             <RecipeComponent
-              recipe={{
-                ...createNewRecipe,
-                authorId: userId,
-                rating: 0,
-                comments: 0,
-                isLiked: false,
-              }}
-              userLang={userLangStore}
-              userId={userId}
+              recipe={createNewRecipe}
               ownerRecipe={{
                 avatar: userAvatar,
-                name: userName,
+                user_name: userName,
                 subscribers: subscribers,
-                ownerId: userId,
+                user_id: userId,
               }}
+              userId={userId}
+              userLang={'ru'}
             />
           )}
           <div>

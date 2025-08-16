@@ -8,7 +8,7 @@ import { RootState } from '@/store';
 import {
   getAllRecipesByCategory,
   getAllRecipesBySubCategory,
-  IRecipe,
+  IRecipeAPI,
 } from '@/store/api/getAllCategory';
 import HeaderComponent from '@/components/Header/headerComponent';
 import BreadcrumbsCategorySubCategory, {
@@ -16,6 +16,8 @@ import BreadcrumbsCategorySubCategory, {
 } from '@/components/Breadcrumbs/BreadcrumbsCategorySubCategory';
 import CartItem from '@/components/SectionList/CartItem/CartItem';
 import { Loader2 } from 'lucide-react';
+import LoaderCustom from '@/components/Loaders/LoaderCustom';
+import ButtonsBackToHome from '@/components/Buttons/ButtonsBackToHome';
 
 const Category: React.FC = (): JSX.Element => {
   const categories = useAppSelector(
@@ -25,7 +27,7 @@ const Category: React.FC = (): JSX.Element => {
 
   const [categoryObj, setCategoryObj] = useState<ICategoryFromStore | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [recipes, setRecipes] = useState<IRecipe[]>([]);
+  const [recipes, setRecipes] = useState<IRecipeAPI[]>([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -76,19 +78,27 @@ const Category: React.FC = (): JSX.Element => {
     router.push(`/category?${encodeURIComponent(`sub_${point}`)}`);
     fetchAllSubCategoryRecipes(point);
   };
-
+  if (!categoryObj) {
+    return <LoaderCustom />;
+  }
   return (
     <WrapperApp>
       <div className="mb-5">
         <HeaderComponent />
 
-        <BreadcrumbsCategorySubCategory
-          handlerSubCategoryGo={handlerSubCapGo}
-          handlerCategory={handlerCategory}
-          categoryArr={categoryObj}
-          raw={raw[0]}
-          styleWrapper="relative top-0"
-        />
+        <div className="flex items-center gap-x-5">
+          {/*button back*/}
+          <ButtonsBackToHome router={router} />
+
+          {/*BreadcrumbsCategorySubCategory*/}
+          <BreadcrumbsCategorySubCategory
+            handlerSubCategoryGo={handlerSubCapGo}
+            handlerCategory={handlerCategory}
+            categoryArr={categoryObj}
+            raw={raw[0]}
+            styleWrapper="relative top-0"
+          />
+        </div>
       </div>
       <div className=" relative">
         {isLoadingPage && (

@@ -37,7 +37,7 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
   };
 
   const handleConfirm = () => {
-    console.log('Выбранные языки:', languagesStore);
+    // console.log('Выбранные языки:', languagesStore);
     setIsModalOpen(false);
   };
 

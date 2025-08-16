@@ -3,6 +3,8 @@
 import * as React from 'react';
 import StarRatings from 'react-star-ratings';
 import { JSX, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 
 interface StarRatingProps {
   rating: number;
@@ -15,6 +17,10 @@ const RatingStar: React.FC<StarRatingProps> = ({
 }: StarRatingProps): JSX.Element | null => {
   const [isMounted, setIsMounted] = useState(false);
 
+  const pathName = usePathname();
+
+  const isDisable = pathName === '/profile/create';
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -22,7 +28,8 @@ const RatingStar: React.FC<StarRatingProps> = ({
   if (!isMounted) return null;
 
   return (
-    <div className="flex items-center justify-center ">
+    <div className="flex items-center justify-center relative ">
+      {isDisable && <SkeletonCustom dependency={+!isDisable} />}
       <StarRatings
         rating={rating}
         starRatedColor="#FFD700"

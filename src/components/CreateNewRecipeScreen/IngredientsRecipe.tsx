@@ -54,8 +54,8 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
     (state: RootState) => state.createNewRecipe.ingredients,
   );
 
-  const userLang: IUserProfile['lang'] = useAppSelector(
-    (state: RootState) => (state.user as IUserProfile).lang,
+  const userLang: IUserProfile['appLang'] = useAppSelector(
+    (state: RootState) => (state.user as IUserProfile).appLang,
   );
 
   const [ingredient, setIngredient] = useState<Record<string, string>>({});
@@ -187,7 +187,6 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
           </Button>
         </div>
       </div>
-
       {/* Модальное окно */}
       <Modal
         isOpen={isModalOpen}

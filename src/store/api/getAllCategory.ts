@@ -2,7 +2,7 @@ import { supabase } from '../../../api/supabase';
 
 // import { IItem } from '@/components/SectionList/CartItem.types';
 
-export interface IRecipe {
+export interface IRecipeAPI {
   id: string;
   created_at: string;
   published_id: string;
@@ -27,7 +27,9 @@ export interface IRecipe {
   point: string;
 }
 
-export const getAllRecipesByCategory = async (cat: string): Promise<IRecipe[] | null> => {
+export const getAllRecipesByCategory = async (
+  cat: string,
+): Promise<IRecipeAPI[] | null> => {
   try {
     console.log('getAllRecipesByCategory', cat);
     const { data, error } = await supabase
@@ -48,7 +50,7 @@ export const getAllRecipesByCategory = async (cat: string): Promise<IRecipe[] | 
 
 export const getAllRecipesBySubCategory = async (
   cat: string,
-): Promise<IRecipe[] | null> => {
+): Promise<IRecipeAPI[] | null> => {
   try {
     console.log('getAllRecipesByCategory', cat);
     const { data, error } = await supabase

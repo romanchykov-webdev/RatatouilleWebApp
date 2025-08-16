@@ -9,41 +9,40 @@ import { useSearchParams } from 'next/navigation';
 import { getRecipeById } from '@/store/api/getRecipe';
 import { getOwnerRecipeById } from '@/store/api/getOwnerRecipe';
 import HeaderComponent from '@/components/Header/headerComponent';
-import { useRouter } from 'next/navigation';
-import { Loader, Loader2, Undo2 } from 'lucide-react';
-import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { IOwner, IRecipe, IUserProfile } from '@/types';
+import LoaderCustom from '@/components/Loaders/LoaderCustom';
 
-interface IRecipePageProps {}
+const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
+  const userData = useAppSelector((state: RootState) => state.user as IUserProfile);
+  // console.log('userData', JSON.stringify(userData, null));
+  // const { shadowBox } = useShadowBox();
 
-const RecipePage: React.FC<IRecipePageProps> = (): JSX.Element => {
-  const userData = useAppSelector((state: RootState) => state.user);
+  const [recipeData, setRecipeData] = useState<IRecipe | null>(null);
+  // console.log('recipeData', JSON.stringify(recipeData, null));
 
-  const { shadowBox } = useShadowBox();
+  const [ownerData, setOwnerData] = useState<IOwner | null>(null);
 
-  const [recipeData, setRecipeData] = useState<any | null>(null);
+  // console.log('ownerData', JSON.stringify(ownerData, null));
 
-  const [ownerData, setOwnerData] = useState([]);
-
-  const router = useRouter();
+  // const router = useRouter();
 
   const searchParams = useSearchParams();
   const idRecipe = searchParams.toString().split('=')[0];
   // console.log('searchParams', idRecipe);
 
   const fetchRecipe = async () => {
-    const recipeData = await getRecipeById(idRecipe);
-    // console.log('recipeData', JSON.stringify(recipeData,null));
-    setRecipeData(recipeData[0]);
-    if (recipeData) {
-      fetchGetOwnerData(recipeData[0]);
+    const recipeDataArr = await getRecipeById(idRecipe);
+    if (recipeDataArr && recipeDataArr.length > 0) {
+      const firstRecipe = recipeDataArr[0];
+      setRecipeData(firstRecipe);
+      fetchGetOwnerData(firstRecipe);
     }
   };
 
-  const fetchGetOwnerData = async (recipeData: []) => {
-    // console.log('recipeData.published_user.user_Id', recipeData?.published_id);
-    const ownerRecipeData = await getOwnerRecipeById(recipeData?.published_id);
-    // console.log('ownerRecipeData', ownerRecipeData);
+  const fetchGetOwnerData = async (recipe: IRecipe) => {
+    if (!recipe.published_id) return;
+    const ownerRecipeData = await getOwnerRecipeById(recipe.published_id);
     setOwnerData(ownerRecipeData);
   };
 
@@ -54,42 +53,18 @@ const RecipePage: React.FC<IRecipePageProps> = (): JSX.Element => {
   // console.log('recipeData', JSON.stringify(recipeData, null));
   // console.log('ownerData', JSON.stringify(ownerData, null));
 
-  if (!recipeData) {
-    return (
-      <div
-        className="fixed top-0 left-0 flex items-center justify-center w-full h-screen"
-        style={{ backgroundColor: 'rgba(0,0,0, 0.9)' }}
-      >
-        <Loader2 className="ml-2 w-[50px] h-[50px] text-yellow-400 animate-spin" />
-      </div>
-    );
+  if (!recipeData || !ownerData) {
+    return <LoaderCustom />;
   }
 
   return (
     <WrapperApp>
       <HeaderComponent />
 
-      {/*name recipe and back*/}
-      <div className="flex items-center p-2 mb-5">
-        {/*button back*/}
-        <Button
-          onClick={() => router.back()}
-          className="p-2 rounded-full bg-neutral-500"
-          style={shadowBox()}
-        >
-          <Undo2 />
-        </Button>
-        {/*  name recipe*/}
-        <h1 className="flex-1 text-center font-bold text-xl">
-          {recipeData.title.find(item => item.lang === userData.appLang)?.value ||
-            recipeData.title[0].value}
-        </h1>
-      </div>
-
       <RecipeComponent
         recipe={recipeData}
         ownerRecipe={ownerData}
-        userId={userData.isAuth ? userData.userId : null}
+        userId={userData.isAuth && userData.userId ? userData.userId : null}
         userLang={userData.appLang}
       />
     </WrapperApp>

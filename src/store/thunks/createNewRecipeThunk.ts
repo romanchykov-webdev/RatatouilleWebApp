@@ -13,20 +13,20 @@ import { IMetaData } from '@/types/recipeMeta.types';
 
 // Окончательная модель для вставки рецепта
 export interface IRecipeCreate {
-  authorId: string; // id автора рецепта
-  category: string; // основная категория
+  authorId: string; // id автора рецепта-
+  category: string; // основная категория -
   subCategory: string; // подкатегория
-  imageHeader: string; // картинка заголовка (base64 или url)
-  languages: ILanguage[]; // массив языковых данных
+  image_header: string; // картинка заголовка  -
+  languages: ILanguage[]; // массив языковых данных-
   title: ITitle[]; // массив заголовков
-  area: IArea[]; // массив областей
+  area: IArea[]; // массив областей/-
   tags: string[]; // массив тегов
-  recipeMeta: IMetaData; // метаданные рецепта
-  ingredients: IIngredient[]; // ингредиенты
-  instruction: IInstruction[]; // пошаговая инструкция
-  socialLinks: ISocialRenderProps; // соц. ссылки
+  recipe_metrics: IMetaData; // метаданные рецепта -
+  ingredients: IIngredient[]; // ингредиенты -
+  instructions: IInstruction[]; // пошаговая инструкция -
+  social_links: ISocialRenderProps;
   user_name: string;
-  avatar: string;
+  avatar: string; //-
 }
 
 export const addRecipeThunk = createAsyncThunk(
@@ -38,17 +38,17 @@ export const addRecipeThunk = createAsyncThunk(
       const payload = {
         category: recipeData.category,
         category_id: recipeData.category,
-        image_header: recipeData.imageHeader,
+        image_header: recipeData.image_header,
         area: recipeData.area,
         title: recipeData.title,
         rating: 0,
         likes: 0,
         comments: 0,
-        recipe_metrics: recipeData.recipeMeta,
+        recipe_metrics: recipeData.recipe_metrics,
         ingredients: recipeData.ingredients,
-        instructions: recipeData.instruction,
-        video: recipeData.socialLinks.youtube,
-        source_reference: recipeData.socialLinks.blog,
+        instructions: recipeData.instructions,
+        video: recipeData.social_links.youtube,
+        source_reference: recipeData.social_links.blog,
         tags: recipeData.tags,
         published_id: recipeData.authorId,
         published_user: {
@@ -57,12 +57,12 @@ export const addRecipeThunk = createAsyncThunk(
           avatar: recipeData.avatar,
         },
         point: recipeData.subCategory,
-        link_copyright: recipeData.socialLinks.blog,
-        map_coordinates: recipeData.socialLinks.coordinates,
+        link_copyright: recipeData.social_links.blog,
+        map_coordinates: recipeData.social_links.coordinates,
         social_links: {
-          facebook: recipeData.socialLinks.facebook,
-          instagram: recipeData.socialLinks.instagram,
-          tiktok: recipeData.socialLinks.tiktok,
+          facebook: recipeData.social_links.facebook,
+          instagram: recipeData.social_links.instagram,
+          tiktok: recipeData.social_links.tiktok,
         },
       };
 

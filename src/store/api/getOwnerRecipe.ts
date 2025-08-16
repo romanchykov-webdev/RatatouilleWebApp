@@ -1,9 +1,14 @@
 import { supabase } from '../../../api/supabase';
+import { IOwner } from '@/types';
 
-export const getOwnerRecipeById = async (userId: string) => {
+export const getOwnerRecipeById = async (userId: string): Promise<IOwner | null> => {
   try {
     console.log('getOwnerRecipeById', userId);
-    const { data, error } = await supabase.from('users').select('*').eq('id', userId);
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .single();
 
     // Если нужно фильтровать по категории
 

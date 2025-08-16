@@ -1,30 +1,33 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React, { JSX, useState } from 'react';
 import { Users } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 import { Button } from '@/components/ui/button';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import toast from 'react-hot-toast';
+import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
 
 interface ISubscribeComponentProps {
   ownerRecipe: {
-    avatar: string;
-    name: string;
-    subscribers: number;
-    ownerId: string;
+    avatar: string | null;
+    user_name: string;
+    subscribers?: number; // допускаем undefined
+    id?: string; // тоже optional, как в IOwner
   };
-  userId: string;
+  userId: string | null;
 }
 
 const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
   ownerRecipe,
   userId,
 }: ISubscribeComponentProps): JSX.Element => {
+  const [isModal, setIsModal] = useState(false);
   // console.log('SubscribeComponent ownerRecipe', ownerRecipe);
+  const router = useRouter();
   // console.log('SubscribeComponent userId', userId);
 
   const { shadowBox } = useShadowBox();
@@ -41,11 +44,17 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
     if (ownerRecipe.id === userId) {
       toast.success('This recipe was published by you');
     }
+    if (userId === null) {
+      setIsModal(true);
+      toast.error('Only registered users can mark a recipe');
+    }
     //   запрос на подписку
   };
 
   const handlerGoToOwner = () => {
     console.log('Go to owner');
+    // router.push('/recipesByOwner');
+    router.push(`/recipesByOwner?${encodeURIComponent(`${ownerRecipe.id}`)}`);
   };
 
   return (
@@ -59,14 +68,14 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
           style={shadowBox()}
         >
           {/*{ownerRecipe.avatar && <SkeletonCustom dependency={ownerRecipe.avatar} />}*/}
-          <AvatarImage src={ownerRecipe.avatar} />
+          <AvatarImage src={ownerRecipe.avatar ?? '/default-avatar.png'} />
         </Avatar>
 
         {/*  /!*  description*!/*/}
         <div>
           <h6 className="capitalize">{ownerRecipe.user_name}</h6>
           <div className="flex items-center gap-2">
-            <Users /> {formatNumberToK(ownerRecipe.subscribers)}
+            <Users /> {formatNumberToK(ownerRecipe.subscribers ?? 0)}
           </div>
         </div>
       </div>
@@ -75,6 +84,8 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
       <Button onClick={handlerSubscribe} className="bg-green-300 hover:bg-yellow-500">
         Subscribe
       </Button>
+
+      <ModalLoginRes isOpen={isModal} onCloseAction={() => setIsModal(false)} />
     </article>
   );
 };

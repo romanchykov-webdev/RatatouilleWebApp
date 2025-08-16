@@ -22,11 +22,12 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 }: IAddSocialWrapperProps): JSX.Element => {
   const [socialObj, setSocialObj] = useState<ISocialRenderProps>({
     youtube: null,
-    blog: null,
     instagram: null,
     facebook: null,
     tiktok: null,
     coordinates: null,
+    link_copyright: null,
+    map_coordinates: null,
   });
   const [isSocialLink, setIsSocialLink] = useState<string>('');
 
@@ -48,7 +49,8 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 
       const rules: Record<string, RegExp> = {
         youtube: /^(www\.)?(youtube\.com|youtu\.be)$/,
-        blog: /.*/, // любые ссылки допустимы
+        // blog: /.*/, // любые ссылки допустимы
+        link_copyright: /.*/, // любые ссылки допустимы
         instagram: /^(www\.)?instagram\.com$/,
         facebook: /^(www\.)?facebook\.com$/,
         tikTok: /^((?:www|vt|m)\.)?tiktok\.com$/,

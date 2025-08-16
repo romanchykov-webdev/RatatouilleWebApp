@@ -9,7 +9,7 @@ import FooterCartItem from '@/components/SectionList/CartItem/FooterCartItem';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import { useRouter } from 'next/navigation';
-import { IRecipe } from '@/store/api/getAllCategory';
+import { IRecipe } from '@/types';
 
 // Интерфейс для пропсов компонента CartItem
 interface ICartItemProps {
@@ -28,6 +28,8 @@ const CartItem: React.FC<ICartItemProps> = ({
   const { shadowBox } = useShadowBox();
 
   const router = useRouter();
+
+  console.log('CartItem item', JSON.stringify(item));
 
   // Ищем заголовок на нужном языке appLang
   const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];

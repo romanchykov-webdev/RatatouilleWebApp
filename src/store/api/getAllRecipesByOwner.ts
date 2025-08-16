@@ -1,13 +1,15 @@
 import { supabase } from '../../../api/supabase';
 import { IRecipe } from '@/types';
 
-export const getRecipeById = async (idRecipe: string): Promise<IRecipe[] | null> => {
+export const getAllRecipesByOwner = async (
+  ownerId: string,
+): Promise<IRecipe[] | null> => {
   try {
-    console.log('getRecipe', idRecipe);
+    console.log('getRecipe', ownerId);
     const { data, error } = await supabase
-      .from('all_recipes_description')
+      .from('short_desc')
       .select('*')
-      .eq('id', idRecipe);
+      .eq('published_id', ownerId);
 
     // Если нужно фильтровать по категории
 

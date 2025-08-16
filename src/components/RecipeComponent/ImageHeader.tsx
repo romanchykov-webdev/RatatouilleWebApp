@@ -11,21 +11,25 @@ import { Button } from '@/components/ui/button';
 
 interface IImageHeaderProps {
   isLiked: boolean;
-  imageHeader: string;
+  image_header: string;
   rating: number;
   comments: number;
   handlerSelectedLang: (lang: string) => void;
   isActiveLang: string | null;
   languages: ILanguage[];
-  isLackedRecipe: (idRecipe: string, idOwnerRecipe: string, idUserClick: string) => void;
+  isLackedRecipe: (
+    idRecipe: string,
+    idOwnerRecipe: string,
+    idUserClick: string | null,
+  ) => void;
   idOwnerRecipe: string;
-  idUserClick: string;
+  idUserClick: string | null;
   idRecipe: string;
 }
 
 const ImageHeader: React.FC<IImageHeaderProps> = ({
   isLiked,
-  imageHeader,
+  image_header,
   rating,
   comments,
   isActiveLang,
@@ -46,9 +50,9 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
     setIsModalOpen(false);
   };
 
-  // console.log('languages', languages);
+  // console.log('ImageHeader image_header', image_header);
   return (
-    <div className="relative rounded-[25px] overflow-hidden" style={shadowBox()}>
+    <div className="relative rounded-[25px] overflow-hidden " style={shadowBox()}>
       <div className="absolute top-0 right-0  flex items-center justify-end w-full  p-5  ">
         <div className="flex items-center justify-between w-full relative rounded-full   ">
           {/*selected lang*/}
@@ -76,9 +80,9 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
           </div>
         </div>
       </div>
-      {imageHeader && (
+      {image_header && (
         <Image
-          src={imageHeader}
+          src={image_header}
           // src={'https://res.cloudinary.com/dq0ymjvhx/image/upload/v1754757979/ratatouille_images/byvlnfyruho5rwxvibzs.jpg'}
           alt="Логотип"
           width={200}
@@ -88,7 +92,6 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
           className="w-full"
         />
       )}
-
       {/*block rating comments*/}
       <div className="absolute bottom-0 right-0  flex items-center justify-between w-full  p-5  ">
         {/*rating*/}
@@ -109,7 +112,6 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
           <span className="absolute z-10 text-yellow-500 ">{comments}</span>
         </div>
       </div>
-
       {/* Модальное окно */}
       <Modal
         isOpen={isModalOpen}
