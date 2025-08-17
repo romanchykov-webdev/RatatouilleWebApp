@@ -1,22 +1,31 @@
 import { supabase } from '../../../api/supabase';
-import { IOwner } from '@/types';
 
-export const getOwnerRecipeById = async (userId: string): Promise<IOwner | null> => {
+export const getOwnerRecipeById = async (userId: string) => {
   try {
-    console.log('getOwnerRecipeById', userId);
+    if (!userId) {
+      console.warn('getOwnerRecipeById: userId пустой');
+      return null;
+    }
     const { data, error } = await supabase
       .from('users')
       .select('*')
       .eq('id', userId)
-      .single();
+      .single(); // single() сразу возвращает один объект вместо массива
 
-    // Если нужно фильтровать по категории
+    if (error) {
+      console.error('Ошибка Supabase при получении пользователя:', error.message);
+      return null;
+    }
 
-    if (error) throw error;
+    if (!data) {
+      console.warn(`Пользователь с id ${userId} не найден`);
+      return null;
+    }
 
     return data;
-  } catch (e) {
-    console.error('Ошибка при получении категорий:', e);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+    console.error('Ошибка при получении пользователя:', message);
     return null;
   }
 };

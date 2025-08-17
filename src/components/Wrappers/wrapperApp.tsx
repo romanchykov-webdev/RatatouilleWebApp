@@ -7,6 +7,7 @@ import { RootState } from '@/store';
 import { categoriesThunk } from '@/store/thunks/categoriesThunk';
 import { lanAppForNoAuthorization } from '@/store/slices/isAuthSlice';
 import { Loader2 } from 'lucide-react';
+import { measurementThunk } from '@/store/thunks/measurementThunk';
 
 interface IWrapper {
   children: React.ReactNode;
@@ -44,13 +45,19 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
   useEffect(() => {
     if (!appLang) return;
 
-    const load = async () => {
-      await dispatch(categoriesThunk(appLang));
-      setIsReady(true);
-    };
-
-    load();
+    // const load = async () => {
+    // await dispatch(categoriesThunk(appLang));
+    dispatch(categoriesThunk(appLang));
+    setIsReady(true);
+    // };
+    //
+    // load();
   }, [appLang, dispatch]);
+
+  // 3) Загружаем меры
+  useEffect(() => {
+    dispatch(measurementThunk());
+  }, [dispatch]);
 
   if (!isReady) {
     return (

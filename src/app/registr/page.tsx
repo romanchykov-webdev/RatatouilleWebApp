@@ -20,7 +20,7 @@ import { Loader2 } from 'lucide-react';
 import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { signUpUser } from '@/store/thunks/signUpUserThunks';
+import { signUpUserThunk } from '@/store/thunks/signUpUserThunks';
 import toast from 'react-hot-toast';
 
 const signUpSchema = z
@@ -79,7 +79,7 @@ const SingUp: React.FC = () => {
       signUpSchema.parse(form);
       // Вызов thunk для регистрации
       const result = await dispatch(
-        signUpUser({
+        signUpUserThunk({
           email: form.email,
           password: form.password,
         }),

@@ -52,8 +52,8 @@ export default function Profile() {
         <HeaderPage title={'Профиль'} openModal={openModal} router={router} />
         {/*avatar*/}
         <UserAvatarComponent
-          userName={user.userName}
-          userAvatar={user.userAvatar}
+          userName={user.user_name}
+          userAvatar={user.avatar}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
         />

@@ -8,12 +8,12 @@ import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 
 interface StarRatingProps {
   rating: number;
-  selectedRating: (newRating: number) => void;
+  handlerSelectedRating: (newRating: number) => void;
 }
 
 const RatingStar: React.FC<StarRatingProps> = ({
   rating,
-  selectedRating,
+  handlerSelectedRating,
 }: StarRatingProps): JSX.Element | null => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -34,7 +34,7 @@ const RatingStar: React.FC<StarRatingProps> = ({
         rating={rating}
         starRatedColor="#FFD700"
         starHoverColor="#FFD701"
-        changeRating={selectedRating}
+        changeRating={handlerSelectedRating}
         numberOfStars={5}
         name="rating"
         starDimension="40px"

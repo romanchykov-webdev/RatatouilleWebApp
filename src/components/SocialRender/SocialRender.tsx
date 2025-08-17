@@ -3,26 +3,17 @@
 import React, { JSX, useEffect } from 'react';
 import { ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
 
-import {
-  Youtube,
-  Instagram,
-  Facebook,
-  MapPin,
-  BookOpenText,
-  Copyright,
-} from 'lucide-react';
+import { Youtube, Instagram, Facebook, MapPin, Copyright } from 'lucide-react';
 import Link from 'next/link';
 
-interface ISocialLinksPropsProps {
-  socialLinks: ISocialRenderProps;
-}
+// interface ISocialLinksPropsProps {
+//   socialLinks: ISocialRenderProps;
+// }
 
-const SocialRender: React.FC<ISocialLinksPropsProps> = ({
-  socialLinks,
-}: ISocialLinksPropsProps): JSX.Element => {
+const SocialRender: React.FC = ({ socialLinks }): JSX.Element => {
   // const { youtube, blog, instagram, facebook, tikTok, pointCoordinates } =
   //   socialLinksProps;
-  console.log('socialLinks youtubeUrl', socialLinks);
+  // console.log('socialLinks youtubeUrl', socialLinks);
 
   return (
     <article className="flex flex-wrap gap-2 items-center justify-center">

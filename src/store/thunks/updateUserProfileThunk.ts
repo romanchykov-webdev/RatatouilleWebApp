@@ -11,16 +11,16 @@ export const updateUserProfileThunk = createAsyncThunk(
   async (userData: IUserProfileUpdate, { rejectWithValue }) => {
     // console.log('updateUserProfileThunk userData', userData);
     try {
-      const { userId, userName, userAvatar, lang, userTheme } = userData;
+      const { id, user_name, avatar, appLang, theme } = userData;
       const { error } = await supabase
         .from('users')
         .update({
-          user_name: userName,
-          avatar: userAvatar,
-          lang,
-          theme: userTheme,
+          user_name: user_name,
+          avatar: avatar,
+          appLang: appLang,
+          theme: theme,
         })
-        .eq('id', userId);
+        .eq('id', id);
 
       if (error) {
         toast.error('Ошибка обновления профиля: ' + error.message);

@@ -1,19 +1,11 @@
 'use client';
 
 import React, { JSX, useState } from 'react';
-// import {
-//   IArea,
-//   IIngredient,
-//   IInstruction,
-//   ILanguage,
-//   ISocialRenderProps,
-//   ITitle,
-// } from '@/types/createNewRecipeScreen.types';
-// import { IMetaData } from '@/types/recipeMeta.types';
+
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { usePathname } from 'next/navigation';
 import { Users, Clock, Flame, Layers } from 'lucide-react';
-import RecipeMetaItem from '@/components/RecipeMeta/RecipeMetaItem';
+import RecipeMetaItem from '@/components/RecipeComponent/RecipeMetaItem';
 import IngredientItem from '@/components/IngredientsWrapper/IngredientItem';
 import ImageHeader from '@/components/RecipeComponent/ImageHeader';
 import RatingStar from '@/components/RecipeComponent/RatingStar';
@@ -22,40 +14,18 @@ import SocialRender from '@/components/SocialRender/SocialRender';
 import TitleArea from '@/components/RecipeComponent/TitleArea';
 import toast from 'react-hot-toast';
 import SubscribeComponent from '@/components/RecipeComponent/SubscribeComponent';
-import { IOwner, IRecipe } from '@/types';
+import { IMeasurementData, IOwner, IRecipe } from '@/types';
 import { languagesObj } from '@/helpers/languagesObj';
-import { IIngredient, IInstruction } from '@/types/createNewRecipeScreen.types';
 import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
 import ButtonBack from '@/components/Buttons/ButtonBack';
+import Comments from '@/components/RecipeComponent/Comments';
 
-// interface IRecipeComponentProps {
-//   recipe: {
-//     id?: string;
-//     authorId: string;
-//     category: string;
-//     subCategory: string;
-//     image_header: string;
-//     languages: ILanguage[];
-//     title: ITitle[];
-//     area: IArea[];
-//     tags: string[];
-//     recipe_metrics: IMetaData;
-//     ingredients: IIngredient[];
-//     instructions: IInstruction[];
-//     social_links: ISocialRenderProps;
-//     rating: number;
-//     comments: number;
-//     isLiked: boolean;
-//   };
-//   userLang: string;
-//   userId: string | null;
-//   ownerRecipe: IOwner;
-// }
 interface IRecipeComponentProps {
   recipe: IRecipe;
   userLang: string;
   userId: string | null;
   ownerRecipe: IOwner;
+  measurementData: IMeasurementData;
 }
 
 const RecipeComponent: React.FC<IRecipeComponentProps> = ({
@@ -63,13 +33,14 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   userLang,
   userId,
   ownerRecipe,
-}: IRecipeComponentProps): JSX.Element => {
+  measurementData,
+}): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
-  console.log('recipecomponent', recipe);
+  console.log('measurementData', JSON.stringify(measurementData, null));
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isActiveLang, setIsActiveLang] = useState<string | null>(userLang ?? null);
+  const [isActiveLang, setIsActiveLang] = useState<string>(userLang);
 
   // console.log('recicpeComponent', ownerRecipe);
   const handlerSelectedLang = (lang: string) => {
@@ -117,11 +88,14 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     }
   };
 
+  // const languagesRecipe = languagesObj.filter(lang =>
+  //   recipe.title.some(t => t.lang === lang.name),
+  // );
   const languagesRecipe = languagesObj.filter(lang =>
-    recipe.title.some(t => t.lang === lang.name),
+    recipe.title.hasOwnProperty(lang.name),
   );
 
-  // console.log('languagesRecipe', languagesRecipe);
+  // console.log('languagesRecipe recipe.title', languagesRecipe);
 
   if (!recipe || !ownerRecipe) {
     return <div>Loading...</div>;
@@ -137,7 +111,9 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     // blog: recipe?.blog || null,
   };
 
-  console.log('RecipeComponent socialLinks', JSON.stringify(recipe?.social_links, null));
+  // isActiveLang={isActiveLang} instructionStore={recipe?.instructions}
+
+  // console.log('RecipeComponent socialLinks', recipe?.instructions);
 
   return (
     <article className="flex flex-col gap-y-[35px]">
@@ -147,8 +123,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         <ButtonBack />
         {/*  name recipe*/}
         <h1 className="flex-1 text-center font-bold text-xl">
-          {recipe.title.find(item => item.lang === isActiveLang)?.value ||
-            recipe.title[0].value}
+          {recipe.title[isActiveLang] ?? Object.values(recipe.title)[0]}
         </h1>
       </div>
 
@@ -167,28 +142,27 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         idRecipe={recipe?.id ?? ''}
       />
 
-      {/*block rating*/}
-      <RatingStar rating={recipe?.rating} selectedRating={handlerSelectedRating} />
+      {/*/!*block rating*!/*/}
+      <RatingStar rating={recipe?.rating} handlerSelectedRating={handlerSelectedRating} />
 
-      {/*  block subscribe*/}
+      {/*/!*  block subscribe*!/*/}
       <SubscribeComponent ownerRecipe={ownerRecipe} userId={userId} />
 
-      {/*  title area*/}
+      {/*/!*  title area*!/*/}
       <TitleArea title={recipe?.title} area={recipe?.area} isActiveLang={isActiveLang} />
 
-      {/*  mataData*/}
+      {/*/!*  mataData*!/*/}
       <div
         className="grid gap-x-3  justify-between"
         style={{ gridTemplateColumns: 'repeat(4, minmax(50px, 80px))' }}
       >
-        {/*time*/}
+        {/*  /!*time*!/*/}
         <div
           style={shadowBox()}
           className="relative w h-[150px] rounded-full overflow-hidden"
         >
           <RecipeMetaItem
             pathName={pathName}
-            // handler={()=>void }
             type={'serv'}
             num={recipe?.recipe_metrics?.time}
             text={'time'}
@@ -196,14 +170,13 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
           />
         </div>
 
-        {/*ser*/}
+        {/*  /!*ser*!/*/}
         <div
           style={shadowBox()}
           className="relative w h-[150px] rounded-full overflow-hidden"
         >
           <RecipeMetaItem
             pathName={pathName}
-            // handler={()=>void }
             type={'serv'}
             num={recipe?.recipe_metrics?.serv}
             text={'serv'}
@@ -211,14 +184,13 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
           />
         </div>
 
-        {/*  cal*/}
+        {/*  /!*  cal*!/*/}
         <div
           style={shadowBox()}
           className="relative w h-[150px] rounded-full overflow-hidden"
         >
           <RecipeMetaItem
             pathName={pathName}
-            // handler={()=>void }
             type={'serv'}
             num={recipe?.recipe_metrics?.cal}
             text={'cal'}
@@ -226,43 +198,39 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
           />
         </div>
 
-        {/*  level*/}
+        {/*  /!*  level*!/*/}
         <div
           style={shadowBox()}
           className="relative w h-[150px] rounded-full overflow-hidden"
         >
           <RecipeMetaItem
             pathName={pathName}
-            // handler={()=>void }
             type={'level'}
-            // num={recipe.recipeMeta.level}
             text={recipe?.recipe_metrics?.level ?? ''}
             icon={Layers}
           />
         </div>
       </div>
 
-      {/*ingredients*/}
+      {/*/!*ingredients*!/*/}
       <div>
         <h4>Ingredients</h4>
         <IngredientItem
-          ingredientsStore={recipe?.ingredients as unknown as IIngredient[]}
+          ingredientsStore={recipe.ingredients}
           isCreateRecipe={false}
+          measurements={measurementData}
           isActiveLang={isActiveLang}
         />
       </div>
 
-      {/*instruction*/}
-      <Instruction
-        userLangStore={isActiveLang ?? ''}
-        instructionStore={recipe?.instructions as unknown as IInstruction[]}
-        isVisibleButtonLang={false}
-        isVisibleRemoveInstruction={false}
-      />
+      {/*/!*instruction*!/*/}
+      <Instruction isActiveLang={isActiveLang} instructionStore={recipe?.instructions} />
 
-      {/*social links*/}
+      {/*/!*social links*!/*/}
 
       <SocialRender socialLinks={socialLinks} />
+
+      <Comments />
 
       {/* Модальное окно */}
       <ModalLoginRes isOpen={isModalOpen} onCloseAction={() => setIsModalOpen(false)} />

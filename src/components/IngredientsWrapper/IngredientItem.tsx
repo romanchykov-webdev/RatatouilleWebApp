@@ -1,47 +1,40 @@
 'use client';
 
 import React, { JSX } from 'react';
-import { IIngredient, IMeasurement } from '@/types/createNewRecipeScreen.types';
 import { Button } from '@/components/ui/button';
+import { IIngredient, IMeasurementData, IMeasurementUnits } from '@/types';
 
 interface IngredientsItemProps {
   ingredientsStore: IIngredient[];
   selectedLang?: string;
-  measurements?: IMeasurement;
+  measurements: IMeasurementData;
   isCreateRecipe: boolean;
   handlerRemoveIng?: (idx: number) => void;
-  isActiveLang?: string | null;
+  isActiveLang: string;
 }
 
 const IngredientItem: React.FC<IngredientsItemProps> = ({
   ingredientsStore,
-  selectedLang,
   measurements,
   isCreateRecipe,
   handlerRemoveIng,
   isActiveLang,
 }: IngredientsItemProps): JSX.Element => {
+  // console.log('IngredientItem', ingredientsStore);
+
+  // function getMeasurement(data: IMeasurementData, lang: string, key: string): string {
+  //   const units = data[lang as keyof IMeasurementData];
+  //   if (units && key in units) {
+  //     return units[key as keyof IMeasurementUnits];
+  //   }
+  //   return key;
+  // }
+
   return (
     <div className="flex flex-col gap-y-3">
       {ingredientsStore?.length > 0
         ? ingredientsStore.map((ingredient: IIngredient, index: number) => {
-            // const name = selectedLang
-            //   ? ingredient.value[selectedLang]
-            //   : isActiveLang && ingredient[isActiveLang];
-            const name = selectedLang
-              ? ingredient.value[selectedLang]
-              : isActiveLang
-                ? ingredient.value[isActiveLang]
-                : undefined;
-
-            const measureKey = ingredient.mera.toLowerCase();
-
-            // const measureStr =
-            //   (measurements && measurements[selectedLang]?.[measureKey]) || measureKey;
-            const measureStr =
-              measurements && selectedLang && measurements[selectedLang]?.[measureKey]
-                ? measurements[selectedLang][measureKey]
-                : measureKey;
+            // console.log('IngredientItem', ingredient);
 
             return (
               <div
@@ -53,9 +46,16 @@ const IngredientItem: React.FC<IngredientsItemProps> = ({
                 {/*blog rend ring*/}
                 <div className="flex gap-x-3 items-center">
                   <div className="w-[20px] h-[20px] bg-yellow-500 rounded-full" />
-                  <p>{name}</p>
+                  <p>
+                    {ingredient.value[isActiveLang] ?? Object.values(ingredient.value)[0]}
+                  </p>
                   <p>{ingredient.ves}</p>
-                  <p>{measureStr}</p>
+                  {/*<p>{measurements[isActiveLang][ingredient.mera] ?? ingredient.mera}</p>*/}
+                  <p>
+                    {measurements[isActiveLang as keyof IMeasurementData]?.[
+                      ingredient.mera as keyof IMeasurementUnits
+                    ] ?? ingredient.mera}
+                  </p>
                 </div>
 
                 {/*button remove ing*/}

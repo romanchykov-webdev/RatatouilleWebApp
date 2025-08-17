@@ -35,25 +35,64 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   const ownerId = searchParams.toString().split('=')[0];
+  const userId = userData?.id;
+  const isAuth = userData?.isAuth;
+
   console.log('RecipeByOwner raw', ownerId);
 
   // fetch ger ownerData and recipe by owner
-  const fetchOwnerData = async () => {
-    setIsLoading(true);
-    const ownerData = await getOwnerRecipeById(ownerId);
-    console.log('fetchOwnerData ownerData', ownerData);
-    setOwnerRecipe(ownerData);
-
-    const resRecipes = await getAllRecipesByOwner(ownerId);
-    // console.log('fetchOwnerData resRecipes', resRecipes);
-    setAllRecipesByOwner(resRecipes);
-
-    setIsLoading(false);
-  };
+  // const fetchOwnerData = async () => {
+  //   setIsLoading(true);
+  //   const ownerData = await getOwnerRecipeById(ownerId);
+  //   console.log('fetchOwnerData ownerData', ownerData);
+  //   setOwnerRecipe(ownerData);
+  //
+  //   const resRecipes = await getAllRecipesByOwner(ownerId);
+  //   // console.log('fetchOwnerData resRecipes', resRecipes);
+  //   setAllRecipesByOwner(resRecipes);
+  //
+  //   setIsLoading(false);
+  // };
 
   useEffect(() => {
+    const fetchOwnerData = async () => {
+      setIsLoading(true);
+
+      // если ownerId пустой и пользователь авторизован — используем данные из userData
+      if (ownerId === '' && userData?.isAuth) {
+        setOwnerRecipe({
+          id: userData.id,
+          user_id: userData.id,
+          user_name: userData.user_name,
+          avatar: userData.avatar,
+          subscribers: userData.subscribers ?? 0,
+        });
+
+        const resRecipes = await getAllRecipesByOwner(userData.id);
+        setAllRecipesByOwner(resRecipes);
+
+        setIsLoading(false);
+        return;
+      }
+
+      // если ownerId задан или пользователь не авторизован — делаем обычные запросы
+      if (!ownerId) {
+        console.warn('Нет ownerId и пользователь не авторизован');
+        setIsLoading(false);
+        return;
+      }
+
+      const ownerData = await getOwnerRecipeById(ownerId);
+      setOwnerRecipe(ownerData);
+
+      const resRecipes = await getAllRecipesByOwner(ownerId);
+      setAllRecipesByOwner(resRecipes);
+
+      setIsLoading(false);
+    };
+
     fetchOwnerData();
-  }, [ownerId]);
+  }, [ownerId, userId, isAuth]);
 
   const handlerSubscribe = async () => {
     if (userData?.isAuth === false) {
@@ -61,7 +100,7 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
     }
 
     console.log('SubscribeComponent handler subscribe');
-    if (ownerRecipe?.id === userData?.userId) {
+    if (ownerRecipe?.id === userData?.id) {
       toast.success('This recipe was published by you');
     }
     //   запрос на подписку

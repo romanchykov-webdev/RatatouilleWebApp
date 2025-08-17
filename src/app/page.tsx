@@ -21,9 +21,12 @@ export default function Page() {
 
   const hydrated = useIsHydrated();
 
-  if (!hydrated) {
-    return <WelcomeScreen />;
-  }
+  // Проверяем, что данные готовы
+  const dataLoaded = hydrated && categoriesData && userData;
+
+  // if (!dataLoaded) {
+  //   return <WelcomeScreen />;
+  // }
   return (
     <WrapperApp>
       <HeaderComponent isDesktop={isDesktop} />
@@ -32,6 +35,13 @@ export default function Page() {
         <SectionListWrapper categories={categoriesData} appLang={userData?.appLang} />
       </main>
       <footer className="bg-red-500">footer</footer>
+
+      {/* Показываем WelcomeScreen поверх, пока данные не готовы */}
+      {!dataLoaded && (
+        <div className="fixed inset-0 z-50">
+          <WelcomeScreen />
+        </div>
+      )}
     </WrapperApp>
   );
 }

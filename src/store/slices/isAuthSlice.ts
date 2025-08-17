@@ -40,13 +40,13 @@ const authSlice = createSlice({
         state,
         action: PayloadAction<IUserProfileUpdate | { success: boolean; error: string }>,
       ) => {
-        if (state.isAuth && 'userId' in action.payload) {
+        if (state.isAuth && 'id' in action.payload) {
           return {
             ...(state as IUserProfile),
-            userName: action.payload.userName,
-            userAvatar: action.payload.userAvatar,
+            user_name: action.payload.user_name,
+            avatar: action.payload.avatar,
             appLang: action.payload.appLang,
-            userTheme: action.payload.userTheme,
+            theme: action.payload.theme,
             isAuth: true,
           } as IUserProfile;
         }

@@ -1,67 +1,60 @@
 'use client';
 
-import React, { JSX, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { IInstruction, ILanguage } from '@/types/createNewRecipeScreen.types';
+import React, { JSX, useState } from 'react';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 import SliderHandmade from '@/components/Sliders/SliderHandmade/SliderHandmade';
-import { AppDispatch } from '@/store';
-import { removeInstruction } from '@/store/slices/createNewRecipeSlice';
 
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-import LoaderCustom from '@/components/Loaders/LoaderCustom';
+import { IInstructions } from '@/types';
 
 interface IInstructionProps {
-  instructionStore: IInstruction[];
-  userLangStore: string;
-  dispatch?: AppDispatch;
+  instructionStore: IInstructions[];
+  isActiveLang: string;
   isVisibleButtonLang?: boolean;
   isVisibleRemoveInstruction?: boolean;
-  languagesStore?: ILanguage[];
+  handlerRemoveInst?: (index: number) => void;
 }
 
 const Instruction: React.FC<IInstructionProps> = ({
   instructionStore,
-  userLangStore,
-  dispatch,
-  languagesStore,
-  isVisibleButtonLang = true,
-  isVisibleRemoveInstruction = true,
-}: IInstructionProps): JSX.Element => {
+  isActiveLang,
+  isVisibleButtonLang = false,
+  isVisibleRemoveInstruction = false,
+  handlerRemoveInst,
+}): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState<string[]>([]);
 
-  const pathName = usePathname();
-  console.log('Instruction-----------------', userLangStore);
+  // const pathName = usePathname();
+  // console.log('Instruction-----------------', userLangStore);
 
-  const [langInstruction, setLangInstruction] = useState<string>(userLangStore);
-
-  useEffect(() => {
-    setLangInstruction(userLangStore);
-  }, [userLangStore]);
+  // const [langInstruction, setLangInstruction] = useState<string>(userLangStore);
+  //
+  // useEffect(() => {
+  //   setLangInstruction(userLangStore);
+  // }, [userLangStore]);
 
   // const keyButton = Array.from(
   //   new Set(instructionStore.flatMap(item => Object.keys(item.lang))),
   // );
 
-  const keyButton = Array.from(
-    new Set(instructionStore?.flatMap(item => Object.keys(item.lang)) || []),
-  );
-  const handleSelectLang = (l: string) => {
-    setLangInstruction(l);
-  };
+  // const keyButton = Array.from(
+  //   new Set(instructionStore?.flatMap(item => Object.keys(item.lang)) || []),
+  // );
+  // const handleSelectLang = (l: string) => {
+  //   setLangInstruction(l);
+  // };
 
-  const handlerRemoveInst = (index: number) => {
-    if (pathName === '/profile/create' && dispatch) {
-      dispatch(removeInstruction(index));
-    }
-  };
+  // const handlerRemoveInst = (index: number) => {
+  //   if (pathName === '/profile/create' && dispatch) {
+  //     dispatch(removeInstruction(index));
+  //   }
+  // };
 
   const openLightbox = (images: string[], index: number) => {
     setCurrentImages(images);
@@ -69,38 +62,16 @@ const Instruction: React.FC<IInstructionProps> = ({
     setIsOpen(true);
   };
 
-  // if (!instructionStore || instructionStore.length === 0) {
-  //   return <LoaderCustom />;
-  // }
-  // console.log("instruction:", instruction);
-  // console.log("langInstruction:", langInstruction);
-  // console.log("instruction.lang[langInstruction]:", instruction.lang[langInstruction]);
-
   return (
     <article className="flex flex-col gap-y-2">
       {/*{instructionStore && <SkeletonCustom dependency={instructionStore} />}*/}
       <h6 className="text-center">Instruction</h6>
-      {/*block button for create recipe*/}
-      {isVisibleButtonLang && (
-        <div className="flex items-center justify-around">
-          {keyButton.map(item => (
-            <Button
-              className={`capitalize hover:bg-yellow-300 ${langInstruction === item && 'bg-yellow-500'}`}
-              key={item}
-              onClick={() => handleSelectLang(item)}
-            >
-              {item}
-            </Button>
-          ))}
-        </div>
-      )}
-      {/*render inst*/}
 
       {instructionStore?.length > 0 ? (
         <div>
-          {instructionStore.map((instruction: IInstruction, index) => {
+          {instructionStore.map((instruction: IInstructions, index) => {
             // console.log('instruction', instruction);
-            console.log('instruction langInstruction', langInstruction);
+            // console.log('instruction langInstruction', langInstruction);
             return (
               <div
                 key={index}
@@ -108,7 +79,8 @@ const Instruction: React.FC<IInstructionProps> = ({
               >
                 <div className=" relative p-2 mb-2">
                   <p className="text-lg  ">
-                    {index + 1}) {instruction.lang[langInstruction] || 'No instruction'}
+                    {index + 1}){' '}
+                    {instruction[isActiveLang] ?? Object.values(instruction)[0]}
                   </p>
                   {isVisibleRemoveInstruction && (
                     <span

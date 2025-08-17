@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { IHeaderCartItemProps } from '@/components/SectionList/CartItem.types';
 
-const HeaderCartItem: React.FC<IHeaderCartItemProps> = ({
+const HeaderCartItem: React.FC = ({
   author,
   authorAvatar,
   lang,
@@ -16,12 +16,12 @@ const HeaderCartItem: React.FC<IHeaderCartItemProps> = ({
   setIsLoading,
 }) => {
   const { shadowBox } = useShadowBox();
-  // console.log('authorAvatar', authorAvatar);
+  console.log('HeaderCartItem lang', lang);
   return (
     <div className="flex items-start justify-between  w-full">
       <div>
         {video && <Youtube className="text-red-500" />}
-        {lang.length > 1 && (
+        {Object.keys(lang).length > 1 && (
           <Languages className="text-white text-xs w-[20px] h-[20px]" />
         )}
       </div>

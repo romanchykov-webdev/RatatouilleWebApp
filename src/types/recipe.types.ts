@@ -1,41 +1,53 @@
-import { ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
+export interface ISocial {
+  instagram: string | null;
+  facebook: string | null;
+  tiktok: string | null;
 
-export interface ILocalizedText {
-  lang: string;
-  value: string;
+  [key: string]: string | null;
+}
+
+export interface IArea {
+  [lang: string]: string; // любое свойство с ключом-строкой и значением строка
+}
+
+export interface ITitle {
+  [lang: string]: string; // ключ — любой код языка, значение — строка
 }
 
 export interface IIngredient {
-  id?: string;
-  name: string;
-  amount?: string;
-  unit?: string;
+  ves: number; // количество
+  lang: string; // исходный язык описания
+  mera: string; // единица измерения (kg, ml, tsp, tbs, g, unit, sprigs и т.д.)
+  value: { [lang: string]: string }; // название ингредиента на разных языках
 }
 
-export interface IInstruction {
-  step: number;
-  text: string;
+interface InstructionStep {
+  [lang: string]: string;
+
+  image: string;
 }
+
+export interface IInstructions {
+  instructions: InstructionStep[];
+}
+
+// interface Instruction {
+//   [lang: string]: string | string[]; // Языки — string, images — string[]
+//   images?: string[]; // Необязательное поле images
+// }
 
 export interface IPublishedUser {
-  avatar: string | null;
-  user_id: string;
+  avatar: string;
   user_name: string;
+  user_id: string;
 }
 
 export interface IRecipeMetrics {
-  cal: number;
-  serv: number;
-  time: number;
-
-  [key: string]: number | string;
+  cal: number; // Калории на порцию
+  serv: number; // Количество порций
+  time: number; // Время приготовления в минутах
+  level: 'easy' | 'medium' | 'hard'; // Уровень сложности
 }
-
-// export interface ISocialLinks {
-//   tiktok: string | null;
-//   facebook: string | null;
-//   instagram: string | null;
-// }
 
 export interface IRecipe {
   id?: string;
@@ -43,21 +55,21 @@ export interface IRecipe {
   category: string;
   category_id?: string;
   image_header: string;
-  area: ILocalizedText[];
-  title: ILocalizedText[];
+  area: IArea;
+  title: ITitle;
   rating: number;
-  likes?: number;
+  likes: number;
   comments: number;
   ingredients: IIngredient[];
-  instructions: IInstruction[];
-  link_copyright?: string | null;
-  map_coordinates?: string | null;
+  instructions: IInstructions[];
+  link_copyright: string | null;
+  map_coordinates: string | null;
   point: string;
   full_recipe_id: string;
   published_id: string;
   published_user: IPublishedUser;
   recipe_metrics: IRecipeMetrics;
-  social_links?: ISocialRenderProps;
+  social_links: ISocial;
   source_reference: string | null;
   tags: string[];
   video: string | null;

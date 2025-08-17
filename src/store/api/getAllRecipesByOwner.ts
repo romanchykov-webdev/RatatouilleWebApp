@@ -1,23 +1,31 @@
 import { supabase } from '../../../api/supabase';
-import { IRecipe } from '@/types';
 
-export const getAllRecipesByOwner = async (
-  ownerId: string,
-): Promise<IRecipe[] | null> => {
+export const getAllRecipesByOwner = async (ownerId: string) => {
   try {
-    console.log('getRecipe', ownerId);
+    if (!ownerId) {
+      console.warn('getAllRecipesByOwner: ownerId пустой');
+      return null;
+    }
+
     const { data, error } = await supabase
       .from('short_desc')
       .select('*')
       .eq('published_id', ownerId);
 
-    // Если нужно фильтровать по категории
+    if (error) {
+      console.error('Ошибка Supabase при получении рецептов владельца:', error.message);
+      return null;
+    }
 
-    if (error) throw error;
+    if (!data || data.length === 0) {
+      console.warn(`Рецепты для владельца с id ${ownerId} не найдены`);
+      return null;
+    }
 
     return data;
-  } catch (e) {
-    console.error('Ошибка при получении категорий:', e);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+    console.error('Ошибка при получении рецептов владельца:', message);
     return null;
   }
 };

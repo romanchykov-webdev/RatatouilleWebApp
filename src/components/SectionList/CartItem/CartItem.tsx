@@ -30,10 +30,11 @@ const CartItem: React.FC<ICartItemProps> = ({
   const router = useRouter();
 
   console.log('CartItem item', JSON.stringify(item));
+  console.log('CartItem appLang', appLang);
 
   // Ищем заголовок на нужном языке appLang
-  const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];
-  const titleText = titleObj?.value ?? 'No title';
+  // const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];
+  // const titleText = titleObj?.value ?? 'No title';
   const handleOpenRecipe = () => {
     // console.log('handleOpenRecipe item id', item.full_recipe_id);
     // router.push('/recipe');
@@ -75,12 +76,11 @@ const CartItem: React.FC<ICartItemProps> = ({
 
               {/*/!* footer title like commit rating isLiked *!/*/}
               <FooterCartItem
-                title={titleText}
+                title={item.title[appLang] ?? Object.values(item.title)[0]} //если пользователь не имеет язык рецепта то первый
                 likes={item.likes}
                 comments={item.comments}
                 rating={item.rating}
-                // isLiked={item.isLiked}
-                isLiked={true} //temp
+                isLiked={false}
               />
             </div>
           </CardContent>

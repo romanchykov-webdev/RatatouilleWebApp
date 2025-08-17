@@ -15,8 +15,8 @@ interface ISubscribeComponentProps {
   ownerRecipe: {
     avatar: string | null;
     user_name: string;
-    subscribers?: number; // допускаем undefined
-    id?: string; // тоже optional, как в IOwner
+    subscribers?: number;
+    id?: string;
   };
   userId: string | null;
 }

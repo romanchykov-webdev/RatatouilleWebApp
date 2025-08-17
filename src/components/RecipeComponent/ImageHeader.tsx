@@ -7,7 +7,6 @@ import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { Modal } from '@/components/Modal/modal';
 import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
 import { ILanguage } from '@/types/createNewRecipeScreen.types';
-import { Button } from '@/components/ui/button';
 
 interface IImageHeaderProps {
   isLiked: boolean;
@@ -15,7 +14,7 @@ interface IImageHeaderProps {
   rating: number;
   comments: number;
   handlerSelectedLang: (lang: string) => void;
-  isActiveLang: string | null;
+  isActiveLang: string;
   languages: ILanguage[];
   isLackedRecipe: (
     idRecipe: string,
@@ -128,8 +127,9 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
             langRecipe={languages}
             selectedLang={isActiveLang}
             handlerChangeLang={handlerSelectedLang}
+            handleConfirm={handleConfirm}
           />
-          <Button onClick={handleConfirm}>exit</Button>
+          {/*<Button onClick={handleConfirm}>Save</Button>*/}
         </div>
       </Modal>
     </div>

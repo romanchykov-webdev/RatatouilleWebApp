@@ -13,7 +13,7 @@ import { RootState } from '@/store';
 import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRecipe';
 import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 import AddTags from '@/components/CreateNewRecipeScreen/AddTags';
-import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
+import RecipeMetaComponents from '@/components/CreateNewRecipeScreen/RecipeMeta/RecipeMetaComponents';
 import { usePathname, useRouter } from 'next/navigation';
 import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
 import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
@@ -177,20 +177,21 @@ const CreateNewRecipe: React.FC = () => {
         avatar: userAvatar,
       };
 
-      console.log('pered otpravcoi newRecipeData', newRecipeData);
+      // console.log('pered otpravcoi newRecipeData', newRecipeData);
 
-      dispatch(addRecipeThunk(newRecipeData));
+      // dispatch(addRecipeThunk(newRecipeData));
     } catch (error) {
       console.error('Error while publishing recipe:', error);
       toast.error('Ошибка при публикации рецепта');
-    } finally {
-      setTimeout(() => {
-        dispatch(clearNewRecipeState());
-        setUploadRecipe(false);
-        setUploadProgress(0);
-        router.replace('/profile/create');
-      }, 500);
     }
+    // finally {
+    //   setTimeout(() => {
+    //     dispatch(clearNewRecipeState());
+    //     setUploadRecipe(false);
+    //     setUploadProgress(0);
+    //     router.replace('/profile/create');
+    //   }, 500);
+    // }
   };
 
   return (
@@ -317,38 +318,38 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section last*/}
         <SectionWrapper styleWrapper="sm:col-span-2 lg:col-span-1">
-          {instructionStore.length === 0 ? (
-            <SkeletonCustom dependency={instructionStore} />
-          ) : (
-            // <RecipeComponent
-            //   recipe={{
-            //     ...createNewRecipe,
-            //     // userId: userId,
-            //     rating: 0,
-            //     comments: 0,
-            //     // isLiked: false,
-            //   }}
-            //   userLang={userLangStore}
-            //   userId={userId}
-            //   ownerRecipe={{
-            //     avatar: userAvatar,
-            //     user_name: userName,
-            //     subscribers: subscribers,
-            //     user_id: userId,
-            //   }}
-            // />
-            <RecipeComponent
-              recipe={createNewRecipe}
-              ownerRecipe={{
-                avatar: userAvatar,
-                user_name: userName,
-                subscribers: subscribers,
-                user_id: userId,
-              }}
-              userId={userId}
-              userLang={'ru'}
-            />
-          )}
+          {/*{instructionStore.length === 0 ? (*/}
+          {/*  <SkeletonCustom dependency={instructionStore} />*/}
+          {/*) : (*/}
+          {/*  <RecipeComponent*/}
+          {/*    recipe={{*/}
+          {/*      ...createNewRecipe,*/}
+          {/*      // userId: userId,*/}
+          {/*      rating: 0,*/}
+          {/*      comments: 0,*/}
+          {/*      // isLiked: false,*/}
+          {/*    }}*/}
+          {/*    userLang={userLangStore}*/}
+          {/*    userId={userId}*/}
+          {/*    ownerRecipe={{*/}
+          {/*      avatar: userAvatar,*/}
+          {/*      user_name: userName,*/}
+          {/*      subscribers: subscribers,*/}
+          {/*      user_id: userId,*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*  <RecipeComponent*/}
+          {/*    recipe={createNewRecipe}*/}
+          {/*    ownerRecipe={{*/}
+          {/*      avatar: userAvatar,*/}
+          {/*      user_name: userName,*/}
+          {/*      subscribers: subscribers,*/}
+          {/*      user_id: userId,*/}
+          {/*    }}*/}
+          {/*    userId={userId}*/}
+          {/*    userLang={'ru'}*/}
+          {/*  />*/}
+          {/*)}*/}
           <div>
             <Button
               onClick={handlerPublish}

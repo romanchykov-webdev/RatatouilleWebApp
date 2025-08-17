@@ -14,9 +14,7 @@ export function ThemeProvider({
     (state: RootState) => state.user as IUserProfile | INotAuthorized,
   );
   const { theme } = useTheme();
-  const themeApp: string = authState.isAuth
-    ? (authState as IUserProfile).userTheme
-    : theme;
+  const themeApp: string = authState.isAuth ? (authState as IUserProfile).theme : theme;
 
   return (
     <NextThemesProvider

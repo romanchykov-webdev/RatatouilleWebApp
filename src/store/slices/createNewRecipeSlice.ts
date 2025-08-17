@@ -9,22 +9,22 @@ import {
 } from '@/types/createNewRecipeScreen.types';
 import { IMetaData } from '@/types/recipeMeta.types';
 
-export interface ICreateNewRecipe {
-  authorId: string;
-  category: string;
-  subCategory: string;
-  image_header: string;
-  languages: ILanguage[];
-  title: ITitle[];
-  area: IArea[];
-  tags: string[];
-  recipe_metrics: IMetaData;
-  ingredients: IIngredient[];
-  instructions: IInstruction[];
-  social_links: ISocialRenderProps;
-}
+// export interface ICreateNewRecipe {
+//   authorId: string;
+//   category: string;
+//   subCategory: string;
+//   image_header: string;
+//   languages: ILanguage[];
+//   title: ITitle[];
+//   area: IArea[];
+//   tags: string[];
+//   recipe_metrics: IMetaData;
+//   ingredients: IIngredient[];
+//   instructions: IInstruction[];
+//   social_links: ISocialRenderProps;
+// }
 
-const initialState: ICreateNewRecipe = {
+const initialState = {
   authorId: '',
   category: '',
   subCategory: '',
@@ -37,13 +37,14 @@ const initialState: ICreateNewRecipe = {
   ingredients: [],
   instructions: [],
   social_links: {
-    youtube: null,
-    link_copyright: null,
     instagram: null,
     facebook: null,
     tiktok: null,
-    map_coordinates: null,
   },
+  map_coordinates: null,
+  link_copyright: null,
+  source_reference: null,
+  video: null,
 };
 
 const createNewRecipeSlice = createSlice({
@@ -119,6 +120,30 @@ const createNewRecipeSlice = createSlice({
     },
     removeSocialLink(state, action: PayloadAction<keyof typeof state.social_links>) {
       state.social_links[action.payload] = null;
+    },
+    addCoordinates(state, action) {
+      state.map_coordinates = action.payload;
+    },
+    removeCoordinates(state, action) {
+      state.map_coordinates[action.payload] = null;
+    },
+    addLinkCopyright(state, action) {
+      state.link_copyright = action.payload;
+    },
+    removeLinkCopyright(state, action) {
+      state.link_copyright[action.payload] = null;
+    },
+    addSourceReference(state, action) {
+      state.source_reference = action.payload;
+    },
+    removeSourceReference(state, action) {
+      state.source_reference[action.payload] = null;
+    },
+    addVideo(state, action) {
+      state.video = action.payload;
+    },
+    removeVideo(state, action) {
+      state.video[action.payload] = null;
     },
     clearNewRecipeState(state) {
       state.languages = [];

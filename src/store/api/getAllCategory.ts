@@ -1,70 +1,67 @@
 import { supabase } from '../../../api/supabase';
 
-// import { IItem } from '@/components/SectionList/CartItem.types';
-
-export interface IRecipeAPI {
-  id: string;
-  created_at: string;
-  published_id: string;
-  category: string;
-  category_id: string;
-  image_header: string;
-  title: {
-    lang: string;
-    value: string;
-  }[];
-  rating: number;
-  likes: number;
-  comments: number;
-  video: boolean;
-  tags: string[];
-  full_recipe_id: string;
-  published_user: {
-    avatar: string;
-    user_id: string;
-    user_name: string;
-  };
-  point: string;
-}
-
-export const getAllRecipesByCategory = async (
-  cat: string,
-): Promise<IRecipeAPI[] | null> => {
+export const getAllRecipesByCategory = async (category: string) => {
   try {
-    console.log('getAllRecipesByCategory', cat);
+    if (!category) {
+      console.warn('getAllRecipesByCategory: пустая категория');
+      return null;
+    }
+
     const { data, error } = await supabase
       .from('short_desc')
       .select('*')
-      .eq('category', cat);
+      .eq('category', category);
 
-    // Если нужно фильтровать по категории
+    if (error) {
+      console.error(
+        'Ошибка Supabase при получении рецептов по категории:',
+        error.message,
+      );
+      return null;
+    }
 
-    if (error) throw error;
+    if (!data || data.length === 0) {
+      console.warn(`Рецепты в категории "${category}" не найдены`);
+      return null;
+    }
 
     return data;
-  } catch (e) {
-    console.error('Ошибка при получении категорий:', e);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+    console.error('Ошибка при получении рецептов по категории:', message);
     return null;
   }
 };
 
-export const getAllRecipesBySubCategory = async (
-  cat: string,
-): Promise<IRecipeAPI[] | null> => {
+export const getAllRecipesBySubCategory = async (subCategory: string) => {
   try {
-    console.log('getAllRecipesByCategory', cat);
+    if (!subCategory) {
+      console.warn('getAllRecipesBySubCategory: пустая подкатегория');
+      return null;
+    }
+
     const { data, error } = await supabase
       .from('short_desc')
       .select('*')
-      .eq('point', cat);
+      .eq('point', subCategory);
 
-    // Если нужно фильтровать по категории
+    if (error) {
+      console.error(
+        'Ошибка Supabase при получении рецептов по подкатегории:',
+        error.message,
+      );
+      return null;
+    }
 
-    if (error) throw error;
+    if (!data || data.length === 0) {
+      console.warn(`Рецепты в подкатегории "${subCategory}" не найдены`);
+      return null;
+    }
 
     return data;
-  } catch (e) {
-    console.error('Ошибка при получении категорий:', e);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+    console.error('Ошибка при получении рецептов по подкатегории:', message);
     return null;
   }
 };

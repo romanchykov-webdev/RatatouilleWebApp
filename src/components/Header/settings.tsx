@@ -45,14 +45,14 @@ const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
 };
 
 const SettingsComponent: React.FC = () => {
-  const { isAuth, userAvatar } = useAppSelector(
+  const { isAuth, avatar } = useAppSelector(
     (state: RootState) => state.user as IUserProfile,
   );
   return (
     <div className="flex items-center gap-x-12">
       {isAuth ? null : <ToggleTheme />}
 
-      <AuthIcon isAuth={isAuth} userAvatar={userAvatar} />
+      <AuthIcon isAuth={isAuth} userAvatar={avatar} />
     </div>
   );
 };
