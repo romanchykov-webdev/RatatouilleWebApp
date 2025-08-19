@@ -3,11 +3,20 @@
 import React from 'react';
 import { Languages, Youtube } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { IHeaderCartItemProps } from '@/components/SectionList/CartItem.types';
+import LoaderCustomAbsolute from '@/components/Loaders/LoaderCustomAbsolute';
+import { ITitle } from '@/types';
 
-const HeaderCartItem: React.FC = ({
+interface IHeaderCartItemProps {
+  author: string;
+  authorAvatar: string;
+  lang: ITitle;
+  video: string | null;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+}
+
+const HeaderCartItem: React.FC<IHeaderCartItemProps> = ({
   author,
   authorAvatar,
   lang,
@@ -16,7 +25,6 @@ const HeaderCartItem: React.FC = ({
   setIsLoading,
 }) => {
   const { shadowBox } = useShadowBox();
-  console.log('HeaderCartItem lang', lang);
   return (
     <div className="flex items-start justify-between  w-full">
       <div>
@@ -25,9 +33,10 @@ const HeaderCartItem: React.FC = ({
           <Languages className="text-white text-xs w-[20px] h-[20px]" />
         )}
       </div>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center relative">
+        {isLoading && <LoaderCustomAbsolute />}
+
         <Avatar style={shadowBox()}>
-          {isLoading && <Skeleton className="w-[50px] h-[50px] rounded-full" />}
           <AvatarImage
             src={authorAvatar}
             className="w-[30px] h-[30px] rounded-full"

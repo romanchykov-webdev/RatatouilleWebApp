@@ -14,7 +14,7 @@ import SocialRender from '@/components/SocialRender/SocialRender';
 import TitleArea from '@/components/RecipeComponent/TitleArea';
 import toast from 'react-hot-toast';
 import SubscribeComponent from '@/components/RecipeComponent/SubscribeComponent';
-import { IMeasurementData, IOwner, IRecipe } from '@/types';
+import { IMeasurements, IOwner, IRecipe } from '@/types';
 import { languagesObj } from '@/helpers/languagesObj';
 import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
 import ButtonBack from '@/components/Buttons/ButtonBack';
@@ -25,7 +25,7 @@ interface IRecipeComponentProps {
   userLang: string;
   userId: string | null;
   ownerRecipe: IOwner;
-  measurementData: IMeasurementData;
+  measurementData: IMeasurements;
 }
 
 const RecipeComponent: React.FC<IRecipeComponentProps> = ({
@@ -37,14 +37,12 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 }): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
-  console.log('measurementData', JSON.stringify(measurementData, null));
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isActiveLang, setIsActiveLang] = useState<string>(userLang);
 
-  // console.log('recicpeComponent', ownerRecipe);
   const handlerSelectedLang = (lang: string) => {
-    console.log('handlerSelectedLang', lang);
+    // console.log('handlerSelectedLang', lang);
     setIsActiveLang(lang);
   };
 
@@ -95,25 +93,21 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
     recipe.title.hasOwnProperty(lang.name),
   );
 
-  // console.log('languagesRecipe recipe.title', languagesRecipe);
-
   if (!recipe || !ownerRecipe) {
     return <div>Loading...</div>;
   }
 
   const socialLinks = {
-    tiktok: recipe?.social_links?.tiktok || null,
-    facebook: recipe?.social_links?.facebook || null,
+    video: recipe?.video || null,
     instagram: recipe?.social_links?.instagram || null,
+    facebook: recipe?.social_links?.facebook || null,
+    tiktok: recipe?.social_links?.tiktok || null,
     link_copyright: recipe?.link_copyright || null,
-    coordinates: recipe?.map_coordinates || null,
-    youtube: recipe?.video || null,
-    // blog: recipe?.blog || null,
+    map_coordinates: recipe?.map_coordinates || null,
+    source_reference: recipe?.source_reference || null,
   };
 
   // isActiveLang={isActiveLang} instructionStore={recipe?.instructions}
-
-  // console.log('RecipeComponent socialLinks', recipe?.instructions);
 
   return (
     <article className="flex flex-col gap-y-[35px]">

@@ -2,14 +2,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { supabase } from '../../../api/supabase';
 import {
-  IArea,
-  IIngredient,
-  IInstruction,
-  ILanguage,
-  ISocialRenderProps,
-  ITitle,
+  IAreaByCreateRecipe,
+  IIngredientsByCreateRecipe,
+  IInstructionsByCreateRecipe,
+  ILanguageByCreateRecipe,
+  ISocialByCreateRecipe,
+  ITitleByCreateRecipe,
+  IMetaDataByCreateRecipe,
 } from '@/types/createNewRecipeScreen.types';
-import { IMetaData } from '@/types/recipeMeta.types';
 
 // Окончательная модель для вставки рецепта
 export interface IRecipeCreate {
@@ -17,14 +17,14 @@ export interface IRecipeCreate {
   category: string; // основная категория -
   subCategory: string; // подкатегория
   image_header: string; // картинка заголовка  -
-  languages: ILanguage[]; // массив языковых данных-
-  title: ITitle[]; // массив заголовков
-  area: IArea[]; // массив областей/-
+  languages: ILanguageByCreateRecipe[]; // массив языковых данных-
+  title: ITitleByCreateRecipe[]; // массив заголовков
+  area: IAreaByCreateRecipe[]; // массив областей/-
   tags: string[]; // массив тегов
-  recipe_metrics: IMetaData; // метаданные рецепта -
-  ingredients: IIngredient[]; // ингредиенты -
-  instructions: IInstruction[]; // пошаговая инструкция -
-  social_links: ISocialRenderProps;
+  recipe_metrics: IMetaDataByCreateRecipe; // метаданные рецепта -
+  ingredients: IIngredientsByCreateRecipe[]; // ингредиенты -
+  instructions: IInstructionsByCreateRecipe[]; // пошаговая инструкция -
+  social_links: ISocialByCreateRecipe;
   user_name: string;
   avatar: string; //-
 }
@@ -47,8 +47,6 @@ export const addRecipeThunk = createAsyncThunk(
         recipe_metrics: recipeData.recipe_metrics,
         ingredients: recipeData.ingredients,
         instructions: recipeData.instructions,
-        video: recipeData.social_links.youtube,
-        source_reference: recipeData.social_links.blog,
         tags: recipeData.tags,
         published_id: recipeData.authorId,
         published_user: {
@@ -57,8 +55,10 @@ export const addRecipeThunk = createAsyncThunk(
           avatar: recipeData.avatar,
         },
         point: recipeData.subCategory,
-        link_copyright: recipeData.social_links.blog,
-        map_coordinates: recipeData.social_links.coordinates,
+        link_copyright: recipeData.social_links.link_copyright,
+        map_coordinates: recipeData.social_links.map_coordinates,
+        video: recipeData.social_links.video,
+        source_reference: recipeData.social_links.source_reference,
         social_links: {
           facebook: recipeData.social_links.facebook,
           instagram: recipeData.social_links.instagram,

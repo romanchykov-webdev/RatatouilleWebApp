@@ -1,16 +1,16 @@
 'use client';
 
-import React, { JSX, useEffect, useState } from 'react';
+import React, { ChangeEvent, JSX, useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import { ILanguage, ITitle } from '@/types/createNewRecipeScreen.types';
 import { addTitle } from '@/store/slices/createNewRecipeSlice';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import { Input } from '@/components/ui/input';
+import { ILanguageByCreateRecipe, ITitleByCreateRecipe } from '@/types';
 
 interface ICreateTitleRecipeProps {
   dispatch: AppDispatch;
-  languagesStore: ILanguage[];
+  languagesStore: ILanguageByCreateRecipe[];
 }
 
 const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
@@ -24,7 +24,7 @@ const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
   const debouncedTitles = useDebounce(titlesByLang);
 
   // Обновление стейта при вводе
-  const handleChange = (langName: string, value: string) => {
+  const handleChange = (langName: string, value: string): void => {
     setTitlesByLang(prev => ({ ...prev, [langName]: value }));
   };
 
@@ -35,26 +35,33 @@ const CreateTitleRecipe: React.FC<ICreateTitleRecipeProps> = ({
       languagesStore.every(lang => debouncedTitles[lang.name]?.trim());
 
     if (allFilled) {
-      const titles: ITitle[] = languagesStore.map(lang => ({
-        lang: lang.name,
-        value: debouncedTitles[lang.name],
-      }));
+      const titles: ITitleByCreateRecipe = languagesStore.reduce<Record<string, string>>(
+        (acc, lang) => {
+          acc[lang.name] = debouncedTitles[lang.name];
+          return acc;
+        },
+        {},
+      );
+
       dispatch(addTitle(titles));
     }
   }, [debouncedTitles, dispatch, languagesStore]);
+
   return (
     <article className="flex flex-col gap-y-2  relative">
       <SkeletonCustom dependency={languagesStore} />
       <h6 className="text-center">Add title</h6>
 
-      {languagesStore?.map(lang => {
+      {languagesStore?.map((lang: ILanguageByCreateRecipe) => {
         return (
           <div key={lang.name} className="flex gap-x-2 items-center">
             <Input
               type="text"
               className="w-[90%]"
               value={titlesByLang[lang.name] || ''}
-              onChange={e => handleChange(lang.name, e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                handleChange(lang.name, e.target.value)
+              }
               placeholder={`Write the name of the recipe ${lang.value}`}
             />
             <div className="capitalize text-lg">{lang.name}</div>

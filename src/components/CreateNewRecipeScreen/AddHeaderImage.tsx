@@ -11,16 +11,12 @@ import { useImageUpload } from '@/helpers/hooks/useImageUpload';
 
 interface IAddHeaderImageProps {
   dispatch: AppDispatch;
-  // setSelectedFile: (file: File | null) => void;
-  categoryStore: string;
   subCategoryStore: string;
   imageHeaderStore: string;
 }
 
 const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
   dispatch,
-  // setSelectedFile,
-  categoryStore,
   subCategoryStore,
   imageHeaderStore,
 }: IAddHeaderImageProps): JSX.Element => {
@@ -51,26 +47,31 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
     fileInputRef.current?.click();
   };
 
+  const handlerRemoveImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Предотвращаем вызов handlerAddImage
+    clearImages();
+    dispatch(clearHeaderImage());
+  };
+
+  const hasImage = imageHeaderStore !== '';
+
   return (
     <section className="relative">
-      {(categoryStore === '' || subCategoryStore === '') && (
+      {subCategoryStore === '' && (
         <Skeleton className="absolute z-10 w-full h-full bg-neutral-400 opacity-90" />
       )}
 
       <div
+        title="Selected image"
         onClick={handlerAddImage}
         className={`border-[1px] border-neutral-300 w-full h-[200px]
                   rounded-[10px] flex flex-col items-center justify-center bg-neutral-400
                   dark:text-black cursor-pointer gap-y-2 hover:gap-y-5 transition-all duration-600
                   relative  
-                  ${imageHeaderStore !== '' ? 'bg-cover bg-center bg-no-repeat' : ''}
+                  ${hasImage ? 'bg-cover bg-center bg-no-repeat' : ''}
                   
                 `}
-        style={
-          imageHeaderStore !== ''
-            ? { backgroundImage: `url(${images[0].base64})` }
-            : undefined
-        }
+        style={hasImage ? { backgroundImage: `url(${images[0].base64})` } : undefined}
       >
         <input
           type="file"
@@ -80,13 +81,11 @@ const AddHeaderImage: React.FC<IAddHeaderImageProps> = ({
           className="hidden"
         />
 
-        {imageHeaderStore !== '' ? (
+        {hasImage ? (
           <button
+            aria-label="Remove Image"
             style={shadowBox()}
-            onClick={e => {
-              e.stopPropagation(); // Предотвращаем вызов handlerAddImage
-              clearImages();
-            }}
+            onClick={e => handlerRemoveImage(e)}
             className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-[30px] h-[30px] hover:bg-red-600"
           >
             X

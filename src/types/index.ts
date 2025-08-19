@@ -5,3 +5,4 @@ export * from './IUserProfileEdit.type';
 export * from './recipe.types';
 export * from './category.types';
 export * from './measurement.types';
+export * from './createNewRecipeScreen.types';

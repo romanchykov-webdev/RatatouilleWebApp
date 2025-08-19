@@ -43,9 +43,11 @@ export interface IHeaderCartItemProps extends ICartItemBaseProps {
 }
 
 // Props для фонового изображения карточки
-export interface IBGImageCartItemProps extends ICartItemBaseProps {
-  bdImg: IItem['image'];
-}
+// export interface IBGImageCartItemProps extends ICartItemBaseProps {
+//   bdImg: IItem['image'];
+//   isLoading:boolean;
+//   setIsLoading:React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
 // Props для футера карточки
 export interface IFooterCartItemProps {

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { JSX, useEffect, useRef, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import RecipeComponent from '@/components/RecipeComponent/RecipeComponent';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
@@ -9,37 +8,29 @@ import { useSearchParams } from 'next/navigation';
 import { getRecipeById } from '@/store/api/getRecipe';
 import { getOwnerRecipeById } from '@/store/api/getOwnerRecipe';
 import HeaderComponent from '@/components/Header/headerComponent';
-import { IMeasurementData, IOwner, IRecipe, IUserProfile } from '@/types';
+import { IMeasurements, IOwner, IRecipe, IUserProfile } from '@/types';
 import LoaderCustom from '@/components/Loaders/LoaderCustom';
 
 const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
   const userData = useAppSelector((state: RootState) => state.user as IUserProfile);
 
-  const measurementData: IMeasurementData = useAppSelector(
+  const measurementData: IMeasurements = useAppSelector(
     (state: RootState) => state.measurement,
   );
-  console.log('measurementData', JSON.stringify(measurementData, null));
-  // const { shadowBox } = useShadowBox();
 
   const [recipeData, setRecipeData] = useState<IRecipe | null>(null);
-  // console.log('recipeData', JSON.stringify(recipeData, null));
 
   const [ownerData, setOwnerData] = useState<IOwner | null>(null);
 
-  // console.log('ownerData', JSON.stringify(ownerData, null));
-
-  // const router = useRouter();
-
   const searchParams = useSearchParams();
   const idRecipe = searchParams.toString().split('=')[0];
-  // console.log('searchParams', idRecipe);
 
   // Используем useRef чтобы вызвать fetch только один раз
   const fetched = useRef(false);
 
   const fetchRecipe = async () => {
     const res = await getRecipeById(idRecipe);
-    console.log('recipeDataArr', res);
+    // console.log('recipeDataArr', res);
     if (res) {
       // const firstRecipe = res[0];
       setRecipeData(res);
@@ -57,12 +48,9 @@ const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
     if (!fetched.current) {
       fetchRecipe();
       fetched.current = true;
-      console.log('render page');
+      // console.log('render page');
     }
   }, []);
-
-  console.log('recipeData', JSON.stringify(recipeData, null));
-  // console.log('ownerData', JSON.stringify(ownerData, null));
 
   // Логируем данные только после их загрузки
   // useEffect(() => {
@@ -79,7 +67,7 @@ const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
   }
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
 
       <RecipeComponent
@@ -89,7 +77,7 @@ const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
         userLang={userData.appLang}
         measurementData={measurementData}
       />
-    </WrapperApp>
+    </section>
   );
 };
 export default RecipePage;

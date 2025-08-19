@@ -7,22 +7,21 @@ import SliderHandmade from '@/components/Sliders/SliderHandmade/SliderHandmade';
 
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-import { IInstructions } from '@/types';
+import { IInstructionsByCreateRecipe, ILanguageByCreateRecipe } from '@/types';
 
 interface IInstructionProps {
-  instructionStore: IInstructions[];
+  instructionStore: IInstructionsByCreateRecipe[];
   isActiveLang: string;
-  isVisibleButtonLang?: boolean;
+  languagesStore?: ILanguageByCreateRecipe[];
+  handlerRemoveInstItem?: (index: number) => void;
   isVisibleRemoveInstruction?: boolean;
-  handlerRemoveInst?: (index: number) => void;
 }
 
 const Instruction: React.FC<IInstructionProps> = ({
   instructionStore,
   isActiveLang,
-  isVisibleButtonLang = false,
+  handlerRemoveInstItem,
   isVisibleRemoveInstruction = false,
-  handlerRemoveInst,
 }): JSX.Element => {
   const { shadowBox } = useShadowBox();
 
@@ -30,37 +29,13 @@ const Instruction: React.FC<IInstructionProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState<string[]>([]);
 
-  // const pathName = usePathname();
-  // console.log('Instruction-----------------', userLangStore);
-
-  // const [langInstruction, setLangInstruction] = useState<string>(userLangStore);
-  //
-  // useEffect(() => {
-  //   setLangInstruction(userLangStore);
-  // }, [userLangStore]);
-
-  // const keyButton = Array.from(
-  //   new Set(instructionStore.flatMap(item => Object.keys(item.lang))),
-  // );
-
-  // const keyButton = Array.from(
-  //   new Set(instructionStore?.flatMap(item => Object.keys(item.lang)) || []),
-  // );
-  // const handleSelectLang = (l: string) => {
-  //   setLangInstruction(l);
-  // };
-
-  // const handlerRemoveInst = (index: number) => {
-  //   if (pathName === '/profile/create' && dispatch) {
-  //     dispatch(removeInstruction(index));
-  //   }
-  // };
-
   const openLightbox = (images: string[], index: number) => {
     setCurrentImages(images);
     setCurrentIndex(index);
     setIsOpen(true);
   };
+
+  // console.log('Instruction instructionStore', JSON.stringify(instructionStore, null));
 
   return (
     <article className="flex flex-col gap-y-2">
@@ -69,7 +44,7 @@ const Instruction: React.FC<IInstructionProps> = ({
 
       {instructionStore?.length > 0 ? (
         <div>
-          {instructionStore.map((instruction: IInstructions, index) => {
+          {instructionStore.map((instruction: IInstructionsByCreateRecipe, index) => {
             // console.log('instruction', instruction);
             // console.log('instruction langInstruction', langInstruction);
             return (
@@ -82,9 +57,11 @@ const Instruction: React.FC<IInstructionProps> = ({
                     {index + 1}){' '}
                     {instruction[isActiveLang] ?? Object.values(instruction)[0]}
                   </p>
-                  {isVisibleRemoveInstruction && (
+
+                  {/*if create new recipe screen */}
+                  {isVisibleRemoveInstruction && handlerRemoveInstItem && (
                     <span
-                      onClick={() => handlerRemoveInst(index)}
+                      onClick={() => handlerRemoveInstItem(index)}
                       className="flex items-center justify-center h-[20px] w-[20px] text-black bg-red-500 rounded-full
                                   hover:bg-red-900 cursor-pointer transition-colors duration-500 ease-in-out
                                   absolute top-[2px] right-[2px]

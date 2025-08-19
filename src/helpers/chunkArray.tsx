@@ -6,6 +6,6 @@ export const chunkArray = <T,>(array: T[], size: number): T[][] => {
       result.push(chunk); // добавляем только полные чанки
     }
   }
-  console.log('chunkArray', result);
+  // console.log('chunkArray', JSON.stringify(result, null));
   return result;
 };

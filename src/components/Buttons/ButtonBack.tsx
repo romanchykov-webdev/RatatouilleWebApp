@@ -12,7 +12,7 @@ const ButtonBack: React.FC = (): JSX.Element => {
   const router = useRouter();
 
   const pathName = usePathname();
-  console.log('ButtonBack pathName', pathName);
+  // console.log('ButtonBack pathName', pathName);
 
   const isVisible = pathName === '/profile/create';
 

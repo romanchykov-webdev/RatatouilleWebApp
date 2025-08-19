@@ -13,7 +13,7 @@ import ProgressBarPagination from '@/components/SectionList/CartList/ProgressBar
 import { ITitle } from '@/store/thunks/categoriesThunk';
 
 import { useRouter } from 'next/navigation';
-import { IRecipe } from '@/components/SectionList/CartList.types';
+import { IRecipeByCategory } from '@/components/SectionList/CartList.types';
 import { fetchRecipesByCategories } from '@/app/api/fetch/fetchRecipesByCategories';
 import BreadcrumbsCategorySubCategory from '@/components/Breadcrumbs/BreadcrumbsCategorySubCategory';
 
@@ -36,7 +36,7 @@ const CartList: React.FC<ICartListProps> = ({
 
   const [count, setCount] = useState<number>(0);
 
-  const [recipes, setRecipes] = useState<IRecipe[]>([]);
+  const [recipes, setRecipes] = useState<IRecipeByCategory[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -72,13 +72,13 @@ const CartList: React.FC<ICartListProps> = ({
   const progress: number = count > 1 ? ((current - 1) / (count - 1)) * 100 : 0;
 
   const handlerCategory = (item: string) => {
-    console.log('handlerSubCat', item);
+    // console.log('handlerSubCat', item);
     // router.replace('/category', item);
     router.replace(`/category?${encodeURIComponent(`all_${item}`)}`);
   };
 
   const handlerSubCategoryGo = (item: string) => {
-    console.log('handlerSubCategoryGo', item);
+    // console.log('handlerSubCategoryGo', item);
     router.replace(`/category?${encodeURIComponent(`sub_${item}`)}`);
   };
 
@@ -105,7 +105,7 @@ const CartList: React.FC<ICartListProps> = ({
             >
               <div className="p-2">
                 <CartItem
-                  item={item as unknown as IRecipe}
+                  item={item as unknown as IRecipeByCategory}
                   appLang={appLang}
                   loading={loading}
                 />

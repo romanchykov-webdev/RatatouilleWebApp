@@ -6,7 +6,6 @@ import { checkUserSessionThunks } from '@/store/thunks/checkUserSessionThunks';
 import { RootState } from '@/store';
 import { categoriesThunk } from '@/store/thunks/categoriesThunk';
 import { lanAppForNoAuthorization } from '@/store/slices/isAuthSlice';
-import { Loader2 } from 'lucide-react';
 import { measurementThunk } from '@/store/thunks/measurementThunk';
 
 interface IWrapper {
@@ -19,6 +18,8 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
 
   const [appLang, setAppLang] = useState('');
   const [isReady, setIsReady] = useState(false);
+
+  // console.log('render wrapper');
 
   // 1) Проверяем сессию один раз
   useEffect(() => {
@@ -45,13 +46,13 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
   useEffect(() => {
     if (!appLang) return;
 
-    // const load = async () => {
-    // await dispatch(categoriesThunk(appLang));
-    dispatch(categoriesThunk(appLang));
-    setIsReady(true);
-    // };
-    //
-    // load();
+    const load = async () => {
+      await dispatch(categoriesThunk(appLang));
+      // dispatch(categoriesThunk(appLang));
+      setIsReady(true);
+    };
+
+    load();
   }, [appLang, dispatch]);
 
   // 3) Загружаем меры

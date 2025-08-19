@@ -4,8 +4,26 @@ import React from 'react';
 import BGImage from '@/components/SectionList/CartItem/BGImage';
 import HeaderCartItem from '@/components/SectionList/CartItem/HeaderCartItem';
 import FooterCartItem from '@/components/SectionList/CartItem/FooterCartItem';
+import { ITitle } from '@/types';
 
-const ItemCarousel: React.FC = ({
+interface IItemCarouselProps {
+  handleOpenRecipe: (recipeId: string) => void;
+  recipeId: string;
+  bgBigImage: string;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  video: string | null;
+  isLiked: boolean;
+  lang: ITitle;
+  authorAvatar: string;
+  author: string;
+  title: string;
+  likes: number;
+  comments: number;
+  rating: number;
+}
+
+const ItemCarousel: React.FC<IItemCarouselProps> = ({
   handleOpenRecipe,
   recipeId,
   bgBigImage,
@@ -16,12 +34,12 @@ const ItemCarousel: React.FC = ({
   authorAvatar,
   author,
   title,
-  like,
+  likes,
   comments,
   rating,
   isLiked,
 }) => {
-  console.log('ItemCarousel', title);
+  // console.log('ItemCarousel', likes);
 
   return (
     <div
@@ -53,7 +71,7 @@ const ItemCarousel: React.FC = ({
         {/*  /!* footer title like commit rating isLiked *!/*/}
         <FooterCartItem
           title={title}
-          like={like}
+          likes={likes}
           comments={comments}
           rating={rating}
           isLiked={isLiked}

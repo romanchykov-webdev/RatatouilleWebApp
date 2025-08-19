@@ -1,7 +1,6 @@
 'use client';
 
 import React, { JSX, useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Undo2, Users } from 'lucide-react';
 import { IOwner, IRecipe, IUserProfile } from '@/types';
@@ -38,7 +37,7 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
   const userId = userData?.id;
   const isAuth = userData?.isAuth;
 
-  console.log('RecipeByOwner raw', ownerId);
+  // console.log('RecipeByOwner raw', ownerId);
 
   // fetch ger ownerData and recipe by owner
   // const fetchOwnerData = async () => {
@@ -111,7 +110,7 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
   }
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
 
       {/*button back*/}
@@ -155,7 +154,7 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
             ))}
         </div>
       </article>
-    </WrapperApp>
+    </section>
   );
 };
 export default RecipeByOwner;

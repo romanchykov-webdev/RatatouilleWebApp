@@ -2,9 +2,7 @@
 
 import React, { JSX } from 'react';
 
-interface IPreviewPageProps {}
-
 const PreviewPage: React.FC = (): JSX.Element => {
-  return <div>PreviewPaje Const</div>;
+  return <div>Preview Const</div>;
 };
 export default PreviewPage;

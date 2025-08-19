@@ -4,7 +4,7 @@ export interface ISubcategory {
   image: string;
 }
 
-export interface ITitleByCategory {
+export interface ICategoriesAndSubcategories {
   name: string;
   point: string;
   image: string;
@@ -15,5 +15,5 @@ export interface ICategory {
   id: string;
   created_at: string;
   lang: string;
-  title: ITitleByCategory[];
+  title: ICategoriesAndSubcategories[];
 }

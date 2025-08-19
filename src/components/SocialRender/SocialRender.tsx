@@ -1,16 +1,25 @@
 'use client';
 
-import React, { JSX, useEffect } from 'react';
-import { ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
+import React, { JSX } from 'react';
 
-import { Youtube, Instagram, Facebook, MapPin, Copyright } from 'lucide-react';
+import { Youtube, Instagram, Facebook, MapPin, Copyright, Signature } from 'lucide-react';
 import Link from 'next/link';
 
-// interface ISocialLinksPropsProps {
-//   socialLinks: ISocialRenderProps;
-// }
+interface ISocialLinksPropsProps {
+  socialLinks: {
+    video: string | null;
+    instagram: string | null;
+    facebook: string | null;
+    tiktok: string | null;
+    link_copyright: string | null;
+    map_coordinates: string | null;
+    source_reference: string | null;
+  };
+}
 
-const SocialRender: React.FC = ({ socialLinks }): JSX.Element => {
+const SocialRender: React.FC<ISocialLinksPropsProps> = ({
+  socialLinks,
+}: ISocialLinksPropsProps): JSX.Element => {
   // const { youtube, blog, instagram, facebook, tikTok, pointCoordinates } =
   //   socialLinksProps;
   // console.log('socialLinks youtubeUrl', socialLinks);
@@ -24,16 +33,18 @@ const SocialRender: React.FC = ({ socialLinks }): JSX.Element => {
           switch (key) {
             case 'facebook':
               return <Facebook className="w-[30px] h-[30px] text-blue-500" />;
-            case 'youtube':
+            case 'video':
               return <Youtube className="w-[30px] h-[30px] text-red-500" />;
             case 'instagram':
               return <Instagram className="w-[30px] h-[30px] text-red-300" />;
-            case 'coordinates':
+            case 'tiktok':
+              return;
+            case 'map_coordinates':
               return <MapPin className="w-[30px] h-[30px] text-blue-300" />;
-            // case 'blog':
-            //   return <BookOpenText className="w-[30px] h-[30px] text-blue-300" />;
             case 'link_copyright':
               return <Copyright className="w-[30px] h-[30px] text-blue-300" />;
+            case 'source_reference':
+              return <Signature className="w-[30px] h-[30px] text-blue-300" />;
             default:
               return null;
           }

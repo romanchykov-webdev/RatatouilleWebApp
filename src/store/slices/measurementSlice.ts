@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IMeasurementData } from '@/types';
+import { IMeasurements } from '@/types';
 
-const initialState: IMeasurementData = {
+const initialState: IMeasurements = {
   en: {
     g: '',
     kg: '',

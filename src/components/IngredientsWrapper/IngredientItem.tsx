@@ -2,12 +2,12 @@
 
 import React, { JSX } from 'react';
 import { Button } from '@/components/ui/button';
-import { IIngredient, IMeasurementData, IMeasurementUnits } from '@/types';
+import { IIngredient, IMeasurements, IMeasurementUnits } from '@/types';
 
 interface IngredientsItemProps {
   ingredientsStore: IIngredient[];
   selectedLang?: string;
-  measurements: IMeasurementData;
+  measurements: IMeasurements;
   isCreateRecipe: boolean;
   handlerRemoveIng?: (idx: number) => void;
   isActiveLang: string;
@@ -15,8 +15,8 @@ interface IngredientsItemProps {
 
 const IngredientItem: React.FC<IngredientsItemProps> = ({
   ingredientsStore,
-  measurements,
   isCreateRecipe,
+  measurements,
   handlerRemoveIng,
   isActiveLang,
 }: IngredientsItemProps): JSX.Element => {
@@ -52,7 +52,7 @@ const IngredientItem: React.FC<IngredientsItemProps> = ({
                   <p>{ingredient.ves}</p>
                   {/*<p>{measurements[isActiveLang][ingredient.mera] ?? ingredient.mera}</p>*/}
                   <p>
-                    {measurements[isActiveLang as keyof IMeasurementData]?.[
+                    {measurements[isActiveLang as keyof IMeasurements]?.[
                       ingredient.mera as keyof IMeasurementUnits
                     ] ?? ingredient.mera}
                   </p>

@@ -14,22 +14,7 @@ const TitleArea: React.FC<ITitleAreaProps> = ({
   area,
   isActiveLang,
 }: ITitleAreaProps): JSX.Element => {
-  console.log('TitleArea title', title);
-  console.log('TitleArea area', area);
-  console.log('TitleArea isActiveLang', isActiveLang);
-
-  // const titleActive = title.find(item => item.lang === isActiveLang);
-  // const titleValue = titleActive?.value;
-  //
-  // const areaActive = area.find(item => item.lang === isActiveLang);
-  // const areaValue = areaActive?.value;
-  // console.log('TitleArea areaValue', areaValue);
-
-  // const getValueByLang = (arr: { lang: string; value: string }[]) =>
-  //   arr.find(item => item.lang === isActiveLang)?.value;
-  //
-  // const titleValue = getValueByLang(title);
-  // const areaValue = getValueByLang(area);
+  // console.log('TitleArea isActiveLang', isActiveLang);
 
   return (
     <div>

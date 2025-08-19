@@ -21,14 +21,19 @@ export interface IIngredient {
   value: { [lang: string]: string }; // название ингредиента на разных языках
 }
 
-interface InstructionStep {
-  [lang: string]: string;
-
-  image: string;
-}
+// interface InstructionStep {
+//   [lang: string]: string;
+//
+//   image: string;
+// }
+//
+// export interface IInstructions {
+//   instructions: InstructionStep[];
+// }
 
 export interface IInstructions {
-  instructions: InstructionStep[];
+  [lang: string]: string | string[]; // динамические ключи для текстов на разных языках
+  images: string[]; // всегда массив строк
 }
 
 // interface Instruction {

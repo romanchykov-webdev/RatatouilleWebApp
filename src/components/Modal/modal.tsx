@@ -23,9 +23,6 @@ export const Modal: React.FC<ModalProps> = ({
   onCloseAction,
   title,
   children,
-  confirmText = 'Подтвердить',
-  cancelText = 'Отмена',
-  onConfirm,
   showCloseButton = true,
   maxWidth = 'max-w-md',
 }) => {

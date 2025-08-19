@@ -14,15 +14,27 @@ export function ThemeProvider({
     (state: RootState) => state.user as IUserProfile | INotAuthorized,
   );
   const { theme } = useTheme();
-  const themeApp: string = authState.isAuth ? (authState as IUserProfile).theme : theme;
+  // const themeApp: string = authState.isAuth ? (authState as IUserProfile).theme : theme;
 
+  // Определяем тему, если она есть
+  const userTheme = authState.isAuth ? (authState as IUserProfile).theme : undefined;
+  const themeApp = userTheme ?? theme; // может быть undefined
+
+  // Создаем объект с пропсами только если тема существует
+  const themeProps = themeApp ? { defaultTheme: themeApp, forcedTheme: themeApp } : {};
+
+  // return (
+  //   <NextThemesProvider
+  //     attribute="class"
+  //     defaultTheme={themeApp}
+  //     forcedTheme={themeApp}
+  //     {...props}
+  //   >
+  //     {children}
+  //   </NextThemesProvider>
+  // );
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme={themeApp}
-      forcedTheme={themeApp}
-      {...props}
-    >
+    <NextThemesProvider attribute="class" {...themeProps} {...props}>
       {children}
     </NextThemesProvider>
   );

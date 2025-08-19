@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { Modal } from '@/components/Modal/modal';
 import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
-import { ILanguage } from '@/types/createNewRecipeScreen.types';
+import { ILanguageByCreateRecipe } from '@/types';
 
 interface IImageHeaderProps {
   isLiked: boolean;
@@ -15,7 +15,7 @@ interface IImageHeaderProps {
   comments: number;
   handlerSelectedLang: (lang: string) => void;
   isActiveLang: string;
-  languages: ILanguage[];
+  languages: ILanguageByCreateRecipe[];
   isLackedRecipe: (
     idRecipe: string,
     idOwnerRecipe: string,

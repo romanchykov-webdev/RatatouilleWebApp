@@ -9,7 +9,7 @@ export interface IPublishedUser {
   user_name: string;
 }
 
-export interface IRecipe {
+export interface IRecipeByCategory {
   id: string;
   created_at: string;
   published_id: string;

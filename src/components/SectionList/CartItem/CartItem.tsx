@@ -29,8 +29,8 @@ const CartItem: React.FC<ICartItemProps> = ({
 
   const router = useRouter();
 
-  console.log('CartItem item', JSON.stringify(item));
-  console.log('CartItem appLang', appLang);
+  // console.log('CartItem item', JSON.stringify(item));
+  // console.log('CartItem appLang', appLang);
 
   // Ищем заголовок на нужном языке appLang
   // const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];

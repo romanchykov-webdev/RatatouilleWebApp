@@ -12,12 +12,12 @@ import {
   removeLanguage,
 } from '@/store/slices/createNewRecipeSlice';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ILanguage } from '@/types/createNewRecipeScreen.types';
+import { ILanguageByCreateRecipe } from '@/types';
 
 interface IAddLanguagesProps {
   dispatch: AppDispatch;
   imageHeaderStore: string;
-  languagesStore: ILanguage[];
+  languagesStore: ILanguageByCreateRecipe[];
 }
 
 const AddLanguages: React.FC<IAddLanguagesProps> = ({
@@ -26,8 +26,9 @@ const AddLanguages: React.FC<IAddLanguagesProps> = ({
   languagesStore,
 }: IAddLanguagesProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // console.log('languagesStore', languagesStore);
 
-  const toggleLanguage = (lang: ILanguage) => {
+  const toggleLanguage = (lang: ILanguageByCreateRecipe): void => {
     const exists = languagesStore.find(l => l.name === lang.name);
     if (exists) {
       dispatch(removeLanguage(lang.name)); // новый экшен для удаления одного языка

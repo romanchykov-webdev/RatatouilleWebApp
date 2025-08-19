@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import { shadowBox } from '@/helpers/shadowBoxStyle';
 import InputLogRes from '@/components/Inputs/InputLogRes';
@@ -105,7 +104,7 @@ export default function Login() {
   };
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
       <div className="flex items-center justify-center ">
         <Card style={shadowBox()} className="w-full max-w-sm">
@@ -187,6 +186,6 @@ export default function Login() {
           </CardFooter>
         </Card>
       </div>
-    </WrapperApp>
+    </section>
   );
 }

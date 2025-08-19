@@ -1,30 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  IArea,
-  IIngredient,
-  IInstruction,
-  ILanguage,
-  ISocialRenderProps,
-  ITitle,
-} from '@/types/createNewRecipeScreen.types';
+
 import { IMetaData } from '@/types/recipeMeta.types';
+import {
+  IAreaByCreateRecipe,
+  IIngredientsByCreateRecipe,
+  IInstructionsByCreateRecipe,
+  ILanguageByCreateRecipe,
+  ISocialByCreateRecipe,
+  ITitleByCreateRecipe,
+} from '@/types';
 
-// export interface ICreateNewRecipe {
-//   authorId: string;
-//   category: string;
-//   subCategory: string;
-//   image_header: string;
-//   languages: ILanguage[];
-//   title: ITitle[];
-//   area: IArea[];
-//   tags: string[];
-//   recipe_metrics: IMetaData;
-//   ingredients: IIngredient[];
-//   instructions: IInstruction[];
-//   social_links: ISocialRenderProps;
-// }
+export interface ICreateNewRecipe {
+  authorId: string;
+  category: string;
+  subCategory: string;
+  image_header: string;
+  languages: ILanguageByCreateRecipe[];
+  title: ITitleByCreateRecipe[];
+  area: IAreaByCreateRecipe[];
+  tags: string[];
+  recipe_metrics: IMetaData;
+  ingredients: IIngredientsByCreateRecipe[];
+  instructions: IInstructionsByCreateRecipe[];
+  social_links: ISocialByCreateRecipe;
+}
 
-const initialState = {
+const initialState: ICreateNewRecipe = {
   authorId: '',
   category: '',
   subCategory: '',
@@ -40,11 +41,11 @@ const initialState = {
     instagram: null,
     facebook: null,
     tiktok: null,
+    map_coordinates: null,
+    link_copyright: null,
+    source_reference: null,
+    video: null,
   },
-  map_coordinates: null,
-  link_copyright: null,
-  source_reference: null,
-  video: null,
 };
 
 const createNewRecipeSlice = createSlice({
@@ -64,13 +65,16 @@ const createNewRecipeSlice = createSlice({
       state.subCategory = '';
       state.category = '';
     },
+    clearSubCategory(state) {
+      state.subCategory = '';
+    },
     addHeaderImage(state, action: PayloadAction<ICreateNewRecipe['image_header']>) {
       state.image_header = action.payload;
     },
     clearHeaderImage(state) {
       state.image_header = '';
     },
-    addLanguage(state, action: PayloadAction<ILanguage>) {
+    addLanguage(state, action: PayloadAction<ILanguageByCreateRecipe>) {
       const exists = state.languages.some(l => l.name === action.payload.name);
       if (!exists) {
         state.languages.push(action.payload);
@@ -83,10 +87,10 @@ const createNewRecipeSlice = createSlice({
     removeAllLanguages(state) {
       state.languages = [];
     },
-    addTitle(state, action: PayloadAction<ITitle[]>) {
+    addTitle(state, action: PayloadAction<ITitleByCreateRecipe[]>) {
       state.title = action.payload;
     },
-    addArea(state, action: PayloadAction<IArea[]>) {
+    addArea(state, action: PayloadAction<IAreaByCreateRecipe[]>) {
       state.area = action.payload;
     },
     addTags(state, action: PayloadAction<string[]>) {
@@ -95,8 +99,8 @@ const createNewRecipeSlice = createSlice({
     addRecipeMeta(state, action: PayloadAction<ICreateNewRecipe['recipe_metrics']>) {
       state.recipe_metrics = action.payload;
     },
-    removeTag(state, action: PayloadAction<string>) {
-      state.tags = state.tags.filter(tag => tag !== action.payload);
+    removeTag(state, action: PayloadAction<number>) {
+      state.tags = state.tags.filter((_, index: number) => index !== action.payload);
     },
 
     addIngredients(state, action: PayloadAction<ICreateNewRecipe['ingredients']>) {
@@ -107,7 +111,7 @@ const createNewRecipeSlice = createSlice({
         (_, index) => index !== action.payload,
       );
     },
-    addInstruction(state, action: PayloadAction<IInstruction>) {
+    addInstruction(state, action: PayloadAction<IInstructionsByCreateRecipe>) {
       state.instructions.push(action.payload);
     },
     removeInstruction(state, action: PayloadAction<number>) {
@@ -115,36 +119,13 @@ const createNewRecipeSlice = createSlice({
         (_, index) => index !== action.payload,
       );
     },
-    addSocialLinks(state, action: PayloadAction<ISocialRenderProps>) {
+    addSocialLinks(state, action: PayloadAction<ISocialByCreateRecipe>) {
       state.social_links = action.payload;
     },
-    removeSocialLink(state, action: PayloadAction<keyof typeof state.social_links>) {
+    removeSocialLink(state, action: PayloadAction<keyof ISocialByCreateRecipe>) {
       state.social_links[action.payload] = null;
     },
-    addCoordinates(state, action) {
-      state.map_coordinates = action.payload;
-    },
-    removeCoordinates(state, action) {
-      state.map_coordinates[action.payload] = null;
-    },
-    addLinkCopyright(state, action) {
-      state.link_copyright = action.payload;
-    },
-    removeLinkCopyright(state, action) {
-      state.link_copyright[action.payload] = null;
-    },
-    addSourceReference(state, action) {
-      state.source_reference = action.payload;
-    },
-    removeSourceReference(state, action) {
-      state.source_reference[action.payload] = null;
-    },
-    addVideo(state, action) {
-      state.video = action.payload;
-    },
-    removeVideo(state, action) {
-      state.video[action.payload] = null;
-    },
+
     clearNewRecipeState(state) {
       state.languages = [];
       Object.assign(state, initialState);
@@ -156,6 +137,7 @@ export const {
   addOwnerId,
   addCategory,
   addSubCategory,
+  clearSubCategory,
   clearCategorySubCategory,
   addHeaderImage,
   clearHeaderImage,

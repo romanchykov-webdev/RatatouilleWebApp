@@ -1,14 +1,12 @@
 'use client';
 
 import React, { JSX, useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
 import {
   getAllRecipesByCategory,
   getAllRecipesBySubCategory,
-  IRecipeAPI,
 } from '@/store/api/getAllCategory';
 import HeaderComponent from '@/components/Header/headerComponent';
 import BreadcrumbsCategorySubCategory, {
@@ -18,6 +16,7 @@ import CartItem from '@/components/SectionList/CartItem/CartItem';
 import { Loader2 } from 'lucide-react';
 import LoaderCustom from '@/components/Loaders/LoaderCustom';
 import ButtonsBackToHome from '@/components/Buttons/ButtonsBackToHome';
+import { IRecipe } from '@/types';
 
 const Category: React.FC = (): JSX.Element => {
   const categories = useAppSelector(
@@ -27,7 +26,7 @@ const Category: React.FC = (): JSX.Element => {
 
   const [categoryObj, setCategoryObj] = useState<ICategoryFromStore | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [recipes, setRecipes] = useState<IRecipeAPI[]>([]);
+  const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,16 +49,21 @@ const Category: React.FC = (): JSX.Element => {
       setIsLoadingPage(false);
     }, 500);
   };
-
   useEffect(() => {
     // Ждём, пока категории загрузятся
     if (!categories || categories.length === 0) {
-      setIsLoadingPage(true);
+      // setIsLoadingPage(true);
       return;
     }
 
     const [type, value] = (raw[0] ?? '').split('_');
+    // console.log('Category type', type);
+    // console.log('Category value', value);
+
     const found = categories.find(c => c.point === value) ?? null;
+    // console.log('Category categories', categories);
+    // console.log('Category found', found);
+
     setCategoryObj(found);
 
     if (type === 'all' && value) {
@@ -78,11 +82,12 @@ const Category: React.FC = (): JSX.Element => {
     router.push(`/category?${encodeURIComponent(`sub_${point}`)}`);
     fetchAllSubCategoryRecipes(point);
   };
+
   if (!categoryObj) {
     return <LoaderCustom />;
   }
   return (
-    <WrapperApp>
+    <section>
       <div className="mb-5">
         <HeaderComponent />
 
@@ -120,7 +125,7 @@ const Category: React.FC = (): JSX.Element => {
           ))}
         </div>
       </div>
-    </WrapperApp>
+    </section>
   );
 };
 

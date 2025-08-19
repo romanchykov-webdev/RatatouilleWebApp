@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -24,40 +23,40 @@ const ProfileEdit: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.user as IUserProfile);
-  // console.log('user', user);
-  const { userName, userAvatar, appLang, userTheme, userId } = user;
+  console.log('user', user);
+  const { user_name, avatar, appLang, theme, id: userId } = user;
 
   const [userDataUpdate, setUserDataUpdate] = useState<IUserProfileUpdate>({
-    userId: userId,
-    userName: userName,
-    userAvatar: userAvatar ?? avatarDefault.src,
+    id: userId,
+    user_name: user_name,
+    avatar: avatar ?? avatarDefault.src,
     appLang: appLang,
-    userTheme: userTheme,
+    theme: theme,
   });
 
   useEffect(() => {
     setUserDataUpdate({
-      userId: userId,
-      userName: userName,
-      userAvatar: userAvatar ?? avatarDefault.src,
+      id: userId,
+      user_name: user_name,
+      avatar: avatar ?? avatarDefault.src,
       appLang: appLang,
-      userTheme: userTheme,
+      theme: theme,
     });
-  }, [userName, userAvatar, appLang, userTheme, userId]);
+  }, [user_name, avatar, appLang, theme, userId]);
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
 
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} />
         <BreadcrumbsComponent />
         <UserAvatarComponent
-          userName={userDataUpdate?.userName}
+          userName={userDataUpdate?.user_name}
           // userAvatar={
           //   userDataUpdate?.userAvatar ? userDataUpdate?.userAvatar : avatarDefault.src
           // }
-          userAvatar={userDataUpdate.userAvatar ?? avatarDefault.src}
+          userAvatar={userDataUpdate.avatar ?? avatarDefault.src}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           handleImageChange={event =>
@@ -118,7 +117,7 @@ const ProfileEdit: React.FC = () => {
           <Loader2 className="w-8 h-8 text-yellow-400 animate-spin" />
         </div>
       )}
-    </WrapperApp>
+    </section>
   );
 };
 export default ProfileEdit;

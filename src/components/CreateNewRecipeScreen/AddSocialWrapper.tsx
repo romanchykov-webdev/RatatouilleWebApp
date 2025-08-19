@@ -1,7 +1,6 @@
 'use client';
 
 import React, { JSX, useState } from 'react';
-import { IInstruction, ISocialRenderProps } from '@/types/createNewRecipeScreen.types';
 import { AppDispatch } from '@/store';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import SocialRender from '@/components/SocialRender/SocialRender';
@@ -9,31 +8,32 @@ import InputLogRes from '@/components/Inputs/InputLogRes';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { addSocialLinks, removeSocialLink } from '@/store/slices/createNewRecipeSlice';
+import { IInstructionsByCreateRecipe, ISocialByCreateRecipe } from '@/types';
 
 interface IAddSocialWrapperProps {
-  instructionStore: IInstruction[];
+  instructionStore: IInstructionsByCreateRecipe[];
   dispatch: AppDispatch;
-  socialLinkStore: ISocialRenderProps;
 }
 
 const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
   dispatch,
-  socialLinkStore,
+  instructionStore,
 }: IAddSocialWrapperProps): JSX.Element => {
-  const [socialObj, setSocialObj] = useState<ISocialRenderProps>({
-    youtube: null,
+  const [socialObj, setSocialObj] = useState<ISocialByCreateRecipe>({
+    video: null,
     instagram: null,
     facebook: null,
     tiktok: null,
-    coordinates: null,
     link_copyright: null,
     map_coordinates: null,
+    source_reference: null,
   });
   const [isSocialLink, setIsSocialLink] = useState<string>('');
 
   const [changeInputValue, setChangeInputValue] = useState<string>('');
 
-  const socialArr = Object.keys(socialObj).filter(key => key);
+  // const socialArr = Object.keys(socialObj).filter(key => key);
+  const socialArr = Object.keys(socialObj) as (keyof ISocialByCreateRecipe)[];
 
   const handlerSelectedSocial = (socialLink: string) => {
     setIsSocialLink(socialLink);
@@ -47,18 +47,24 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
       const parsed = new URL(url);
       const host = parsed.hostname.toLowerCase();
 
+      // const rules: Record<string, RegExp> = {
+      //   video: /^(www\.)?(youtube\.com|youtu\.be)$/,
+      //   instagram: /^(www\.)?instagram\.com$/,
+      //   facebook: /^(www\.)?facebook\.com$/,
+      //   tiktok: /^((?:www|vt|m)\.)?tiktok\.com$/,
+      //   link_copyright: /.*/, // любые ссылки допустимы
+      //   map_coordinates: /^(www\.)?(google\.[a-z.]+|maps\.app\.goo\.gl)$/,
+      //   source_reference: /.*/, // любые ссылки допустимы
+      // };
       const rules: Record<string, RegExp> = {
-        youtube: /^(www\.)?(youtube\.com|youtu\.be)$/,
-        // blog: /.*/, // любые ссылки допустимы
+        video: /.*/, // любые ссылки допустимы
+        instagram: /.*/, // любые ссылки допустимы
+        facebook: /.*/, // любые ссылки допустимы
+        tiktok: /.*/, // любые ссылки допустимы
         link_copyright: /.*/, // любые ссылки допустимы
-        instagram: /^(www\.)?instagram\.com$/,
-        facebook: /^(www\.)?facebook\.com$/,
-        tikTok: /^((?:www|vt|m)\.)?tiktok\.com$/,
-        // tikTok: /^(www\.)?tiktok\.com$/,
-        // coordinates: /^https?:\/\/(www\.)?google\.[a-z.]+\/maps/, // пример: Google Maps
-        coordinates: /^(www\.)?(google\.[a-z.]+|maps\.app\.goo\.gl)$/,
+        map_coordinates: /.*/, // любые ссылки допустимы
+        source_reference: /.*/, // любые ссылки допустимы
       };
-
       const rule = rules[type];
       if (!rule) return false;
 
@@ -81,10 +87,11 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 
     setSocialObj(updatedSocialObj);
 
-    // setSocialObj(prev => ({
-    //   ...prev,
-    //   [isSocialLink]: changeInputValue,
-    // }));
+    setSocialObj(prev => ({
+      ...prev,
+      [isSocialLink]: changeInputValue,
+    }));
+    console.log('updatedSocialObj', updatedSocialObj);
     dispatch(addSocialLinks(updatedSocialObj));
     setChangeInputValue('');
     setIsSocialLink('');
@@ -94,6 +101,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 
   const handlerRemoveLink = (social: string) => {
     console.log('handlerRemoveLink', social);
+    // console.log('handlerRemoveLink socialObj', socialObj);
     setSocialObj(prev => ({
       ...prev,
       [social]: null,
@@ -103,7 +111,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
 
   return (
     <article className="w-full h-full  relative flex flex-col gap-y-2">
-      {/*{instructionStore && <SkeletonCustom dependency={instructionStore} />}*/}
+      {instructionStore.length === 0 && <SkeletonCustom dependency={instructionStore} />}
 
       <h6 className="text-center">AddSocialWrapper Const</h6>
 
@@ -158,7 +166,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
         </div>
       </div>
 
-      <SocialRender socialLinks={socialLinkStore} />
+      <SocialRender socialLinks={socialObj} />
     </article>
   );
 };

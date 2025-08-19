@@ -4,7 +4,14 @@ import React from 'react';
 import { Heart, HeartHandshake, MessageCircle, Star } from 'lucide-react';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 import { useShadowText } from '@/helpers/hooks/useShadowText';
-import { IFooterCartItemProps } from '@/components/SectionList/CartItem.types';
+
+interface IFooterCartItemProps {
+  title: string;
+  likes: number;
+  comments: number;
+  rating: number;
+  isLiked: boolean;
+}
 
 const FooterCartItem: React.FC<IFooterCartItemProps> = ({
   title,

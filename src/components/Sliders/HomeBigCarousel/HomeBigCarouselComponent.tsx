@@ -19,23 +19,21 @@ import { chunkArray } from '@/helpers/chunkArray';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
 import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { IRecipe } from '@/types';
 
-interface IWrapperCarouselItemsProps {
-  index: number;
-}
+export const WrapperCarouselItems: React.FC = ({}): JSX.Element => {
+  const appLang: string = useAppSelector(
+    (state: RootState): string => state.user.appLang,
+  );
 
-export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
-  index,
-}): JSX.Element => {
-  const appLang = useAppSelector((state: RootState) => state.user.appLang);
+  const router: AppRouterInstance = useRouter();
 
-  const router = useRouter();
-
-  const [recipesBySlider, setRecipesBySlider] = useState([]);
+  const [recipesBySlider, setRecipesBySlider] = useState<IRecipe[][]>([]);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchRecipeByslider = async () => {
+  const fetchRecipeBySlider = async () => {
     setIsLoading(true);
     const result = await getRecipesByHomeSlider();
     // console.log('WrapperCarouselItems', JSON.stringify(result, null));
@@ -46,7 +44,7 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
   };
 
   useEffect(() => {
-    fetchRecipeByslider();
+    fetchRecipeBySlider();
 
     // console.log('recipesBySlider?.image_header', recipesBySlider);
   }, []);
@@ -58,7 +56,7 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
   if (isLoading) {
     return <LoaderCustom />;
   }
-  console.log('WrapperCarouselItems recipesBySlider', recipesBySlider);
+  // console.log('WrapperCarouselItems recipesBySlider', recipesBySlider);
   return (
     <>
       {recipesBySlider?.length > 0 &&
@@ -87,9 +85,10 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
                         title={
                           group[0].title[appLang] ?? Object.values(group[0].title)[0]
                         }
-                        like={group[0].likes}
+                        likes={group[0].likes}
                         comments={group[0].comments}
                         rating={group[0].rating}
+                        isLiked={false} //temp
                       />
                     )}
                   </div>
@@ -113,9 +112,10 @@ export const WrapperCarouselItems: React.FC<IWrapperCarouselItemsProps> = ({
                           author={recipe.published_user.user_name}
                           bgBigImage={recipe.image_header}
                           title={recipe.title[appLang] ?? Object.values(recipe.title)[0]}
-                          like={recipe.likes}
+                          likes={recipe.likes}
                           comments={recipe.comments}
                           rating={recipe.rating}
+                          isLiked={false} //temp
                         />
                       </div>
                     ))}
@@ -135,7 +135,7 @@ const HomeBigCarouselComponent: React.FC = () => {
       <Carousel className="w-full  h-[520px]">
         <CarouselContent className="mb-5">
           {Array.from({ length: 5 }).map((_, index) => {
-            return <WrapperCarouselItems key={index} index={index} />;
+            return <WrapperCarouselItems key={index} />;
           })}
         </CarouselContent>
         <div className="flex justify-center">

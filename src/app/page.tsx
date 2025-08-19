@@ -1,7 +1,6 @@
 'use client';
 import HeaderComponent from '@/components/Header/headerComponent';
 import useWindowWidth from '@/helpers/widthScreen';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import SectionListWrapper from '@/components/SectionList/SectionListWrapper';
 import { useIsHydrated } from '@/helpers/hooks/useIsHydrated';
 import WelcomeScreen from '@/components/Modal/WelcomeScreen';
@@ -28,7 +27,7 @@ export default function Page() {
   //   return <WelcomeScreen />;
   // }
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
         <HomeBigCarouselComponent />
@@ -42,6 +41,6 @@ export default function Page() {
           <WelcomeScreen />
         </div>
       )}
-    </WrapperApp>
+    </section>
   );
 }

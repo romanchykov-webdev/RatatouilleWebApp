@@ -15,7 +15,7 @@ export const measurementThunk = createAsyncThunk(
       if (!data) {
         return rejectWithValue('Data not found');
       }
-      console.log('measurementThunk', JSON.stringify(data.lang, null, 2));
+      // console.log('measurementThunk', JSON.stringify(data.lang, null, 2));
       dispatch(setMeasurement(data.lang));
       return data;
     } catch (error) {

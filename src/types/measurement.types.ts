@@ -11,7 +11,7 @@ export interface IMeasurementUnits {
 }
 
 // Любой язык может присутствовать, но если есть — он должен соответствовать IMeasurementUnits
-export interface IMeasurementData {
+export interface IMeasurements {
   [lang: string]: IMeasurementUnits;
 }
 

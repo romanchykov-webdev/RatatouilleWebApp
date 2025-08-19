@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import {
   Card,
@@ -125,7 +124,7 @@ const SingUp: React.FC = () => {
   };
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
       <div className="flex items-center justify-center ">
         <Card style={shadowBox()} className="w-full max-w-sm">
@@ -214,7 +213,7 @@ const SingUp: React.FC = () => {
           </CardFooter>
         </Card>
       </div>
-    </WrapperApp>
+    </section>
   );
 };
 export default SingUp;
