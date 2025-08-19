@@ -5,13 +5,14 @@ import { AppDispatch } from '@/store';
 import { Clock, Users, Flame, Layers } from 'lucide-react';
 import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
-import RecipeMetaItem from '@/components/RecipeMeta/RecipeMetaItem';
-import SelectedMetaData from '@/components/RecipeMeta/SelectedMetaData/SelectedMetaData';
+import RecipeMetaItem from '@/components/RecipeComponent/RecipeMetaItem';
+import SelectedMetaData from '@/components/CreateNewRecipeScreen/RecipeMeta/SelectedMetaData/SelectedMetaData';
 import { IMetaData } from '@/types/recipeMeta.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addRecipeMeta } from '@/store/slices/createNewRecipeSlice';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
+import { IMetaDataByCreateRecipe } from '@/types';
 
 interface IRecipeMetaProps {
   dispatch?: AppDispatch;
@@ -28,7 +29,7 @@ const RecipeMetaComponents: React.FC<IRecipeMetaProps> = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [metaData, setMetaData] = useState<IMetaData>({
+  const [metaData, setMetaData] = useState<IMetaDataByCreateRecipe>({
     time: 0,
     serv: 0,
     cal: 0,
@@ -175,4 +176,5 @@ const RecipeMetaComponents: React.FC<IRecipeMetaProps> = ({
     </article>
   );
 };
+
 export default RecipeMetaComponents;

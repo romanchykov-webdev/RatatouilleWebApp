@@ -12,12 +12,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import { shadowBox } from '@/helpers/shadowBoxStyle';
 import InputLogRes from '@/components/Inputs/InputLogRes';
 import { Loader2 } from 'lucide-react';
-import { logInUser } from '@/store/thunks/logInUserThunks';
+import { logInUserThunk } from '@/store/thunks/logInUserThunks';
 import { z } from 'zod';
 import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
@@ -53,7 +52,7 @@ export default function Login() {
       loginSchema.parse(form);
       // Вызов thunk для логина
       const result = await dispatch(
-        logInUser({ email: form.email, password: form.password }),
+        logInUserThunk({ email: form.email, password: form.password }),
       ).unwrap();
 
       if (!result.success) {
@@ -105,7 +104,7 @@ export default function Login() {
   };
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
       <div className="flex items-center justify-center ">
         <Card style={shadowBox()} className="w-full max-w-sm">
@@ -187,6 +186,6 @@ export default function Login() {
           </CardFooter>
         </Card>
       </div>
-    </WrapperApp>
+    </section>
   );
 }

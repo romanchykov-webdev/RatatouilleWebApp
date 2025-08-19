@@ -3,17 +3,15 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { AppDispatch, RootState } from '@/store';
-import { Button } from '@/components/ui/button';
-// import { IUserProfile } from '@/types';
-import { IMeasurement } from '@/types/createNewRecipeScreen.types';
 import { removeIngredient } from '@/store/slices/createNewRecipeSlice';
 import { usePathname } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import IngredientItem from '@/components/IngredientsWrapper/IngredientItem';
 import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
+import { IMeasurements } from '@/types';
 
 interface IIngredientsWrapperProps {
-  measurements: IMeasurement;
+  measurements: IMeasurements;
   dispatch?: AppDispatch;
   userLangStore: string;
 }
@@ -57,37 +55,22 @@ const IngredientsWrapper: React.FC<IIngredientsWrapperProps> = ({
       dispatch(removeIngredient(idx));
     }
   };
-
+  // console.log('selectedLang', selectedLang);
   return (
     <article className="fllex flex-col gap-y-2 items-center justify-between relative">
       {ingredientsStore && <SkeletonCustom dependency={ingredientsStore} />}
       {/*buttons lang*/}
-      {isCreateRecipe && (
-        // <div
-        //   className={`flex flex-wrap items-center justify-around  ${ingredientsStore && 'mb-5'}`}
-        // >
-        //   {languagesStore?.length > 0
-        //     ? languagesStore?.map(l => (
-        //         <Button
-        //           key={l.name}
-        //           onClick={() => handlerChangeLang(l.name)}
-        //           className={`capitalize ${l.name === selectedLang && 'bg-yellow-500'}  hover:bg-yellow-300`}
-        //         >
-        //           {l.name}
-        //         </Button>
-        //       ))
-        //     : null}
-        // </div>
-        <ButtonsLangSelected
-          langRecipe={languagesStore}
-          selectedLang={selectedLang}
-          handlerChangeLang={handlerChangeLang}
-        />
-      )}
+      {/*{isCreateRecipe && (*/}
+      <ButtonsLangSelected
+        langRecipe={languagesStore}
+        selectedLang={selectedLang}
+        handlerChangeLang={handlerChangeLang}
+      />
+      {/*)}*/}
 
       <IngredientItem
         ingredientsStore={ingredientsStore}
-        selectedLang={selectedLang}
+        isActiveLang={selectedLang}
         measurements={measurements}
         isCreateRecipe={isCreateRecipe}
         handlerRemoveIng={handlerRemoveIng}

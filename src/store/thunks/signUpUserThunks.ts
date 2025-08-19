@@ -1,8 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../../api/supabase';
-import { AuthError } from '@supabase/auth-js';
-import { IUserProfile } from '@/types';
-import { PostgrestError } from '@supabase/supabase-js';
 import { login } from '@/store/slices/isAuthSlice';
 
 interface SignUpPayload {
@@ -15,53 +12,51 @@ interface SignUpResponse {
   error?: string | null;
 }
 
-export const signUpUser = createAsyncThunk<SignUpResponse, SignUpPayload>(
+export const signUpUserThunk = createAsyncThunk<SignUpResponse, SignUpPayload>(
   'auth/signUpUser',
-  async ({ email, password }, { dispatch }) => {
+  async ({ email, password }, { rejectWithValue, dispatch }) => {
     try {
-      // Регистрация
+      // Регистрация пользователя
       const { data, error } = await supabase.auth.signUp({ email, password });
 
       if (error) {
-        throw new Error((error as AuthError).message);
+        return rejectWithValue(error.message);
       }
 
       const user = data.user;
-
-      if (!user) {
-        throw new Error('User not created');
-      }
-      if (!user.email) {
-        throw new Error('User email is undefined');
+      if (!user?.email) {
+        return rejectWithValue('Email пользователя не определен');
       }
 
-      // Получение профиля
-      const { data: profileData, error: fetchProfileError } = (await supabase
+      // Получение профиля пользователя
+      const { data: profileData, error: fetchProfileError } = await supabase
         .from('users')
         .select('*')
         .eq('id', user.id)
-        .single()) as { data: IUserProfile | null; error: PostgrestError | null };
+        .single();
 
       if (fetchProfileError || !profileData) {
-        throw new Error(fetchProfileError?.message || 'Профиль пользователя не найден');
+        return rejectWithValue(
+          fetchProfileError?.message || 'Профиль пользователя не найден',
+        );
       }
 
       dispatch(
         login({
-          userId: profileData.userId,
-          userName: profileData.userName,
-          userAvatar: profileData.userAvatar,
-          userEmail: user.email,
-          lang: profileData.lang,
-          userTheme: profileData.userTheme,
+          id: profileData.id,
+          user_name: profileData.user_name,
+          avatar: profileData.avatar,
+          email: user.email,
+          appLang: profileData.appLang,
+          theme: profileData.theme,
           subscribers: profileData.subscribers,
         }),
       );
 
       return { success: true, error: null };
-    } catch (error: unknown) {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
-      return { success: false, error: errorMessage };
+      return rejectWithValue(errorMessage);
     }
   },
 );

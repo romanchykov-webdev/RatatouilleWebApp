@@ -4,7 +4,6 @@ import React, { ChangeEvent, JSX, RefObject, useEffect, useRef, useState } from 
 import { AppDispatch } from '@/store';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { IIngredient, ILanguage } from '@/types/createNewRecipeScreen.types';
 import { ImagePlus } from 'lucide-react';
 import { useImageUpload } from '@/helpers/hooks/useImageUpload';
 import toast from 'react-hot-toast';
@@ -19,12 +18,13 @@ import {
 } from '@/components/ui/carousel';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import ButtonsLangSelected from '@/components/Buttons/ButtonsLangSelected';
+import { IIngredientsByCreateRecipe, ILanguageByCreateRecipe } from '@/types';
 
 interface IInstructionWrapperProps {
   dispatch: AppDispatch;
-  languagesStore: ILanguage[];
+  languagesStore: ILanguageByCreateRecipe[];
   userLangStore: string;
-  ingredientsStore: IIngredient[];
+  ingredientsStore: IIngredientsByCreateRecipe[];
 }
 
 const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
@@ -51,15 +51,23 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
   const [emblaApi, setEmblaApi] = useState<CarouselApi | undefined>();
 
   // Инициализация языка
+  // useEffect(() => {
+  //   if (!emblaApi || !userLangStore || languagesStore.length === 0) return;
+  //
+  //   const index = languagesStore.findIndex(l => l.name === userLangStore);
+  //   if (index !== -1) {
+  //     requestAnimationFrame(() => {
+  //       emblaApi.scrollTo(index);
+  //       setSelectedLang(userLangStore);
+  //     });
+  //   }
+  // }, [emblaApi, userLangStore, languagesStore]);
   useEffect(() => {
-    if (!emblaApi || !userLangStore || languagesStore.length === 0) return;
-
+    if (!emblaApi || !userLangStore) return;
     const index = languagesStore.findIndex(l => l.name === userLangStore);
     if (index !== -1) {
-      requestAnimationFrame(() => {
-        emblaApi.scrollTo(index);
-        setSelectedLang(userLangStore);
-      });
+      emblaApi.scrollTo(index);
+      setSelectedLang(userLangStore);
     }
   }, [emblaApi, userLangStore, languagesStore]);
 
@@ -77,7 +85,7 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
 
   const handlerAddImage = () => {
     if (images.length >= 5) {
-      toast.success('5 images maximum ');
+      toast.error('5 images maximum ');
       return;
     }
     fileInputRef.current?.click();
@@ -85,15 +93,9 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
 
   // ad to store
   const handlerAddStep = async () => {
-    console.log('instructions', instructions);
-    console.log('languagesStore', languagesStore);
-    // if (!instructions[selectedLang]) {
-    //   toast.error('Введите инструкцию');
-    //   return;
-    // }
     const imagesUrl = images.map(item => item.base64);
 
-    dispatch(addInstruction({ lang: instructions, images: imagesUrl }));
+    dispatch(addInstruction({ ...instructions, images: imagesUrl }));
     // Очищаем текст для текущего языка и изображения
     setInstructions({});
     clearImages();
@@ -115,7 +117,6 @@ const InstructionWrapper: React.FC<IInstructionWrapperProps> = ({
       <h6 className="text-center">Add instructions</h6>
 
       {/* Кнопки для переключения языков */}
-
       <ButtonsLangSelected
         langRecipe={languagesStore}
         selectedLang={selectedLang}

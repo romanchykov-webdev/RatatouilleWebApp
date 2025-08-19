@@ -2,7 +2,6 @@
 
 import React from 'react';
 import HeaderComponent from '@/components/Header/headerComponent';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
@@ -13,7 +12,7 @@ const SearchScreen: React.FC = () => {
   const debounceValue = useDebounce(query);
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
 
       <div>
@@ -21,7 +20,7 @@ const SearchScreen: React.FC = () => {
         <p>Введённый запрос: {debounceValue || 'Запрос не указан'}</p>
         {/* Логика для отображения результатов поиска на основе query */}
       </div>
-    </WrapperApp>
+    </section>
   );
 };
 export default SearchScreen;

@@ -2,31 +2,31 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { supabase } from '../../../api/supabase';
 import {
-  IArea,
-  IIngredient,
-  IInstruction,
-  ILanguage,
-  ISocialRenderProps,
-  ITitle,
+  IAreaByCreateRecipe,
+  IIngredientsByCreateRecipe,
+  IInstructionsByCreateRecipe,
+  ILanguageByCreateRecipe,
+  ISocialByCreateRecipe,
+  ITitleByCreateRecipe,
+  IMetaDataByCreateRecipe,
 } from '@/types/createNewRecipeScreen.types';
-import { IMetaData } from '@/types/recipeMeta.types';
 
 // Окончательная модель для вставки рецепта
 export interface IRecipeCreate {
-  authorId: string; // id автора рецепта
-  category: string; // основная категория
+  authorId: string; // id автора рецепта-
+  category: string; // основная категория -
   subCategory: string; // подкатегория
-  imageHeader: string; // картинка заголовка (base64 или url)
-  languages: ILanguage[]; // массив языковых данных
-  title: ITitle[]; // массив заголовков
-  area: IArea[]; // массив областей
+  image_header: string; // картинка заголовка  -
+  languages: ILanguageByCreateRecipe[]; // массив языковых данных-
+  title: ITitleByCreateRecipe[]; // массив заголовков
+  area: IAreaByCreateRecipe[]; // массив областей/-
   tags: string[]; // массив тегов
-  recipeMeta: IMetaData; // метаданные рецепта
-  ingredients: IIngredient[]; // ингредиенты
-  instruction: IInstruction[]; // пошаговая инструкция
-  socialLinks: ISocialRenderProps; // соц. ссылки
+  recipe_metrics: IMetaDataByCreateRecipe; // метаданные рецепта -
+  ingredients: IIngredientsByCreateRecipe[]; // ингредиенты -
+  instructions: IInstructionsByCreateRecipe[]; // пошаговая инструкция -
+  social_links: ISocialByCreateRecipe;
   user_name: string;
-  avatar: string;
+  avatar: string; //-
 }
 
 export const addRecipeThunk = createAsyncThunk(
@@ -38,17 +38,15 @@ export const addRecipeThunk = createAsyncThunk(
       const payload = {
         category: recipeData.category,
         category_id: recipeData.category,
-        image_header: recipeData.imageHeader,
+        image_header: recipeData.image_header,
         area: recipeData.area,
         title: recipeData.title,
         rating: 0,
         likes: 0,
         comments: 0,
-        recipe_metrics: recipeData.recipeMeta,
+        recipe_metrics: recipeData.recipe_metrics,
         ingredients: recipeData.ingredients,
-        instructions: recipeData.instruction,
-        video: recipeData.socialLinks.youtube,
-        source_reference: recipeData.socialLinks.blog,
+        instructions: recipeData.instructions,
         tags: recipeData.tags,
         published_id: recipeData.authorId,
         published_user: {
@@ -57,12 +55,14 @@ export const addRecipeThunk = createAsyncThunk(
           avatar: recipeData.avatar,
         },
         point: recipeData.subCategory,
-        link_copyright: recipeData.socialLinks.blog,
-        map_coordinates: recipeData.socialLinks.coordinates,
+        link_copyright: recipeData.social_links.link_copyright,
+        map_coordinates: recipeData.social_links.map_coordinates,
+        video: recipeData.social_links.video,
+        source_reference: recipeData.social_links.source_reference,
         social_links: {
-          facebook: recipeData.socialLinks.facebook,
-          instagram: recipeData.socialLinks.instagram,
-          tiktok: recipeData.socialLinks.tiktok,
+          facebook: recipeData.social_links.facebook,
+          instagram: recipeData.social_links.instagram,
+          tiktok: recipeData.social_links.tiktok,
         },
       };
 

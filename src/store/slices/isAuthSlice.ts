@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserProfile, INotAuthorized, IUserProfileUpdate } from '@/types';
 import { updateUserProfileThunk } from '@/store/thunks/updateUserProfileThunk';
 
-// type AuthState = UserProfile | INotAuthorized;
+type AuthState = IUserProfile | INotAuthorized;
 
-const initialState: INotAuthorized = {
+const initialState: AuthState = {
   isAuth: false,
+  appLang: '',
 };
 
 const authSlice = createSlice({
@@ -13,43 +14,47 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<Omit<IUserProfile, 'isAuth'>>) {
+      // localStorage.setItem('isAuth', JSON.stringify(action.payload));
+      // console.log('LOGIN', action.payload);
       return {
         ...action.payload,
         isAuth: true,
       } as IUserProfile;
     },
     logout() {
-      return initialState as INotAuthorized;
+      return {
+        isAuth: false,
+        appLang: '', // или сохрани appLang, если нужно
+      } as INotAuthorized;
+    },
+    lanAppForNoAuthorization(state, action: PayloadAction<string>) {
+      if (!state.isAuth) {
+        state.appLang = action.payload;
+      }
     },
   },
   extraReducers: builder => {
-    builder
-      // .addCase(updateUserProfileThunk.pending, (_state) => {
-      //   // Можно добавить статус загрузки, если нужно
-      // })
-      .addCase(
-        updateUserProfileThunk.fulfilled,
-        (
-          state,
-          action: PayloadAction<IUserProfileUpdate | { success: boolean; error: string }>,
-        ) => {
-          if ((state as IUserProfile).isAuth && 'userId' in action.payload) {
-            return {
-              ...(state as IUserProfile),
-              userName: action.payload.userName,
-              userAvatar: action.payload.userAvatar,
-              lang: action.payload.lang,
-              userTheme: action.payload.userTheme,
-            } as IUserProfile;
-          }
-          return state;
-        },
-      )
-      .addCase(updateUserProfileThunk.rejected, (_state, action) => {
-        console.error('Update profile error:', action.payload);
-      });
+    builder.addCase(
+      updateUserProfileThunk.fulfilled,
+      (
+        state,
+        action: PayloadAction<IUserProfileUpdate | { success: boolean; error: string }>,
+      ) => {
+        if (state.isAuth && 'id' in action.payload) {
+          return {
+            ...(state as IUserProfile),
+            user_name: action.payload.user_name,
+            avatar: action.payload.avatar,
+            appLang: action.payload.appLang,
+            theme: action.payload.theme,
+            isAuth: true,
+          } as IUserProfile;
+        }
+        return state;
+      },
+    );
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, lanAppForNoAuthorization } = authSlice.actions;
 export default authSlice.reducer;

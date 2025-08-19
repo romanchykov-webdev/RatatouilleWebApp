@@ -4,11 +4,18 @@ import React from 'react';
 import { Heart, HeartHandshake, MessageCircle, Star } from 'lucide-react';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 import { useShadowText } from '@/helpers/hooks/useShadowText';
-import { IFooterCartItemProps } from '@/components/SectionList/CartItem.types';
+
+interface IFooterCartItemProps {
+  title: string;
+  likes: number;
+  comments: number;
+  rating: number;
+  isLiked: boolean;
+}
 
 const FooterCartItem: React.FC<IFooterCartItemProps> = ({
   title,
-  like,
+  likes,
   comments,
   rating,
   isLiked,
@@ -49,7 +56,7 @@ const FooterCartItem: React.FC<IFooterCartItemProps> = ({
           )}
 
           <span className="absolute text-amber-300 " style={{ fontSize: 8 }}>
-            {formatNumberToK(like)}
+            {formatNumberToK(likes ?? 0)}
           </span>
         </div>
       </div>

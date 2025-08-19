@@ -23,11 +23,11 @@ const ChangeUserTheme: React.FC<IUserProfileEditProps> = ({
       <AccordionContent className="flex flex-col gap-4 text-balance">
         <RadioGroup
           // defaultValue={userDataUpdate?.userTheme}
-          value={userDataUpdate?.userTheme}
+          value={userDataUpdate?.theme}
           onValueChange={value =>
             setUserDataUpdate({
               ...userDataUpdate,
-              userTheme: value,
+              theme: value,
             })
           }
         >

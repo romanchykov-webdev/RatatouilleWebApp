@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import {
   Card,
@@ -20,7 +19,7 @@ import { Loader2 } from 'lucide-react';
 import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { signUpUser } from '@/store/thunks/signUpUserThunks';
+import { signUpUserThunk } from '@/store/thunks/signUpUserThunks';
 import toast from 'react-hot-toast';
 
 const signUpSchema = z
@@ -79,7 +78,7 @@ const SingUp: React.FC = () => {
       signUpSchema.parse(form);
       // Вызов thunk для регистрации
       const result = await dispatch(
-        signUpUser({
+        signUpUserThunk({
           email: form.email,
           password: form.password,
         }),
@@ -125,7 +124,7 @@ const SingUp: React.FC = () => {
   };
 
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
       <div className="flex items-center justify-center ">
         <Card style={shadowBox()} className="w-full max-w-sm">
@@ -214,7 +213,7 @@ const SingUp: React.FC = () => {
           </CardFooter>
         </Card>
       </div>
-    </WrapperApp>
+    </section>
   );
 };
 export default SingUp;
