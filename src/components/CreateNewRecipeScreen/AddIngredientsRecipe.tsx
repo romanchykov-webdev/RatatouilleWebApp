@@ -1,45 +1,45 @@
 'use client';
 
 import React, { ChangeEvent, JSX, useEffect, useState } from 'react';
-import { AppDispatch, RootState } from '@/store';
-import {
-  IIngredient,
-  ILanguage,
-  IMeasurement,
-} from '@/types/createNewRecipeScreen.types';
+import { AppDispatch } from '@/store';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/Modal/modal';
-import { useAppSelector } from '@/store/hooks';
-import { IUserProfile } from '@/types';
+import {
+  IIngredientsByCreateRecipe,
+  ILanguageByCreateRecipe,
+  IMeasurements,
+  IMeasurementUnits,
+} from '@/types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { addIngredients } from '@/store/slices/createNewRecipeSlice';
-import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import { IMetaData } from '@/types/recipeMeta.types';
 
 interface IIngredientsRecipeProps {
   dispatch: AppDispatch;
-  recipeMetaStore: IMetaData;
-  languagesStore: ILanguage[];
-  measurements: IMeasurement;
+  languagesStore: ILanguageByCreateRecipe[];
+  measurements: IMeasurements;
+  ingredientsStore: IIngredientsByCreateRecipe[];
+  userLangStore: string;
 }
 
-const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
+const AddIngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
   dispatch,
-  recipeMetaStore,
   languagesStore,
   measurements,
+  userLangStore,
+  ingredientsStore,
 }: IIngredientsRecipeProps): JSX.Element => {
   const [inputValueModal, setInputValueModal] = useState(0);
+
   const [selectedMeasure, setSelectedMeasure] = useState<{
-    meas: string | null;
+    meas: keyof IMeasurementUnits | null;
     val: number;
   }>({
     meas: null,
     val: 0,
   });
-
+  // console.log('recipeMetaStore', recipeMetaStore);
   // Синхронизация selectedMeasure.val с inputValueModal
   useEffect(() => {
     if (selectedMeasure.meas !== null && inputValueModal !== selectedMeasure.val) {
@@ -48,23 +48,12 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
         val: inputValueModal,
       }));
     }
-  }, [inputValueModal, selectedMeasure.meas]);
-
-  const ingredientsStore = useAppSelector(
-    (state: RootState) => state.createNewRecipe.ingredients,
-  );
-
-  const userLang: IUserProfile['lang'] = useAppSelector(
-    (state: RootState) => (state.user as IUserProfile).lang,
-  );
+  }, [inputValueModal, selectedMeasure.meas, selectedMeasure.val]);
 
   const [ingredient, setIngredient] = useState<Record<string, string>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   // console.log('ingredient ', JSON.stringify(ingredient, null, 2));
   // console.log('languagesStore', JSON.stringify(languagesStore, null, 2));
-
-  const isVisible =
-    recipeMetaStore.time > 0 && recipeMetaStore.serv > 0 && recipeMetaStore.cal > 0;
 
   const handleChange = (langName: string, value: string) => {
     setIngredient(prev => ({ ...prev, [langName]: value }));
@@ -94,8 +83,8 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
       });
 
       // Создаем новый ингредиент
-      const newIngredient: IIngredient = {
-        lang: userLang,
+      const newIngredient: IIngredientsByCreateRecipe = {
+        lang: userLangStore,
         value: translations,
         mera: selectedMeasure.meas!,
         ves: selectedMeasure.val,
@@ -124,7 +113,7 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
     );
   };
 
-  const handlerAddMeasure = (key: string) => {
+  const handlerAddMeasure = (key: keyof IMeasurementUnits) => {
     if (inputValueModal === 0) return;
     setSelectedMeasure({
       meas: key,
@@ -139,11 +128,10 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
 
   // button save in modal !disabled
   const buttonSaveIsActive: boolean =
-    selectedMeasure.meas !== '' && selectedMeasure.val > 0;
+    selectedMeasure.meas !== null && selectedMeasure.val > 0;
 
   return (
     <article className="relative ">
-      <SkeletonCustom dependency={isVisible} />
       <h6 className="text-center mb-2">Add ingredients</h6>
       <div className="flex flex-col gap-y-2 mb-5">
         {languagesStore?.map(lang => {
@@ -166,7 +154,7 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
         {selectedMeasure.meas !== null && selectedMeasure.val > 0 && (
           <div>
             <span>{selectedMeasure.val}:</span>
-            <span>{measurements[userLang]?.[selectedMeasure.meas]}</span>
+            <span>{measurements[userLangStore]?.[selectedMeasure.meas]}</span>
           </div>
         )}
 
@@ -187,7 +175,6 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
           </Button>
         </div>
       </div>
-
       {/* Модальное окно */}
       <Modal
         isOpen={isModalOpen}
@@ -222,15 +209,19 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
           <p>Select a unit of measurement</p>
 
           <div className="flex flex-col items-center gap-y-2">
-            {Object.entries(measurements[userLang] || {}).map(([key, value]) => (
-              <Button
-                onClick={() => handlerAddMeasure(key)}
-                className={` w-full hover:bg-yellow-500 ${selectedMeasure.meas === key && 'bg-yellow-500'} `}
-                key={key}
-              >
-                {value}
-              </Button>
-            ))}
+            {Object.entries(measurements[userLangStore] || ({} as IMeasurementUnits)).map(
+              ([key, value]) => (
+                <Button
+                  key={key}
+                  onClick={() => handlerAddMeasure(key as keyof IMeasurementUnits)}
+                  className={`w-full hover:bg-yellow-500 ${
+                    selectedMeasure.meas === key ? 'bg-yellow-500' : ''
+                  }`}
+                >
+                  {value}
+                </Button>
+              ),
+            )}
           </div>
           {/* Кнопки */}
           <div className="flex justify-end gap-4">
@@ -251,4 +242,4 @@ const IngredientsRecipe: React.FC<IIngredientsRecipeProps> = ({
     </article>
   );
 };
-export default IngredientsRecipe;
+export default AddIngredientsRecipe;

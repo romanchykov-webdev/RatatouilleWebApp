@@ -8,8 +8,6 @@ import { clearQuery } from '@/store/slices/searchSlice';
 import { useDispatch } from 'react-redux';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { useShadowText } from '@/helpers/hooks/useShadowText';
-// import { shadowBox } from '@/helpers/shadowBoxStyle';
-// import { shadowText } from '@/helpers/shadowTextStyle';
 
 export default function Logo() {
   const dispatch = useDispatch();

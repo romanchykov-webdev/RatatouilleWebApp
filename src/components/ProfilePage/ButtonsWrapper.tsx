@@ -52,7 +52,7 @@ const ButtonsWrapper: React.FC<ButtonsWrapperProps> = ({ router }) => {
       {/*my recipe*/}
       <ButtonItem
         title={'Мои рецепты'}
-        pathScreen={'/myRecipes'}
+        pathScreen={'/recipesByOwner'}
         icon={FolderPlus}
         handlePath={handlePath}
         color={`text-black`}

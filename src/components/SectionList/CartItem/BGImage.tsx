@@ -2,15 +2,19 @@
 
 import React from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Skeleton } from '@/components/ui/skeleton';
-import { IBGImageCartItemProps } from '@/components/SectionList/CartItem.types';
+import LoaderCustomAbsolute from '@/components/Loaders/LoaderCustomAbsolute';
+import { IItem } from '@/components/SectionList/CartItem.types';
+
+interface IBGImageCartItemProps {
+  bdImg: IItem['image'];
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+}
 
 const BGImage: React.FC<IBGImageCartItemProps> = ({ bdImg, isLoading, setIsLoading }) => {
   return (
     <Avatar className="w-full h-full rounded-none absolute top-0 left-0 right-0 bottom-0">
-      {isLoading && (
-        <Skeleton className="w-full h-full top-0 left-0 right-0 bottom-0 absolute bg-neutral-500" />
-      )}
+      {isLoading && <LoaderCustomAbsolute />}
       <AvatarImage
         src={bdImg}
         className={`w-full h-full  ${isLoading ? 'hidden' : 'block'}`}

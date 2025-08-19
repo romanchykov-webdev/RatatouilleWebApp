@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import HeaderComponent from '@/components/Header/headerComponent';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 
 import { Modal } from '@/components/Modal/modal';
 import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
@@ -43,17 +42,17 @@ export default function Profile() {
       closeModal();
     }
   };
-
+  // console.log('user.userAvatar', user.userAvatar);
   return (
-    <WrapperApp>
+    <section>
       <HeaderComponent />
       {/*top section*/}
       <div className="flex flex-col gap-y-10 ">
         <HeaderPage title={'Профиль'} openModal={openModal} router={router} />
         {/*avatar*/}
         <UserAvatarComponent
-          userName={user.userName}
-          userAvatar={user.userAvatar}
+          userName={user.user_name}
+          userAvatar={user.avatar}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
         />
@@ -87,6 +86,6 @@ export default function Profile() {
           </div>
         </div>
       </Modal>
-    </WrapperApp>
+    </section>
   );
 }

@@ -2,18 +2,22 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { AppDispatch } from '@/store';
-import { IArea, ILanguage, ITitle } from '@/types/createNewRecipeScreen.types';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
 import { Input } from '@/components/ui/input';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
+import {
+  IAreaByCreateRecipe,
+  ILanguageByCreateRecipe,
+  ITitleByCreateRecipe,
+} from '@/types';
 
 interface IAddAreaProps {
   dispatch: AppDispatch;
-  languagesStore: ILanguage[];
-  titleStore: ITitle[];
+  languagesStore: ILanguageByCreateRecipe[];
+  titleStore: ITitleByCreateRecipe[];
 }
 
 const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore }) => {
@@ -21,7 +25,7 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
   const [areaByLang, setAreaByLang] = useState<Record<string, string>>({});
 
   // Дебаунс значений
-  const debouncedArea = useDebounce(areaByLang);
+  const debouncedArea: Record<string, string> = useDebounce(areaByLang);
 
   // Обновление стейта при вводе
   const handleChange = (langName: string, value: string) => {
@@ -29,16 +33,37 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
   };
 
   // Диспатчим в redux, когда все поля заполнены и debounce отработал
+  // useEffect(() => {
+  //   const allFilled =
+  //     languagesStore.length > 0 &&
+  //     languagesStore.every(lang => debouncedArea[lang.name]?.trim());
+  //
+  //   if (allFilled) {
+  //     const areas: IAreaByCreateRecipe[] = languagesStore.map(lang => ({
+  //       lang: lang.name,
+  //       value: debouncedArea[lang.name],
+  //     }));
+  //
+  //     if (allFilled && Object.values(debouncedArea).some(v => v.trim() !== '')) {
+  //       dispatch(addArea(areas));
+  //     }
+  //   }
+  // }, [debouncedArea, dispatch, languagesStore]);
+
   useEffect(() => {
     const allFilled =
       languagesStore.length > 0 &&
       languagesStore.every(lang => debouncedArea[lang.name]?.trim());
 
     if (allFilled) {
-      const areas: IArea[] = languagesStore.map(lang => ({
-        lang: lang.name,
-        value: debouncedArea[lang.name],
-      }));
+      const areas: IAreaByCreateRecipe = languagesStore.reduce<Record<string, string>>(
+        (acc, lang) => {
+          acc[lang.name] = debouncedArea[lang.name];
+          return acc;
+        },
+        {},
+      );
+
       dispatch(addArea(areas));
     }
   }, [debouncedArea, dispatch, languagesStore]);
@@ -54,7 +79,9 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
               type="text"
               className="w-[90%]"
               value={areaByLang[lang.name] || ''}
-              onChange={e => handleChange(lang.name, e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleChange(lang.name, e.target.value)
+              }
               placeholder={`Write the name of the recipe ${lang.value}`}
             />
             <div className="capitalize text-lg">{lang.name}</div>

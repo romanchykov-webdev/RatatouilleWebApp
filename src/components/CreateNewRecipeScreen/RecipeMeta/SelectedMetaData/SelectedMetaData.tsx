@@ -2,9 +2,9 @@
 
 import React, { ChangeEvent, JSX } from 'react';
 import { IMetaData, IMetaDataTimeProps } from '@/types/recipeMeta.types';
-import IconsSelected from '@/components/RecipeMeta/IconsSelected';
-import RangLevel from '@/components/RecipeMeta/SelectedMetaData/RangLevel';
-import RangeNumber from '@/components/RecipeMeta/SelectedMetaData/RangeNumber';
+import IconsSelected from '@/components/CreateNewRecipeScreen/RecipeMeta/IconsSelected';
+import RangLevel from '@/components/CreateNewRecipeScreen/RecipeMeta/SelectedMetaData/RangLevel';
+import RangeNumber from '@/components/CreateNewRecipeScreen/RecipeMeta/SelectedMetaData/RangeNumber';
 
 const SelectedMetaData: React.FC<IMetaDataTimeProps> = ({
   setMetaData,

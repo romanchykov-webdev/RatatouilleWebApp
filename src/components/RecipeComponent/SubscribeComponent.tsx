@@ -1,29 +1,35 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React, { JSX, useState } from 'react';
 import { Users } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { formatNumberToK } from '@/helpers/formatNumberToK';
 import { Button } from '@/components/ui/button';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
 import toast from 'react-hot-toast';
+import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
 
 interface ISubscribeComponentProps {
   ownerRecipe: {
-    avatar: string;
-    name: string;
-    subscribers: number;
-    ownerId: string;
+    avatar: string | null;
+    user_name: string;
+    subscribers?: number;
+    id?: string;
   };
-  userId: string;
+  userId: string | null;
 }
 
 const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
   ownerRecipe,
   userId,
 }: ISubscribeComponentProps): JSX.Element => {
+  const [isModal, setIsModal] = useState(false);
+  // console.log('SubscribeComponent ownerRecipe', ownerRecipe);
+  const router = useRouter();
+  // console.log('SubscribeComponent userId', userId);
+
   const { shadowBox } = useShadowBox();
 
   const pathName = usePathname();
@@ -34,14 +40,21 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
   // console.log('isDisable', +isDisable);
 
   const handlerSubscribe = async () => {
-    if (ownerRecipe.ownerId === userId) {
+    console.log('SubscribeComponent handler subscribe');
+    if (ownerRecipe.id === userId) {
       toast.success('This recipe was published by you');
+    }
+    if (userId === null) {
+      setIsModal(true);
+      toast.error('Only registered users can mark a recipe');
     }
     //   запрос на подписку
   };
 
   const handlerGoToOwner = () => {
     console.log('Go to owner');
+    // router.push('/recipesByOwner');
+    router.push(`/recipesByOwner?${encodeURIComponent(`${ownerRecipe.id}`)}`);
   };
 
   return (
@@ -54,22 +67,25 @@ const SubscribeComponent: React.FC<ISubscribeComponentProps> = ({
           className="w-[50px] h-[50px] cursor-pointer"
           style={shadowBox()}
         >
-          <AvatarImage src={ownerRecipe.avatar} />
+          {/*{ownerRecipe.avatar && <SkeletonCustom dependency={ownerRecipe.avatar} />}*/}
+          <AvatarImage src={ownerRecipe.avatar ?? '/default-avatar.png'} />
         </Avatar>
 
-        {/*  description*/}
+        {/*  /!*  description*!/*/}
         <div>
-          <h6 className="capitalize">{ownerRecipe.name}</h6>
+          <h6 className="capitalize">{ownerRecipe.user_name}</h6>
           <div className="flex items-center gap-2">
-            <Users /> {formatNumberToK(ownerRecipe.subscribers)}
+            <Users /> {formatNumberToK(ownerRecipe.subscribers ?? 0)}
           </div>
         </div>
       </div>
 
-      {/*Button subscribe*/}
+      {/*/!*Button subscribe*!/*/}
       <Button onClick={handlerSubscribe} className="bg-green-300 hover:bg-yellow-500">
         Subscribe
       </Button>
+
+      <ModalLoginRes isOpen={isModal} onCloseAction={() => setIsModal(false)} />
     </article>
   );
 };

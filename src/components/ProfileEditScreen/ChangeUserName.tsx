@@ -22,9 +22,9 @@ const ChangeUserName: React.FC<IUserProfileEditProps> = ({
       <AccordionContent className="flex flex-col gap-4 text-balance">
         <Input
           type="text"
-          value={userDataUpdate.userName}
+          value={userDataUpdate.user_name}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setUserDataUpdate({ ...userDataUpdate, userName: e.target.value })
+            setUserDataUpdate({ ...userDataUpdate, user_name: e.target.value })
           }
         />
       </AccordionContent>

@@ -17,7 +17,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   return (
     <section
       style={shadowBox()}
-      className={`w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col relative   gap-y-10 ${styleWrapper ?? ''}`}
+      className={`w-full  h-auto bg-neutral-500 p-2 rounded-[10px] flex flex-col relative  relative  gap-y-10 ${styleWrapper ?? ''}`}
     >
       {children}
     </section>

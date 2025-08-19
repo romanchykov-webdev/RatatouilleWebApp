@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import WrapperApp from '@/components/Wrappers/wrapperApp';
 import HeaderComponent from '@/components/Header/headerComponent';
 import BreadcrumbsComponent from '@/components/Breadcrumbs/BreadcrumbsComponent';
-import { supabase } from '../../../../api/supabase';
 import SelectedCategory from '@/components/CreateNewRecipeScreen/SelectedCategory';
 import AddHeaderImage from '@/components/CreateNewRecipeScreen/AddHeaderImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -13,100 +11,74 @@ import { RootState } from '@/store';
 import CreateTitleRecipe from '@/components/CreateNewRecipeScreen/CreateTitleRecipe';
 import AddArea from '@/components/CreateNewRecipeScreen/AddArea';
 import AddTags from '@/components/CreateNewRecipeScreen/AddTags';
-import RecipeMetaComponents from '@/components/RecipeMeta/RecipeMetaComponents';
-import { usePathname, useRouter } from 'next/navigation';
-import IngredientsRecipe from '@/components/CreateNewRecipeScreen/IngredientsRecipe';
+import RecipeMetaComponents from '@/components/CreateNewRecipeScreen/RecipeMeta/RecipeMetaComponents';
+import { usePathname } from 'next/navigation';
+import AddIngredientsRecipe from '@/components/CreateNewRecipeScreen/AddIngredientsRecipe';
 import SectionWrapper from '@/components/CreateNewRecipeScreen/SectionWrapper';
 import IngredientsWrapper from '@/components/IngredientsWrapper/IngredientsWrapper';
-import { ICategory, IMeasurement } from '@/types/createNewRecipeScreen.types';
-import { IUserProfile } from '@/types';
+import {
+  ICategoriesAndSubcategories,
+  IInstructionsByCreateRecipe,
+  IMeasurements,
+  IUserProfile,
+} from '@/types';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import InstructionWrapper from '@/components/Instruction/InstructionWrapper';
-import Instruction from '@/components/Instruction/Instruction';
+import AddInstructions from '@/components/Instruction/InstructionWrapper';
 import AddSocialWrapper from '@/components/CreateNewRecipeScreen/AddSocialWrapper';
-import RecipeComponent from '@/components/RecipeComponent/RecipeComponent';
 import { addOwnerId, clearNewRecipeState } from '@/store/slices/createNewRecipeSlice';
 import { Button } from '@/components/ui/button';
-import { addRecipeThunk } from '@/store/thunks/createNewRecipeThunk';
 import { uploadBase64ToCloudinary } from '@/helpers/uploadBase64ToCloudinary';
 import toast from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import InstructionWrapper from '@/components/CreateNewRecipeScreen/InstructionWrapper';
+import { addRecipeThunk } from '@/store/thunks/createNewRecipeThunk';
 
 const CreateNewRecipe: React.FC = () => {
-  const [category, setCategory] = useState<ICategory[]>([]);
-  const [measurements, setMeasurements] = useState<IMeasurement>({});
-
   const [uploadRecipe, setUploadRecipe] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const dispatch = useAppDispatch();
+
+  const categoryStore: ICategoriesAndSubcategories[] = useAppSelector(
+    (state: RootState): ICategoriesAndSubcategories[] => state.allCategories.categories,
+  );
+
+  const measurementStore: IMeasurements = useAppSelector(
+    (state: RootState): IMeasurements => state.measurement,
+  );
+
   const createNewRecipe = useAppSelector((state: RootState) => state.createNewRecipe);
   const {
-    category: categoryStore,
-    subCategory: subCategoryStore,
-    imageHeader: imageHeaderStore,
+    category: categoryNewRecipe,
+    subCategory: subCategoryNewRecipe,
+    image_header: imageHeaderStore,
     languages: languagesStore,
     title: titleStore,
     area: ariaStore,
     tags: tagStore,
-    recipeMeta: recipeMetaStore,
+    recipe_metrics: recipeMetaStore,
     ingredients: ingredientsStore,
-    instruction: instructionStore,
-    socialLinks: socialLinkStore,
+    instructions: instructionStore,
   } = createNewRecipe;
 
   const pathName = usePathname();
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  // console.log('setSelectedFile', selectedFile);
   const user: IUserProfile = useAppSelector(
     (state: RootState) => state.user as IUserProfile,
   );
-  const { lang: userLangStore, userId, userAvatar, userName, subscribers } = user;
-
-  const getMeasurement = async () => {
-    const { data, error } = await supabase.from('measurement').select('lang');
-    if (error) {
-      console.error('Error fetching measurements:', error.message);
-      return;
-    }
-    if (data && data[0]?.lang) {
-      // console.log('data[0].lang', JSON.stringify(data[0].lang, null, 2));
-      setMeasurements(data[0].lang as IMeasurement);
-    } else {
-      console.warn('No measurement data found');
-      setMeasurements({});
-    }
-  };
-
-  const getCategory = async () => {
-    // const lang = userLangStore || 'en';
-    const { data, error } = await supabase
-      .from('categories_masonry')
-      .select('*')
-      .eq('lang', `${userLangStore}`);
-    if (error) {
-      console.error('Error fetching categories:', error.message);
-      return;
-    }
-    if (data && data.length > 0 && data[0]?.title) {
-      setCategory(data[0].title as ICategory[]);
-    } else {
-      console.warn('No category data found for lang:');
-      setCategory([]);
-    }
-  };
+  const {
+    appLang: userLangStore,
+    id: userId,
+    avatar: userAvatar,
+    user_name: userName,
+  } = user;
 
   useEffect(() => {
     dispatch(addOwnerId(userId));
-    getCategory();
-    getMeasurement();
-  }, [userLangStore, dispatch, userId]);
-
-  // const imageHeaderToPass =
-  //   typeof createNewRecipe.imageHeader === 'string' ? createNewRecipe.imageHeader : '';
+  }, [dispatch, userId]);
 
   //  Publish recipe
   const handlerPublish = async () => {
@@ -114,16 +86,16 @@ const CreateNewRecipe: React.FC = () => {
       setUploadRecipe(true);
       setUploadProgress(0);
 
-      const { instruction, imageHeader } = createNewRecipe;
+      const { instructions, image_header } = createNewRecipe;
 
       // Считаем все изображения
       const imagesToUpload = [];
 
-      if (imageHeader.startsWith('data:image')) {
-        imagesToUpload.push(imageHeader);
+      if (image_header.startsWith('data:image')) {
+        imagesToUpload.push(image_header);
       }
 
-      instruction.forEach(step => {
+      instructions.forEach((step: IInstructionsByCreateRecipe) => {
         if (step.images && step.images.length > 0) {
           step.images.forEach(img => {
             if (img.startsWith('data:image')) {
@@ -145,14 +117,14 @@ const CreateNewRecipe: React.FC = () => {
       };
 
       // Загружаем imageHeader
-      let imageHeaderUrl = imageHeader;
-      if (imageHeader.startsWith('data:image')) {
-        imageHeaderUrl = await uploadWithProgress(imageHeader);
+      let imageHeaderUrl = image_header;
+      if (image_header.startsWith('data:image')) {
+        imageHeaderUrl = await uploadWithProgress(image_header);
       }
 
       // Загружаем изображения в instruction
-      const updatedInstructions = await Promise.all(
-        instruction.map(async step => {
+      const updatedInstructions: IInstructionsByCreateRecipe[] = await Promise.all(
+        instructions.map(async (step: IInstructionsByCreateRecipe) => {
           if (step.images && step.images.length > 0) {
             const updatedImages = await Promise.all(
               step.images.map(async img => {
@@ -171,11 +143,13 @@ const CreateNewRecipe: React.FC = () => {
       // Формируем новый объект
       const newRecipeData = {
         ...createNewRecipe,
-        imageHeader: imageHeaderUrl,
-        instruction: updatedInstructions,
+        image_header: imageHeaderUrl,
+        instructions: updatedInstructions,
         user_name: userName,
         avatar: userAvatar,
       };
+
+      // console.log('pered otpravcoi newRecipeData', JSON.stringify(newRecipeData, null));
 
       dispatch(addRecipeThunk(newRecipeData));
     } catch (error) {
@@ -186,13 +160,13 @@ const CreateNewRecipe: React.FC = () => {
         dispatch(clearNewRecipeState());
         setUploadRecipe(false);
         setUploadProgress(0);
-        router.replace('/profile/create');
+        // router.replace('/profile/create');
       }, 500);
     }
   };
 
   return (
-    <WrapperApp>
+    <section className="flex flex-col gap-y-5">
       <HeaderComponent />
       <BreadcrumbsComponent />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -214,17 +188,15 @@ const CreateNewRecipe: React.FC = () => {
         {/*section 1*/}
         <SectionWrapper>
           <SelectedCategory
-            data={category}
             dispatch={dispatch}
             categoryStore={categoryStore}
-            subCategoryStore={subCategoryStore}
+            categoryNewRecipe={categoryNewRecipe}
+            subCategoryNewRecipe={subCategoryNewRecipe}
           />
           <AddHeaderImage
             dispatch={dispatch}
-            // setSelectedFile={setSelectedFile}
-            categoryStore={categoryStore}
             imageHeaderStore={imageHeaderStore}
-            subCategoryStore={subCategoryStore}
+            subCategoryStore={subCategoryNewRecipe}
           />
           <AddLanguages
             dispatch={dispatch}
@@ -255,11 +227,16 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 4*/}
         <SectionWrapper>
-          <IngredientsRecipe
+          {recipeMetaStore?.cal === 0 && (
+            <SkeletonCustom dependency={recipeMetaStore.cal} />
+          )}
+
+          <AddIngredientsRecipe
             dispatch={dispatch}
-            recipeMetaStore={recipeMetaStore}
             languagesStore={languagesStore}
-            measurements={measurements}
+            measurements={measurementStore}
+            ingredientsStore={ingredientsStore}
+            userLangStore={userLangStore}
           />
         </SectionWrapper>
 
@@ -267,7 +244,7 @@ const CreateNewRecipe: React.FC = () => {
         <SectionWrapper>
           {ingredientsStore.length > 0 ? (
             <IngredientsWrapper
-              measurements={measurements}
+              measurements={measurementStore}
               dispatch={dispatch}
               userLangStore={userLangStore}
             />
@@ -278,7 +255,7 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 6*/}
         <SectionWrapper>
-          <InstructionWrapper
+          <AddInstructions
             dispatch={dispatch}
             languagesStore={languagesStore}
             userLangStore={userLangStore}
@@ -288,54 +265,32 @@ const CreateNewRecipe: React.FC = () => {
 
         {/*section 7*/}
         <SectionWrapper>
-          {instructionStore.length === 0 ? (
-            <SkeletonCustom dependency={instructionStore} />
-          ) : (
-            <Instruction
-              dispatch={dispatch}
-              instructionStore={instructionStore}
-              userLangStore={userLangStore}
-            />
-          )}
+          <InstructionWrapper
+            instructionStore={instructionStore}
+            isActiveLang={userLangStore}
+            languagesStore={languagesStore}
+          />
         </SectionWrapper>
 
         {/*section 8*/}
         <SectionWrapper>
-          {instructionStore.length === 0 ? (
-            <SkeletonCustom dependency={instructionStore} />
-          ) : (
-            <AddSocialWrapper
-              dispatch={dispatch}
-              instructionStore={instructionStore}
-              socialLinkStore={socialLinkStore}
-            />
-          )}
+          <AddSocialWrapper dispatch={dispatch} instructionStore={instructionStore} />
         </SectionWrapper>
 
         {/*section last*/}
         <SectionWrapper styleWrapper="sm:col-span-2 lg:col-span-1">
-          {instructionStore.length === 0 ? (
-            <SkeletonCustom dependency={instructionStore} />
-          ) : (
-            <RecipeComponent
-              recipe={{
-                ...createNewRecipe,
-                authorId: userId,
-                rating: 0,
-                comments: 0,
-                isLiked: false,
-              }}
-              userLang={userLangStore}
-              userId={userId}
-              ownerRecipe={{
-                avatar: userAvatar,
-                name: userName,
-                subscribers: subscribers,
-                ownerId: userId,
-              }}
-            />
-          )}
-          <div>
+          {/*{instructionStore.length === 0 ? (*/}
+          {/*  <SkeletonCustom dependency={instructionStore} />*/}
+          {/*) : (*/}
+          <div className="flex flex-col gap-y-5">
+            <Button
+              // onClick={handlerPreview}
+              className="bg-violet-300 w-full hover:bg-yellow-500"
+            >
+              <a href="/preview" target="_blank" rel="noopener noreferrer">
+                Preview
+              </a>
+            </Button>
             <Button
               onClick={handlerPublish}
               className="bg-green-300 w-full hover:bg-yellow-500"
@@ -343,9 +298,10 @@ const CreateNewRecipe: React.FC = () => {
               Publish
             </Button>
           </div>
+          {/*)}*/}
         </SectionWrapper>
       </div>
-    </WrapperApp>
+    </section>
   );
 };
 export default CreateNewRecipe;

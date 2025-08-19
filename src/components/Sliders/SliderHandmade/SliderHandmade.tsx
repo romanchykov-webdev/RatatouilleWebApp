@@ -12,6 +12,8 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import Image from 'next/image';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
 
 interface ISliderHandmadeProps {
   images: string[];
@@ -25,6 +27,10 @@ const SliderHandmade: React.FC<ISliderHandmadeProps> = ({
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
+  // Lightbox state
+  const [isOpen, setIsOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
   useEffect(() => {
     if (!api) {
       return;
@@ -37,6 +43,10 @@ const SliderHandmade: React.FC<ISliderHandmadeProps> = ({
       setCurrent(api.selectedScrollSnap() + 1);
     });
   }, [api]);
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setIsOpen(true);
+  };
 
   return (
     <div className="w-full ">
@@ -44,13 +54,16 @@ const SliderHandmade: React.FC<ISliderHandmadeProps> = ({
         <CarouselContent>
           {images.map((img, index) => (
             <CarouselItem key={index}>
-              <Card className=" p-0 overflow-hidden">
-                <CardContent className="relative w-full h-[200px] p-0 overflow-visible ">
+              <Card
+                className=" p-0 overflow-hidden cursor-pointer"
+                onClick={() => openLightbox(index)}
+              >
+                <CardContent className="relative w-full min-h-[200px] h-[400px] p-0 overflow-visible ">
                   <Image
                     src={img}
                     alt={`image-${index}`}
                     fill
-                    className="object-cover"
+                    className="object-cover "
                     // style={{ backgroundImage: `url(${img})` }}
                     unoptimized
                   />
@@ -82,6 +95,15 @@ const SliderHandmade: React.FC<ISliderHandmadeProps> = ({
           </div>
         </div>
       </Carousel>
+      {/* Lightbox */}
+      {isOpen && (
+        <Lightbox
+          open={isOpen}
+          close={() => setIsOpen(false)}
+          slides={images.map(src => ({ src }))}
+          index={lightboxIndex}
+        />
+      )}
     </div>
   );
 };
