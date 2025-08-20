@@ -7,6 +7,8 @@ import WelcomeScreen from '@/components/Modal/WelcomeScreen';
 import HomeBigCarouselComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselComponent';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
+import HomeBigCarouselServerComponent from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselServerComponent';
+import HomeBigCarouselWrapper from '@/components/Sliders/HomeBigCarousel/HomeBigCarouselWrapper';
 
 export default function Page() {
   const widthScreen: number = useWindowWidth();
@@ -30,7 +32,9 @@ export default function Page() {
     <section>
       <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
-        <HomeBigCarouselComponent />
+        {/*<HomeBigCarouselComponent />*/}
+        <HomeBigCarouselWrapper />
+
         <SectionListWrapper categories={categoriesData} appLang={userData?.appLang} />
       </main>
       <footer className="bg-red-500">footer</footer>

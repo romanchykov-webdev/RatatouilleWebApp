@@ -3,11 +3,11 @@
 import React, { JSX } from 'react';
 import CartList from '@/components/SectionList/CartList/CartList';
 import AnimatedWrapperUp from '@/components/Animated/AnimatedWrapperUp';
+import { ICategoriesAndSubcategories } from '@/types';
 
-import { ITitle } from '@/store/thunks/categoriesThunk';
 
 interface ISectionListWrapperProps {
-  categories: ITitle[];
+  categories: ICategoriesAndSubcategories[];
   appLang: string;
 }
 
