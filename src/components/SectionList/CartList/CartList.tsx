@@ -10,23 +10,22 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import ProgressBarPagination from '@/components/SectionList/CartList/ProgressBarPagination';
-import { ITitle } from '@/store/thunks/categoriesThunk';
 
 import { useRouter } from 'next/navigation';
-import { IRecipeByCategory } from '@/components/SectionList/CartList.types';
 import { fetchRecipesByCategories } from '@/app/api/fetch/fetchRecipesByCategories';
 import BreadcrumbsCategorySubCategory from '@/components/Breadcrumbs/BreadcrumbsCategorySubCategory';
+import { ICategoriesAndSubcategories, IRecipe } from '@/types';
 
 interface ICartListProps {
-  categoryArr: ITitle;
+  categoryArr: ICategoriesAndSubcategories;
   categoryPoints: string[];
-  appLang: string;
+  app_lang: string;
 }
 
 const CartList: React.FC<ICartListProps> = ({
   categoryArr,
   categoryPoints,
-  appLang,
+  app_lang,
 }: ICartListProps): JSX.Element => {
   const [api, setApi] = useState<CarouselApi | undefined>();
 
@@ -36,7 +35,7 @@ const CartList: React.FC<ICartListProps> = ({
 
   const [count, setCount] = useState<number>(0);
 
-  const [recipes, setRecipes] = useState<IRecipeByCategory[]>([]);
+  const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -104,11 +103,7 @@ const CartList: React.FC<ICartListProps> = ({
               className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6 overflow-y-visible"
             >
               <div className="p-2">
-                <CartItem
-                  item={item as unknown as IRecipeByCategory}
-                  appLang={appLang}
-                  loading={loading}
-                />
+                <CartItem item={item as unknown as IRecipe} app_lang={app_lang} loading={loading} />
               </div>
             </CarouselItem>
           ))}

@@ -16,7 +16,7 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state: RootState) => state.user);
 
-  const [appLang, setAppLang] = useState('');
+  const [app_lang, setapp_lang] = useState('');
   const [isReady, setIsReady] = useState(false);
 
   // console.log('render wrapper');
@@ -35,7 +35,7 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
       ? userData.app_lang
       : (navigator.language || 'en').split('-')[0].toLowerCase();
     const finalLang = supported.includes(lang) ? lang : 'en';
-    setAppLang(finalLang);
+    setapp_lang(finalLang);
 
     if (!userData.isAuth) {
       dispatch(lanAppForNoAuthorization(finalLang));
@@ -44,16 +44,16 @@ const WrapperApp: React.FC<IWrapper> = ({ children }) => {
 
   // 3) Загружаем категории после того, как определили язык
   useEffect(() => {
-    if (!appLang) return;
+    if (!app_lang) return;
 
     const load = async () => {
-      await dispatch(categoriesThunk(appLang));
-      // dispatch(categoriesThunk(appLang));
+      await dispatch(categoriesThunk(app_lang));
+      // dispatch(categoriesThunk(app_lang));
       setIsReady(true);
     };
 
     load();
-  }, [appLang, dispatch]);
+  }, [app_lang, dispatch]);
 
   // 3) Загружаем меры
   useEffect(() => {
