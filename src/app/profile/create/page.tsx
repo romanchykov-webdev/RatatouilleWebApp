@@ -66,15 +66,8 @@ const CreateNewRecipe: React.FC = () => {
 
   // const router = useRouter();
 
-  const user: IUserProfile = useAppSelector(
-    (state: RootState) => state.user as IUserProfile,
-  );
-  const {
-    appLang: userLangStore,
-    id: userId,
-    avatar: userAvatar,
-    user_name: userName,
-  } = user;
+  const user: IUserProfile = useAppSelector((state: RootState) => state.user as IUserProfile);
+  const { app_lang: userLangStore, id: userId, avatar: userAvatar, user_name: userName } = user;
 
   useEffect(() => {
     dispatch(addOwnerId(userId));
@@ -208,28 +201,18 @@ const CreateNewRecipe: React.FC = () => {
         {/*section 2*/}
         <SectionWrapper>
           <CreateTitleRecipe dispatch={dispatch} languagesStore={languagesStore} />
-          <AddArea
-            dispatch={dispatch}
-            titleStore={titleStore}
-            languagesStore={languagesStore}
-          />
+          <AddArea dispatch={dispatch} titleStore={titleStore} languagesStore={languagesStore} />
         </SectionWrapper>
 
         {/*section 3*/}
         <SectionWrapper>
           <AddTags dispatch={dispatch} ariaStore={ariaStore} tagStore={tagStore} />
-          <RecipeMetaComponents
-            dispatch={dispatch}
-            tagStore={tagStore}
-            pathName={pathName}
-          />
+          <RecipeMetaComponents dispatch={dispatch} tagStore={tagStore} pathName={pathName} />
         </SectionWrapper>
 
         {/*section 4*/}
         <SectionWrapper>
-          {recipeMetaStore?.cal === 0 && (
-            <SkeletonCustom dependency={recipeMetaStore.cal} />
-          )}
+          {recipeMetaStore?.cal === 0 && <SkeletonCustom dependency={recipeMetaStore.cal} />}
 
           <AddIngredientsRecipe
             dispatch={dispatch}
@@ -291,10 +274,7 @@ const CreateNewRecipe: React.FC = () => {
                 Preview
               </a>
             </Button>
-            <Button
-              onClick={handlerPublish}
-              className="bg-green-300 w-full hover:bg-yellow-500"
-            >
+            <Button onClick={handlerPublish} className="bg-green-300 w-full hover:bg-yellow-500">
               Publish
             </Button>
           </div>

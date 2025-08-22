@@ -11,13 +11,13 @@ export const updateUserProfileThunk = createAsyncThunk(
   async (userData: IUserProfileUpdate, { rejectWithValue }) => {
     // console.log('updateUserProfileThunk userData', userData);
     try {
-      const { id, user_name, avatar, appLang, theme } = userData;
+      const { id, user_name, avatar, app_lang, theme } = userData;
       const { error } = await supabase
         .from('users')
         .update({
           user_name: user_name,
           avatar: avatar,
-          appLang: appLang,
+          app_lang: app_lang,
           theme: theme,
         })
         .eq('id', id);

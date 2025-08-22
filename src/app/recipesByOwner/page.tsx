@@ -147,7 +147,7 @@ const RecipeByOwner: React.FC = (): JSX.Element => {
             allRecipesByOwner.map(item => (
               <CartItem
                 item={item}
-                appLang={userData.appLang}
+                app_lang={userData.app_lang}
                 key={item.id}
                 loading={isLoading}
               />

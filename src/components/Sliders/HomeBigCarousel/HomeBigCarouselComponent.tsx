@@ -23,9 +23,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { IRecipe } from '@/types';
 
 export const WrapperCarouselItems: React.FC = ({}): JSX.Element => {
-  const appLang: string = useAppSelector(
-    (state: RootState): string => state.user.appLang,
-  );
+  const app_lang: string = useAppSelector((state: RootState): string => state.user.app_lang);
 
   const router: AppRouterInstance = useRouter();
 
@@ -82,9 +80,7 @@ export const WrapperCarouselItems: React.FC = ({}): JSX.Element => {
                         authorAvatar={group[0].published_user.avatar}
                         author={group[0].published_user.user_name}
                         bgBigImage={group[0].image_header}
-                        title={
-                          group[0].title[appLang] ?? Object.values(group[0].title)[0]
-                        }
+                        title={group[0].title[app_lang] ?? Object.values(group[0].title)[0]}
                         likes={group[0].likes}
                         comments={group[0].comments}
                         rating={group[0].rating}
@@ -111,7 +107,7 @@ export const WrapperCarouselItems: React.FC = ({}): JSX.Element => {
                           authorAvatar={recipe.published_user.avatar}
                           author={recipe.published_user.user_name}
                           bgBigImage={recipe.image_header}
-                          title={recipe.title[appLang] ?? Object.values(recipe.title)[0]}
+                          title={recipe.title[app_lang] ?? Object.values(recipe.title)[0]}
                           likes={recipe.likes}
                           comments={recipe.comments}
                           rating={recipe.rating}
