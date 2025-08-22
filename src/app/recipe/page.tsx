@@ -14,9 +14,7 @@ import LoaderCustom from '@/components/Loaders/LoaderCustom';
 const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
   const userData = useAppSelector((state: RootState) => state.user as IUserProfile);
 
-  const measurementData: IMeasurements = useAppSelector(
-    (state: RootState) => state.measurement,
-  );
+  const measurementData: IMeasurements = useAppSelector((state: RootState) => state.measurement);
 
   const [recipeData, setRecipeData] = useState<IRecipe | null>(null);
 
@@ -74,7 +72,7 @@ const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
         recipe={recipeData}
         ownerRecipe={ownerData}
         userId={userData.isAuth && userData.id ? userData.id : null}
-        userLang={userData.appLang}
+        userLang={userData.app_lang}
         measurementData={measurementData}
       />
     </section>

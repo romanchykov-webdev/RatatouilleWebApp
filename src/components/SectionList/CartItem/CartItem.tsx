@@ -14,15 +14,11 @@ import { IRecipe } from '@/types';
 // Интерфейс для пропсов компонента CartItem
 interface ICartItemProps {
   item: IRecipe;
-  appLang: string;
+  app_lang: string;
   loading: boolean;
 }
 
-const CartItem: React.FC<ICartItemProps> = ({
-  item,
-  appLang,
-  loading,
-}): React.ReactElement => {
+const CartItem: React.FC<ICartItemProps> = ({ item, app_lang, loading }): React.ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { shadowBox } = useShadowBox();
@@ -30,10 +26,10 @@ const CartItem: React.FC<ICartItemProps> = ({
   const router = useRouter();
 
   // console.log('CartItem item', JSON.stringify(item));
-  // console.log('CartItem appLang', appLang);
+  // console.log('CartItem app_lang', app_lang);
 
-  // Ищем заголовок на нужном языке appLang
-  // const titleObj = item.title.find(t => t.lang === appLang) || item.title[0];
+  // Ищем заголовок на нужном языке app_lang
+  // const titleObj = item.title.find(t => t.lang === app_lang) || item.title[0];
   // const titleText = titleObj?.value ?? 'No title';
   const handleOpenRecipe = () => {
     // console.log('handleOpenRecipe item id', item.full_recipe_id);
@@ -76,7 +72,7 @@ const CartItem: React.FC<ICartItemProps> = ({
 
               {/*/!* footer title like commit rating isLiked *!/*/}
               <FooterCartItem
-                title={item.title[appLang] ?? Object.values(item.title)[0]} //если пользователь не имеет язык рецепта то первый
+                title={item.title[app_lang] ?? Object.values(item.title)[0]} //если пользователь не имеет язык рецепта то первый
                 likes={item.likes}
                 comments={item.comments}
                 rating={item.rating}

@@ -4,10 +4,7 @@ import React, { JSX, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import {
-  getAllRecipesByCategory,
-  getAllRecipesBySubCategory,
-} from '@/store/api/getAllCategory';
+import { getAllRecipesByCategory, getAllRecipesBySubCategory } from '@/store/api/getAllCategory';
 import HeaderComponent from '@/components/Header/headerComponent';
 import BreadcrumbsCategorySubCategory, {
   ICategoryFromStore,
@@ -118,7 +115,7 @@ const Category: React.FC = (): JSX.Element => {
           {recipes.map(item => (
             <CartItem
               item={item}
-              appLang={userData.appLang}
+              app_lang={userData.app_lang}
               key={item.id}
               loading={isLoadingPage}
             />

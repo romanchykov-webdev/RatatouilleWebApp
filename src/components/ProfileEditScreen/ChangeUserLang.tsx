@@ -1,11 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { IUserProfileEditProps } from '@/types';
@@ -15,18 +11,13 @@ const ChangeUserLang: React.FC<IUserProfileEditProps> = ({
   setUserDataUpdate,
 }: IUserProfileEditProps) => {
   return (
-    <AccordionItem
-      value="item-2"
-      className="border-2 border-neutral-300 rounded-[10px] px-2"
-    >
+    <AccordionItem value="item-2" className="border-2 border-neutral-300 rounded-[10px] px-2">
       <AccordionTrigger className=" cursor-pointer">Change language app</AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 text-balance">
         <RadioGroup
-          defaultValue={userDataUpdate?.appLang}
-          value={userDataUpdate.appLang}
-          onValueChange={value =>
-            setUserDataUpdate({ ...userDataUpdate, appLang: value })
-          }
+          defaultValue={userDataUpdate?.app_lang}
+          value={userDataUpdate.app_lang}
+          onValueChange={value => setUserDataUpdate({ ...userDataUpdate, app_lang: value })}
         >
           <div className="flex items-center gap-3">
             <RadioGroupItem value="en" id="r1" />

@@ -55,7 +55,7 @@ export const logInUserThunk = createAsyncThunk<
         user_name: profileData.user_name || '', // Изменено с user_name на userName
         avatar: profileData.avatar || '', // Изменено с avatar на userAvatar
         email: user.email || '',
-        appLang: profileData.appLang || 'en',
+        app_lang: profileData.app_lang || 'en',
         theme: profileData.theme || 'light', // Изменено с theme на userTheme
         subscribers: profileData.subscribers || 0,
         // isLikedRecipe: isLikedRecipe,
