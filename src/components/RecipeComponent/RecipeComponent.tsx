@@ -112,9 +112,11 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   return (
     <article className="flex flex-col gap-y-[35px]">
       {/*name recipe and back*/}
-      <div className="flex items-center p-2 mb-5">
+      <div className="flex flex-col  p-2 mb-5">
         {/*button back*/}
-        <ButtonBack />
+        <div className="flex">
+          <ButtonBack />
+        </div>
         {/*  name recipe*/}
         <h1 className="flex-1 text-center font-bold text-xl">
           {recipe.title[isActiveLang] ?? Object.values(recipe.title)[0]}
