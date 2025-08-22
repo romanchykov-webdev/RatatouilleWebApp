@@ -8,11 +8,7 @@ import { useDebounce } from '@/helpers/hooks/useDebounce';
 import { addArea } from '@/store/slices/createNewRecipeSlice';
 import { Input } from '@/components/ui/input';
 import SkeletonCustom from '@/components/CreateNewRecipeScreen/SkeletonCustom';
-import {
-  IAreaByCreateRecipe,
-  ILanguageByCreateRecipe,
-  ITitleByCreateRecipe,
-} from '@/types';
+import { IAreaByCreateRecipe, ILanguageByCreateRecipe, ITitleByCreateRecipe } from '@/types';
 
 interface IAddAreaProps {
   dispatch: AppDispatch;
@@ -52,8 +48,7 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
 
   useEffect(() => {
     const allFilled =
-      languagesStore.length > 0 &&
-      languagesStore.every(lang => debouncedArea[lang.name]?.trim());
+      languagesStore.length > 0 && languagesStore.every(lang => debouncedArea[lang.name]?.trim());
 
     if (allFilled) {
       const areas: IAreaByCreateRecipe = languagesStore.reduce<Record<string, string>>(
@@ -63,6 +58,8 @@ const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore
         },
         {},
       );
+
+      console.log('areas', areas);
 
       dispatch(addArea(areas));
     }

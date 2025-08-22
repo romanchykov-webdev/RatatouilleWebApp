@@ -17,7 +17,7 @@ export interface ICreateNewRecipe {
   image_header: string;
   languages: ILanguageByCreateRecipe[];
   title: ITitleByCreateRecipe[];
-  area: IAreaByCreateRecipe[];
+  area: IAreaByCreateRecipe;
   tags: string[];
   recipe_metrics: IMetaData;
   ingredients: IIngredientsByCreateRecipe[];
@@ -32,7 +32,7 @@ const initialState: ICreateNewRecipe = {
   image_header: '',
   languages: [],
   title: [],
-  area: [],
+  area: {},
   tags: [],
   recipe_metrics: { time: 0, serv: 0, cal: 0, level: 'easy' },
   ingredients: [],
@@ -90,7 +90,7 @@ const createNewRecipeSlice = createSlice({
     addTitle(state, action: PayloadAction<ITitleByCreateRecipe[]>) {
       state.title = action.payload;
     },
-    addArea(state, action: PayloadAction<IAreaByCreateRecipe[]>) {
+    addArea(state, action: PayloadAction<IAreaByCreateRecipe>) {
       state.area = action.payload;
     },
     addTags(state, action: PayloadAction<string[]>) {
@@ -107,17 +107,13 @@ const createNewRecipeSlice = createSlice({
       state.ingredients = action.payload;
     },
     removeIngredient(state, action: PayloadAction<number>) {
-      state.ingredients = state.ingredients.filter(
-        (_, index) => index !== action.payload,
-      );
+      state.ingredients = state.ingredients.filter((_, index) => index !== action.payload);
     },
     addInstruction(state, action: PayloadAction<IInstructionsByCreateRecipe>) {
       state.instructions.push(action.payload);
     },
     removeInstruction(state, action: PayloadAction<number>) {
-      state.instructions = state.instructions.filter(
-        (_, index) => index !== action.payload,
-      );
+      state.instructions = state.instructions.filter((_, index) => index !== action.payload);
     },
     addSocialLinks(state, action: PayloadAction<ISocialByCreateRecipe>) {
       state.social_links = action.payload;
