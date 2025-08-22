@@ -2,9 +2,9 @@
 
 import React, { JSX, useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
-import { ISubCategory } from '@/components/SectionList/CartList.types';
 import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
+import { ISubcategory } from '@/types';
 
 // тип, совпадающий с данными из
 export type ICategoryFromStore = {
@@ -22,7 +22,7 @@ interface IBreadcrumbsCategorySubCategoryProps {
   categoryArr: ICategoryFromStore;
   handlerCategory: (item: string) => void;
   handlerSubCategoryGo: (item: string) => void;
-  handlerFilter?: (subCats: ISubCategory[]) => void;
+  handlerFilter?: (subCats: ISubcategory[]) => void;
   styleWrapper?: string;
   raw?: string;
 }
