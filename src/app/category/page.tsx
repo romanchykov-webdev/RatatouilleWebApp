@@ -4,10 +4,7 @@ import React, { JSX, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
-import {
-  getAllRecipesByCategory,
-  getAllRecipesBySubCategory,
-} from '@/store/api/getAllCategory';
+import { getAllRecipesByCategory, getAllRecipesBySubCategory } from '@/store/api/getAllCategory';
 import HeaderComponent from '@/components/Header/headerComponent';
 import BreadcrumbsCategorySubCategory, {
   ICategoryFromStore,

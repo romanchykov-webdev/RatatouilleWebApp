@@ -6,7 +6,7 @@ import { ISubCategory } from '@/components/SectionList/CartList.types';
 import { Modal } from '@/components/Modal/modal';
 import { Button } from '@/components/ui/button';
 
-// тип, совпадающий с данными из стора
+// тип, совпадающий с данными из
 export type ICategoryFromStore = {
   name: string;
   point: string;

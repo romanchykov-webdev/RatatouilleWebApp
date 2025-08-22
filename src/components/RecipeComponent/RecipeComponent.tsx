@@ -18,7 +18,7 @@ import { IMeasurements, IOwner, IRecipe } from '@/types';
 import { languagesObj } from '@/helpers/languagesObj';
 import { ModalLoginRes } from '@/components/Modal/ModalLoginRes';
 import ButtonBack from '@/components/Buttons/ButtonBack';
-import Comments from '@/components/RecipeComponent/Comments';
+import CommentsComponent from '@/components/RecipeComponent/CommentsComponent';
 
 interface IRecipeComponentProps {
   recipe: IRecipe;
@@ -36,6 +36,8 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   measurementData,
 }): JSX.Element => {
   const { shadowBox } = useShadowBox();
+
+  // console.log('ownerRecipe ', ownerRecipe);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -89,9 +91,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
   // const languagesRecipe = languagesObj.filter(lang =>
   //   recipe.title.some(t => t.lang === lang.name),
   // );
-  const languagesRecipe = languagesObj.filter(lang =>
-    recipe.title.hasOwnProperty(lang.name),
-  );
+  const languagesRecipe = languagesObj.filter(lang => recipe.title.hasOwnProperty(lang.name));
 
   if (!recipe || !ownerRecipe) {
     return <div>Loading...</div>;
@@ -151,10 +151,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         style={{ gridTemplateColumns: 'repeat(4, minmax(50px, 80px))' }}
       >
         {/*  /!*time*!/*/}
-        <div
-          style={shadowBox()}
-          className="relative w h-[150px] rounded-full overflow-hidden"
-        >
+        <div style={shadowBox()} className="relative w h-[150px] rounded-full overflow-hidden">
           <RecipeMetaItem
             pathName={pathName}
             type={'serv'}
@@ -165,10 +162,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         </div>
 
         {/*  /!*ser*!/*/}
-        <div
-          style={shadowBox()}
-          className="relative w h-[150px] rounded-full overflow-hidden"
-        >
+        <div style={shadowBox()} className="relative w h-[150px] rounded-full overflow-hidden">
           <RecipeMetaItem
             pathName={pathName}
             type={'serv'}
@@ -179,10 +173,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         </div>
 
         {/*  /!*  cal*!/*/}
-        <div
-          style={shadowBox()}
-          className="relative w h-[150px] rounded-full overflow-hidden"
-        >
+        <div style={shadowBox()} className="relative w h-[150px] rounded-full overflow-hidden">
           <RecipeMetaItem
             pathName={pathName}
             type={'serv'}
@@ -193,10 +184,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
         </div>
 
         {/*  /!*  level*!/*/}
-        <div
-          style={shadowBox()}
-          className="relative w h-[150px] rounded-full overflow-hidden"
-        >
+        <div style={shadowBox()} className="relative w h-[150px] rounded-full overflow-hidden">
           <RecipeMetaItem
             pathName={pathName}
             type={'level'}
@@ -224,7 +212,7 @@ const RecipeComponent: React.FC<IRecipeComponentProps> = ({
 
       <SocialRender socialLinks={socialLinks} />
 
-      <Comments />
+      <CommentsComponent recipeId={recipe?.id} userId={userId} ownerRecipe={ownerRecipe} />
 
       {/* Модальное окно */}
       <ModalLoginRes isOpen={isModalOpen} onCloseAction={() => setIsModalOpen(false)} />

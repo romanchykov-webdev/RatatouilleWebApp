@@ -14,9 +14,7 @@ import LoaderCustom from '@/components/Loaders/LoaderCustom';
 const RecipePage: React.FC = (): JSX.Element => {
   const userData = useAppSelector((state: RootState) => state.user as IUserProfile);
 
-  const measurementData: IMeasurements = useAppSelector(
-    (state: RootState) => state.measurement,
-  );
+  const measurementData: IMeasurements = useAppSelector((state: RootState) => state.measurement);
 
   const [recipeData, setRecipeData] = useState<IRecipe | null>(null);
 

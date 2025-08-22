@@ -78,16 +78,10 @@ const ProfileEdit: React.FC = () => {
             // defaultValue="item-1"
           >
             {/*username*/}
-            <ChangeUserName
-              userDataUpdate={userDataUpdate}
-              setUserDataUpdate={setUserDataUpdate}
-            />
+            <ChangeUserName userDataUpdate={userDataUpdate} setUserDataUpdate={setUserDataUpdate} />
 
             {/*user lang*/}
-            <ChangeUserLang
-              userDataUpdate={userDataUpdate}
-              setUserDataUpdate={setUserDataUpdate}
-            />
+            <ChangeUserLang userDataUpdate={userDataUpdate} setUserDataUpdate={setUserDataUpdate} />
 
             {/*  user theme*/}
             <ChangeUserTheme

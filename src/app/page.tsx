@@ -11,9 +11,7 @@ import { RootState } from '@/store';
 export default function Page() {
   const widthScreen: number = useWindowWidth();
 
-  const categoriesData = useAppSelector(
-    (state: RootState) => state.allCategories.categories,
-  );
+  const categoriesData = useAppSelector((state: RootState) => state.allCategories.categories);
   const userData = useAppSelector((state: RootState) => state.user);
 
   const isDesktop: boolean = widthScreen !== undefined ? widthScreen > 810 : false;

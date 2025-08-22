@@ -16,109 +16,93 @@ import Link from 'next/link';
 import InputLogRes from '@/components/Inputs/InputLogRes';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { useAppDispatch } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
-import { z } from 'zod';
-import { signUpUserThunk } from '@/store/thunks/signUpUserThunks';
 import toast from 'react-hot-toast';
-
-const signUpSchema = z
-  .object({
-    email: z.string().email('Некорректный email'),
-    password: z.string().min(6, 'Пароль должен быть не короче 6 символов'),
-    repPassword: z.string().min(6, 'Повторный пароль должен быть не короче 6 символов'),
-  })
-  .refine(data => data.password === data.repPassword, {
-    message: 'Пароли не совпадают',
-    path: ['repPassword'],
-  });
+import { supabase } from '../../../api/supabase';
 
 const SingUp: React.FC = () => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
+
+  // как в RN: userName + email + password + repeatPassword
   const [form, setForm] = useState({
+    userName: '',
     email: '',
     password: '',
     repPassword: '',
   });
-  const [errorText, setErrorText] = useState<{
-    errorEmail: string | null;
-    errorPassword: string | null;
-    errorRepPassword: string | null;
-  }>({
-    errorEmail: null,
-    errorPassword: null,
-    errorRepPassword: null,
-  });
-  const [loading, setLoading] = useState(false);
-  const [allInput, setAllInput] = useState(true);
 
+  // как в RN: простые установки языка/темы (можно подключить свои компоненты позже)
+  const [lang] = useState<'en' | 'ru' | 'it' | string>('en');
+  const [theme] = useState<'auto' | 'light' | 'dark' | string>('auto');
+
+  const [loading, setLoading] = useState(false);
+  const [allInputDisabled, setAllInputDisabled] = useState(true);
+
+  // дизаблим кнопку, если что-то не заполнено или пароли не совпадают
   useEffect(() => {
-    if (
-      form.email.trim() === '' ||
-      form.password.trim() === '' ||
-      form.repPassword.trim() === '' ||
-      form.password.trim() !== form.repPassword.trim() ||
-      form.password.trim().length < 6 ||
-      form.repPassword.trim().length < 6
-    ) {
-      setAllInput(true);
+    const { userName, email, password, repPassword } = form;
+    if (!userName || !email || !password || !repPassword || password !== repPassword) {
+      setAllInputDisabled(true);
     } else {
-      setAllInput(false);
+      setAllInputDisabled(false);
     }
-  }, [form.email, form.password, form.repPassword]);
+  }, [form]);
 
   const handlerRegister = async (e: React.FormEvent) => {
-    console.log('handlerLogIn');
     e.preventDefault();
-    setErrorText({ errorEmail: null, errorPassword: null, errorRepPassword: null });
+
+    const email = form.email.trim();
+    const userName = form.userName.trim();
+    const password = form.password.trim();
+    const repeatPassword = form.repPassword.trim();
+
+    // проверки — точно как в RN:
+    if (password !== repeatPassword) {
+      toast.error('Enter two identical passwords!');
+      return;
+    }
+    if (!email || !password || !repeatPassword || !userName) {
+      toast.error('Please fill all the fields!');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      signUpSchema.parse(form);
-      // Вызов thunk для регистрации
-      const result = await dispatch(
-        signUpUserThunk({
-          email: form.email,
-          password: form.password,
-        }),
-      ).unwrap();
+      // прямой вызов supabase.auth.signUp как в RN
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            user_name: userName,
+            app_lang: lang,
+            theme,
+            avatar: null,
+          },
+        },
+      });
 
-      if (!result.success) {
-        const errorMessage = result.error ?? 'Произошла ошибка при регистрации';
-        setErrorText({
-          errorEmail: errorMessage.includes('User already registered')
-            ? 'Этот email уже зарегистрирован'
-            : errorMessage,
-          errorPassword: errorMessage,
-          errorRepPassword: errorMessage,
-        });
-        setLoading(false);
+      if (error) {
+        toast.error(error.message || 'Sign up error');
         return;
       }
 
-      // Успешная регистрация, перенаправление
-      toast.success('Successful registration');
-      router.push('/profile');
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const errors = err.flatten().fieldErrors as {
-          email?: string[];
-          password?: string[];
-          repPassword?: string[];
-        };
-        setErrorText({
-          errorEmail: errors.email?.[0] || null,
-          errorPassword: errors.password?.[0] || null,
-          errorRepPassword: errors.repPassword?.[0] || null,
-        });
+      // Поведение после регистрации:
+      // Если в проекте включено подтверждение email — сессии может не быть.
+      if (!data.session) {
+        toast.success('Check your email to confirm registration');
       } else {
-        setErrorText({
-          errorEmail: 'Произошла ошибка при регистрации',
-          errorPassword: 'Произошла ошибка при регистрации',
-          errorRepPassword: 'Произошла ошибка при регистрации',
-        });
+        toast.success('Successful registration');
+        router.push('/profile');
       }
+
+      // сброс формы
+      setForm({ userName: '', email: '', password: '', repPassword: '' });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      toast.error(msg);
+    } finally {
       setLoading(false);
     }
   };
@@ -132,48 +116,52 @@ const SingUp: React.FC = () => {
             <CardTitle>Create an account</CardTitle>
             <CardDescription>Enter your details to register</CardDescription>
             <CardAction>
-              <Link href={'/registr'} className="cursor-pointer hover:underline">
+              <Link href={'/login'} className="cursor-pointer hover:underline">
                 Log In
               </Link>
             </CardAction>
           </CardHeader>
+
           <CardContent>
-            {/*form*/}
             <form className="mb-5" id="signup-form" onSubmit={handlerRegister}>
               <div className="flex flex-col gap-6">
-                {/*email*/}
                 <div className="grid gap-5">
+                  {/* user name */}
+                  <InputLogRes
+                    id="userName"
+                    type="text"
+                    placeholder="User name"
+                    inputValue={form.userName}
+                    setValue={value => setForm({ ...form, userName: value })}
+                  />
+
+                  {/* email */}
                   <InputLogRes
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    isError={errorText.errorEmail !== null}
                     inputValue={form.email}
                     setValue={value => setForm({ ...form, email: value.toLowerCase() })}
-                    errorText={errorText.errorEmail}
                   />
 
-                  {/*password*/}
+                  {/* password */}
                   <InputLogRes
                     id="password"
                     type="password"
                     placeholder="Enter password"
-                    isError={errorText.errorPassword !== null}
-                    isPas={true}
+                    isPas
                     inputValue={form.password}
                     setValue={value => setForm({ ...form, password: value })}
-                    errorText={errorText.errorPassword}
                   />
-                  {/*repeat password*/}
+
+                  {/* repeat password */}
                   <InputLogRes
-                    id="password"
+                    id="repPassword"
                     type="password"
                     placeholder="Repeat password"
-                    isError={errorText.errorPassword !== null}
-                    isPas={true}
+                    isPas
                     inputValue={form.repPassword}
                     setValue={value => setForm({ ...form, repPassword: value })}
-                    errorText={errorText.errorPassword}
                   />
                 </div>
               </div>
@@ -188,25 +176,24 @@ const SingUp: React.FC = () => {
               </Link>
             </div>
           </CardContent>
+
           <CardFooter className="flex-col gap-2">
             <Button
               onClick={handlerRegister}
               variant="outline"
               type="submit"
-              disabled={loading || allInput}
-              className={`w-full bg-black text-white dark:bg-white dark:text-black cursor-pointer transform-hover duration-500
-             
-              `}
+              disabled={loading || allInputDisabled}
+              className="w-full bg-black text-white dark:bg-white dark:text-black cursor-pointer transform-hover duration-500"
             >
               {loading ? (
                 <>
-                  Authorization...{' '}
-                  <Loader2 className="ml-2 w-5 h-5 text-yellow-400 animate-spin" />
+                  Authorization... <Loader2 className="ml-2 w-5 h-5 animate-spin" />
                 </>
               ) : (
                 'Registration'
               )}
             </Button>
+
             <Button variant="outline" className="w-full cursor-pointer">
               <Link href="/">Login with Google</Link>
             </Button>
@@ -216,4 +203,5 @@ const SingUp: React.FC = () => {
     </section>
   );
 };
+
 export default SingUp;
