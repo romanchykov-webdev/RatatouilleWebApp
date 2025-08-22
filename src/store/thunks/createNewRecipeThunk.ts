@@ -19,7 +19,7 @@ export interface IRecipeCreate {
   image_header: string; // картинка заголовка  -
   languages: ILanguageByCreateRecipe[]; // массив языковых данных-
   title: ITitleByCreateRecipe[]; // массив заголовков
-  area: IAreaByCreateRecipe[]; // массив областей/-
+  area: IAreaByCreateRecipe;
   tags: string[]; // массив тегов
   recipe_metrics: IMetaDataByCreateRecipe; // метаданные рецепта -
   ingredients: IIngredientsByCreateRecipe[]; // ингредиенты -
