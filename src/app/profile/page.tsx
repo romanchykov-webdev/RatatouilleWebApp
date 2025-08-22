@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import HeaderComponent from '@/components/Header/headerComponent';
 
 import { Modal } from '@/components/Modal/modal';
-import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import ButtonsWrapper from '@/components/ProfilePage/ButtonsWrapper';
 import HeaderPage from '@/components/ProfilePage/HeaderPage';
 import { useRouter } from 'next/navigation';
@@ -13,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { signOutThunk } from '@/store/thunks/signOutThunk';
 import { RootState } from '@/store';
 import { IUserProfile } from '@/types';
+import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 
 export default function Profile() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function Profile() {
       closeModal();
     }
   };
-  // console.log('user.userAvatar', user.userAvatar);
+  // console.log('user.avatar', user.avatar);
   return (
     <section>
       <HeaderComponent />
@@ -52,7 +52,7 @@ export default function Profile() {
         {/*avatar*/}
         <UserAvatarComponent
           userName={user.user_name}
-          userAvatar={user.avatar}
+          avatar={user.avatar}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
         />

@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import SkeletonCustom from './SkeletonCustom';
 import { useDebounce } from '@/helpers/hooks/useDebounce';
-import { ILanguage } from '@/types/createNewRecipeScreen.types';
+import { ILanguageByCreateRecipe } from '@/types';
 
 interface MultiLangInputBlockProps {
   label: string;
-  languages: ILanguage[];
+  languages: ILanguageByCreateRecipe[];
   dependency: { lang: string; value: string }[];
   dispatch: (payload: { lang: string; value: string }[]) => void;
   placeholderPrefix: string;

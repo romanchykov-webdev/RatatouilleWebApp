@@ -18,7 +18,7 @@ export interface IRecipeCreate {
   subCategory: string; // подкатегория
   image_header: string; // картинка заголовка  -
   languages: ILanguageByCreateRecipe[]; // массив языковых данных-
-  title: ITitleByCreateRecipe[]; // массив заголовков
+  title: ITitleByCreateRecipe; // массив заголовков
   area: IAreaByCreateRecipe;
   tags: string[]; // массив тегов
   recipe_metrics: IMetaDataByCreateRecipe; // метаданные рецепта -

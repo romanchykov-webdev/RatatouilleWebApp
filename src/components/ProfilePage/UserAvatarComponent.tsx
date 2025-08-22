@@ -10,17 +10,17 @@ import { usePathname } from 'next/navigation';
 import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 import { useShadowText } from '@/helpers/hooks/useShadowText';
 
-interface UserAvatarComponentProps {
+interface avatarComponentProps {
   userName: string;
-  userAvatar: string;
+  avatar: string;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   handleImageChange?: (event: ChangeEvent<HTMLInputElement>) => void; // Исправленный тип
 }
 
-const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
+const UserAvatarComponent: React.FC<avatarComponentProps> = ({
   userName,
-  userAvatar,
+  avatar,
   isLoading,
   setIsLoading,
   handleImageChange,
@@ -36,7 +36,7 @@ const UserAvatarComponent: React.FC<UserAvatarComponentProps> = ({
         <Avatar className="w-[200px] h-[200px]" style={shadowBox()}>
           {isLoading && <Skeleton className="w-[200px] h-[200px] rounded-full" />}
           <AvatarImage
-            src={userAvatar}
+            src={avatar}
             alt="Avatar"
             onLoad={() => setIsLoading(false)}
             onError={() => setIsLoading(false)}

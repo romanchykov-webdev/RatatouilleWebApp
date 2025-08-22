@@ -53,7 +53,7 @@ export const logInUserThunk = createAsyncThunk<
       login({
         id: profileData.id, // Изменено с id на userId
         user_name: profileData.user_name || '', // Изменено с user_name на userName
-        avatar: profileData.avatar || '', // Изменено с avatar на userAvatar
+        avatar: profileData.avatar || '', // Изменено с avatar на avatar
         email: user.email || '',
         app_lang: profileData.app_lang || 'en',
         theme: profileData.theme || 'light', // Изменено с theme на userTheme

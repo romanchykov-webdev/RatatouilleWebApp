@@ -24,7 +24,7 @@ export const useShadowBox = (params: Omit<ShadowBoxParams, 'theme'> = {}) => {
 
     // Для авторизованных пользователей используем userTheme, для неавторизованных — theme из useTheme
     const newTheme = authState.isAuth
-      ? (authState as IUserProfile).userTheme === 'dark'
+      ? (authState as IUserProfile).theme === 'dark'
         ? 'dark'
         : 'light'
       : theme === 'dark'

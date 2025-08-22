@@ -16,11 +16,7 @@ interface IImageHeaderProps {
   handlerSelectedLang: (lang: string) => void;
   isActiveLang: string;
   languages: ILanguageByCreateRecipe[];
-  isLackedRecipe: (
-    idRecipe: string,
-    idOwnerRecipe: string,
-    idUserClick: string | null,
-  ) => void;
+  isLackedRecipe: (idRecipe: string, idOwnerRecipe: string, idUserClick: string | null) => void;
   idOwnerRecipe: string;
   idUserClick: string | null;
   idRecipe: string;
@@ -127,7 +123,6 @@ const ImageHeader: React.FC<IImageHeaderProps> = ({
             langRecipe={languages}
             selectedLang={isActiveLang}
             handlerChangeLang={handlerSelectedLang}
-            handleConfirm={handleConfirm}
           />
           {/*<Button onClick={handleConfirm}>Save</Button>*/}
         </div>

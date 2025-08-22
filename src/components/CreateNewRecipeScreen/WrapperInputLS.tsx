@@ -2,10 +2,10 @@
 
 import React, { JSX } from 'react';
 import { Input } from '@/components/ui/input';
-import { ILanguage } from '@/types/createNewRecipeScreen.types';
+import { ILanguageByCreateRecipe } from '@/types';
 
 interface IWrapperInputLSProps {
-  languagesStore: ILanguage[];
+  languagesStore: ILanguageByCreateRecipe[];
   inputValue: Record<string, string> | undefined;
   handleChangeInput: (langName: string, value: string) => void;
 }

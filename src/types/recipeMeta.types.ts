@@ -9,7 +9,7 @@ export interface IMetaData {
   time: number;
   serv: number;
   cal: number;
-  level: 'easy' | 'medium' | 'hard';
+  level: string;
 }
 
 export interface IRecipeMetaItemProps {

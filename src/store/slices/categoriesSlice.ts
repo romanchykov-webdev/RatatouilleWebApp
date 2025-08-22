@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { categoriesThunk, ITitle } from '@/store/thunks/categoriesThunk';
+import { categoriesThunk } from '@/store/thunks/categoriesThunk';
+import { ICategoriesAndSubcategories } from '@/types';
 
 interface CategoriesState {
-  categories: ITitle[];
+  categories: ICategoriesAndSubcategories[];
 }
 
 const initialState: CategoriesState = {

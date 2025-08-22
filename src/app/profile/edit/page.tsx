@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import HeaderComponent from '@/components/Header/headerComponent';
-import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store';
 import { IUserProfileUpdate, IUserProfile } from '@/types';
@@ -16,6 +15,7 @@ import ChangeUserLang from '@/components/ProfileEditScreen/ChangeUserLang';
 import ChangeUserTheme from '@/components/ProfileEditScreen/ChangeUserTheme';
 import { handleImageChange, handlerUpdateProfile } from '@/lib/utils/profileEditHandlers';
 import BreadcrumbsComponent from '@/components/Breadcrumbs/BreadcrumbsComponent';
+import UserAvatarComponent from '@/components/ProfilePage/UserAvatarComponent';
 
 const ProfileEdit: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,13 +53,13 @@ const ProfileEdit: React.FC = () => {
         <BreadcrumbsComponent />
         <UserAvatarComponent
           userName={userDataUpdate?.user_name}
-          // userAvatar={
-          //   userDataUpdate?.userAvatar ? userDataUpdate?.userAvatar : avatarDefault.src
+          // avatar={
+          //   userDataUpdate?.avatar ? userDataUpdate?.avatar : avatarDefault.src
           // }
-          userAvatar={userDataUpdate.avatar ?? avatarDefault.src}
+          avatar={userDataUpdate.avatar ?? avatarDefault.src}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
-          handleImageChange={event =>
+          handleImageChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             handleImageChange({
               event,
               userDataUpdate,

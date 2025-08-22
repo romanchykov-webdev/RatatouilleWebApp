@@ -16,7 +16,7 @@ export interface ICreateNewRecipe {
   subCategory: string;
   image_header: string;
   languages: ILanguageByCreateRecipe[];
-  title: ITitleByCreateRecipe[];
+  title: ITitleByCreateRecipe;
   area: IAreaByCreateRecipe;
   tags: string[];
   recipe_metrics: IMetaData;
@@ -31,7 +31,7 @@ const initialState: ICreateNewRecipe = {
   subCategory: '',
   image_header: '',
   languages: [],
-  title: [],
+  title: {},
   area: {},
   tags: [],
   recipe_metrics: { time: 0, serv: 0, cal: 0, level: 'easy' },
@@ -87,7 +87,7 @@ const createNewRecipeSlice = createSlice({
     removeAllLanguages(state) {
       state.languages = [];
     },
-    addTitle(state, action: PayloadAction<ITitleByCreateRecipe[]>) {
+    addTitle(state, action: PayloadAction<ITitleByCreateRecipe>) {
       state.title = action.payload;
     },
     addArea(state, action: PayloadAction<IAreaByCreateRecipe>) {

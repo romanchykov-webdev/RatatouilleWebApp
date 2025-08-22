@@ -13,7 +13,7 @@ import { IAreaByCreateRecipe, ILanguageByCreateRecipe, ITitleByCreateRecipe } fr
 interface IAddAreaProps {
   dispatch: AppDispatch;
   languagesStore: ILanguageByCreateRecipe[];
-  titleStore: ITitleByCreateRecipe[];
+  titleStore: ITitleByCreateRecipe;
 }
 
 const AddArea: React.FC<IAddAreaProps> = ({ dispatch, languagesStore, titleStore }) => {

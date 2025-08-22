@@ -1,4 +1,3 @@
-// Тип для аргументов handleImageChange
 import React, { ChangeEvent } from 'react';
 import { IUserProfileUpdate } from '@/types';
 import toast from 'react-hot-toast';
@@ -43,24 +42,21 @@ export const handleImageChange = async ({
 
     setUserDataUpdate(prev => ({
       ...prev,
-      userAvatar: previewUrl,
+      avatar: previewUrl,
     }));
 
     // // Удаление старого аватара
     // if (
-    //   userDataUpdate.userAvatar &&
-    //   userDataUpdate.userAvatar.includes('uploads_image/profiles')
+    //   userDataUpdate.avatar &&
+    //   userDataUpdate.avatar.includes('uploads_image/profiles')
     // ) {
-    //   const oldFileName = userDataUpdate.userAvatar.split('/').pop();
+    //   const oldFileName = userDataUpdate.avatar.split('/').pop();
     //   await supabase.storage.from('uploads_image').remove([`profiles/${oldFileName}`]);
     // }
 
     // Удаление старого аватара
-    if (
-      userDataUpdate.userAvatar &&
-      userDataUpdate.userAvatar.includes('uploads_image/profiles')
-    ) {
-      const oldFileName = userDataUpdate.userAvatar.split('/').pop();
+    if (userDataUpdate.avatar && userDataUpdate.avatar.includes('uploads_image/profiles')) {
+      const oldFileName = userDataUpdate.avatar.split('/').pop();
       await supabase.storage.from('uploads_image').remove([`profiles/${oldFileName}`]);
     }
 
@@ -76,7 +72,7 @@ export const handleImageChange = async ({
       setUserDataUpdate(
         (prev: IUserProfileUpdate): IUserProfileUpdate => ({
           ...prev,
-          userAvatar: userDataUpdate.userAvatar,
+          avatar: userDataUpdate.avatar,
         }),
       );
       setIsUpdating(false);
@@ -89,7 +85,7 @@ export const handleImageChange = async ({
     setUserDataUpdate(
       (prev: IUserProfileUpdate): IUserProfileUpdate => ({
         ...prev,
-        userAvatar: publicUrlData.publicUrl,
+        avatar: publicUrlData.publicUrl,
       }),
     );
 
@@ -99,7 +95,7 @@ export const handleImageChange = async ({
     setUserDataUpdate(
       (prev: IUserProfileUpdate): IUserProfileUpdate => ({
         ...prev,
-        userAvatar: userDataUpdate.userAvatar,
+        avatar: userDataUpdate.avatar,
       }),
     );
     console.error('Error:', error);
@@ -126,11 +122,11 @@ export const handlerUpdateProfile = async ({
   setIsUpdating(true);
   await dispatch(
     updateUserProfileThunk({
-      userId: userDataUpdate.userId,
-      userName: userDataUpdate.userName,
-      userAvatar: userDataUpdate.userAvatar,
-      lang: userDataUpdate.lang,
-      userTheme: userDataUpdate.userTheme,
+      id: userDataUpdate.id,
+      user_name: userDataUpdate.user_name,
+      avatar: userDataUpdate.avatar,
+      app_lang: userDataUpdate.app_lang,
+      theme: userDataUpdate.theme,
     }),
   );
   setTimeout(() => {

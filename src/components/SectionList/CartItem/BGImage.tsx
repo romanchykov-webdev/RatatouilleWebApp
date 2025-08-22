@@ -3,10 +3,9 @@
 import React from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import LoaderCustomAbsolute from '@/components/Loaders/LoaderCustomAbsolute';
-import { IItem } from '@/components/SectionList/CartItem.types';
 
 interface IBGImageCartItemProps {
-  bdImg: IItem['image'];
+  bdImg: string;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
 }

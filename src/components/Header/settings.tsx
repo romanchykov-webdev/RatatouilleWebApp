@@ -14,10 +14,10 @@ import { useShadowBox } from '@/helpers/hooks/useShadowBox';
 
 interface AuthIconProps {
   isAuth: boolean;
-  userAvatar: string;
+  avatar: string;
 }
 
-const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
+const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, avatar }) => {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
 
@@ -30,7 +30,7 @@ const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
       <Avatar className="w-[50px] h-[50px]" style={shadowBox()}>
         {isLoading && <Skeleton className="w-[50px] h-[50px] rounded-full" />}
         <AvatarImage
-          src={userAvatar}
+          src={avatar}
           alt="Avatar"
           onLoad={() => setIsLoading(false)}
           onError={() => setIsLoading(false)}
@@ -45,14 +45,12 @@ const AuthIcon: React.FC<AuthIconProps> = ({ isAuth, userAvatar }) => {
 };
 
 const SettingsComponent: React.FC = () => {
-  const { isAuth, avatar } = useAppSelector(
-    (state: RootState) => state.user as IUserProfile,
-  );
+  const { isAuth, avatar } = useAppSelector((state: RootState) => state.user as IUserProfile);
   return (
     <div className="flex items-center gap-x-12">
       {isAuth ? null : <ToggleTheme />}
 
-      <AuthIcon isAuth={isAuth} userAvatar={avatar} />
+      <AuthIcon isAuth={isAuth} avatar={avatar} />
     </div>
   );
 };

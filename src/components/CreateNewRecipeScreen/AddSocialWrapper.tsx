@@ -99,7 +99,7 @@ const AddSocialWrapper: React.FC<IAddSocialWrapperProps> = ({
     // console.log('isSocialLink', socialObj);
   };
 
-  const handlerRemoveLink = (social: string) => {
+  const handlerRemoveLink = (social: keyof ISocialByCreateRecipe) => {
     console.log('handlerRemoveLink', social);
     // console.log('handlerRemoveLink socialObj', socialObj);
     setSocialObj(prev => ({
