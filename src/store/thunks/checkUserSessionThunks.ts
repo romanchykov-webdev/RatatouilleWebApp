@@ -42,7 +42,7 @@ export const checkUserSessionThunks = createAsyncThunk<
         user_name: profileData.user_name || '',
         avatar: profileData.avatar || '',
         email: user.email || '',
-        appLang: profileData.appLang || 'en',
+        app_lang: profileData.app_lang || 'en',
         theme: profileData.theme || 'light',
         subscribers: profileData.subscribers || 0,
       }),

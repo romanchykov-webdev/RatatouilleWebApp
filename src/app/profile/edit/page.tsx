@@ -24,13 +24,13 @@ const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.user as IUserProfile);
   console.log('user', user);
-  const { user_name, avatar, appLang, theme, id: userId } = user;
+  const { user_name, avatar, app_lang, theme, id: userId } = user;
 
   const [userDataUpdate, setUserDataUpdate] = useState<IUserProfileUpdate>({
     id: userId,
     user_name: user_name,
     avatar: avatar ?? avatarDefault.src,
-    appLang: appLang,
+    app_lang: app_lang,
     theme: theme,
   });
 
@@ -39,10 +39,10 @@ const ProfileEdit: React.FC = () => {
       id: userId,
       user_name: user_name,
       avatar: avatar ?? avatarDefault.src,
-      appLang: appLang,
+      app_lang: app_lang,
       theme: theme,
     });
-  }, [user_name, avatar, appLang, theme, userId]);
+  }, [user_name, avatar, app_lang, theme, userId]);
 
   return (
     <section>
@@ -78,16 +78,10 @@ const ProfileEdit: React.FC = () => {
             // defaultValue="item-1"
           >
             {/*username*/}
-            <ChangeUserName
-              userDataUpdate={userDataUpdate}
-              setUserDataUpdate={setUserDataUpdate}
-            />
+            <ChangeUserName userDataUpdate={userDataUpdate} setUserDataUpdate={setUserDataUpdate} />
 
             {/*user lang*/}
-            <ChangeUserLang
-              userDataUpdate={userDataUpdate}
-              setUserDataUpdate={setUserDataUpdate}
-            />
+            <ChangeUserLang userDataUpdate={userDataUpdate} setUserDataUpdate={setUserDataUpdate} />
 
             {/*  user theme*/}
             <ChangeUserTheme
