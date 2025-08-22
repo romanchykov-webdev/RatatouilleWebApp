@@ -87,7 +87,7 @@ export interface IOwner {
   user_name: string;
   created_at?: string;
   email?: string;
-  appLang?: string;
+  app_lang?: string;
   theme?: string;
   subscribers?: number;
 }

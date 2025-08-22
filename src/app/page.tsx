@@ -31,7 +31,7 @@ export default function Page() {
       <HeaderComponent isDesktop={isDesktop} />
       <main className="flex flex-col gap-y-20">
         <HomeBigCarouselComponent />
-        <SectionListWrapper categories={categoriesData} appLang={userData?.appLang} />
+        <SectionListWrapper categories={categoriesData} app_lang={userData?.app_lang} />
       </main>
       <footer className="bg-red-500">footer</footer>
 

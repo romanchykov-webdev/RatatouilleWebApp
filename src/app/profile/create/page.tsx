@@ -70,7 +70,7 @@ const CreateNewRecipe: React.FC = () => {
     (state: RootState) => state.user as IUserProfile,
   );
   const {
-    appLang: userLangStore,
+    app_lang: userLangStore,
     id: userId,
     avatar: userAvatar,
     user_name: userName,

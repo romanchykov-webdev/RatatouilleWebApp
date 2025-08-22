@@ -47,7 +47,7 @@ export const signUpUserThunk = createAsyncThunk<SignUpResponse, SignUpPayload>(
           user_name: profileData.user_name,
           avatar: profileData.avatar,
           email: user.email,
-          appLang: profileData.appLang,
+          app_lang: profileData.app_lang,
           theme: profileData.theme,
           subscribers: profileData.subscribers,
         }),

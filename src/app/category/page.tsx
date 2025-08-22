@@ -118,7 +118,7 @@ const Category: React.FC = (): JSX.Element => {
           {recipes.map(item => (
             <CartItem
               item={item}
-              appLang={userData.appLang}
+              app_lang={userData.app_lang}
               key={item.id}
               loading={isLoadingPage}
             />

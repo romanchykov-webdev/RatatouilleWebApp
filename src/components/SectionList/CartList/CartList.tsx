@@ -20,13 +20,13 @@ import BreadcrumbsCategorySubCategory from '@/components/Breadcrumbs/Breadcrumbs
 interface ICartListProps {
   categoryArr: ITitle;
   categoryPoints: string[];
-  appLang: string;
+  app_lang: string;
 }
 
 const CartList: React.FC<ICartListProps> = ({
   categoryArr,
   categoryPoints,
-  appLang,
+  app_lang,
 }: ICartListProps): JSX.Element => {
   const [api, setApi] = useState<CarouselApi | undefined>();
 
@@ -106,7 +106,7 @@ const CartList: React.FC<ICartListProps> = ({
               <div className="p-2">
                 <CartItem
                   item={item as unknown as IRecipeByCategory}
-                  appLang={appLang}
+                  app_lang={app_lang}
                   loading={loading}
                 />
               </div>

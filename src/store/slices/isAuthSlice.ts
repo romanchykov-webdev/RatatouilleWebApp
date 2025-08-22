@@ -6,7 +6,7 @@ type AuthState = IUserProfile | INotAuthorized;
 
 const initialState: AuthState = {
   isAuth: false,
-  appLang: '',
+  app_lang: '',
 };
 
 const authSlice = createSlice({
@@ -24,12 +24,12 @@ const authSlice = createSlice({
     logout() {
       return {
         isAuth: false,
-        appLang: '', // или сохрани appLang, если нужно
+        app_lang: '', // или сохрани app_lang, если нужно
       } as INotAuthorized;
     },
     lanAppForNoAuthorization(state, action: PayloadAction<string>) {
       if (!state.isAuth) {
-        state.appLang = action.payload;
+        state.app_lang = action.payload;
       }
     },
   },
@@ -45,7 +45,7 @@ const authSlice = createSlice({
             ...(state as IUserProfile),
             user_name: action.payload.user_name,
             avatar: action.payload.avatar,
-            appLang: action.payload.appLang,
+            app_lang: action.payload.app_lang,
             theme: action.payload.theme,
             isAuth: true,
           } as IUserProfile;

@@ -22,10 +22,10 @@ const ChangeUserLang: React.FC<IUserProfileEditProps> = ({
       <AccordionTrigger className=" cursor-pointer">Change language app</AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 text-balance">
         <RadioGroup
-          defaultValue={userDataUpdate?.appLang}
-          value={userDataUpdate.appLang}
+          defaultValue={userDataUpdate?.app_lang}
+          value={userDataUpdate.app_lang}
           onValueChange={value =>
-            setUserDataUpdate({ ...userDataUpdate, appLang: value })
+            setUserDataUpdate({ ...userDataUpdate, app_lang: value })
           }
         >
           <div className="flex items-center gap-3">
