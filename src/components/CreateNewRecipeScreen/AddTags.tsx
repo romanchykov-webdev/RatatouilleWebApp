@@ -12,7 +12,7 @@ import { IAreaByCreateRecipe } from '@/types';
 
 interface IAddTagsProps {
   dispatch: AppDispatch;
-  ariaStore: IAreaByCreateRecipe[];
+  ariaStore: IAreaByCreateRecipe;
   tagStore: string[];
 }
 
@@ -44,15 +44,13 @@ const AddTags: React.FC<IAddTagsProps> = ({
 
   return (
     <article className="relative overflow-hidden">
-      {ariaStore.length === 0 && <SkeletonCustom dependency={ariaStore} />}
+      {Object.keys(ariaStore).length === 0 && <SkeletonCustom dependency={ariaStore} />}
       <h6 className="text-center">Add tags</h6>
       <div className="flex items-center justify-center gap-x-2 mb-5">
         <Input
           type="text"
           value={inputValue}
-          onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-            setInputValue(e.target.value)
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Enter') {
               e.preventDefault();
