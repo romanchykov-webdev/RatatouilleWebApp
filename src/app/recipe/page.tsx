@@ -11,7 +11,7 @@ import HeaderComponent from '@/components/Header/headerComponent';
 import { IMeasurements, IOwner, IRecipe, IUserProfile } from '@/types';
 import LoaderCustom from '@/components/Loaders/LoaderCustom';
 
-const RecipePage: React.FC<IRecipe> = (): JSX.Element => {
+const RecipePage: React.FC = (): JSX.Element => {
   const userData = useAppSelector((state: RootState) => state.user as IUserProfile);
 
   const measurementData: IMeasurements = useAppSelector((state: RootState) => state.measurement);
